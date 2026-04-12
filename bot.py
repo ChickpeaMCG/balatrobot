@@ -184,23 +184,23 @@ class Bot:
                     self.challenge,
                 ]
             case "skip_or_select_blind":
-                return self.skip_or_select_blind(self, self.G)
+                return self.skip_or_select_blind(self.G)
             case "select_cards_from_hand":
-                return self.select_cards_from_hand(self, self.G)
+                return self.select_cards_from_hand(self.G)
             case "select_shop_action":
-                return self.select_shop_action(self, self.G)
+                return self.select_shop_action(self.G)
             case "select_booster_action":
-                return self.select_booster_action(self, self.G)
+                return self.select_booster_action(self.G)
             case "sell_jokers":
-                return self.sell_jokers(self, self.G)
+                return self.sell_jokers(self.G)
             case "rearrange_jokers":
-                return self.rearrange_jokers(self, self.G)
+                return self.rearrange_jokers(self.G)
             case "use_or_sell_consumables":
-                return self.use_or_sell_consumables(self, self.G)
+                return self.use_or_sell_consumables(self.G)
             case "rearrange_consumables":
-                return self.rearrange_consumables(self, self.G)
+                return self.rearrange_consumables(self.G)
             case "rearrange_hand":
-                return self.rearrange_hand(self, self.G)
+                return self.rearrange_hand(self.G)
 
     def run_step(self):
         if self.sock is None:
@@ -241,5 +241,7 @@ class Bot:
                 self.sock.connect(self.addr)
 
     def run(self):
-        while self.running:
+        while True:
             self.run_step()
+            if not self.running:
+                break

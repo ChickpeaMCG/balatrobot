@@ -2,6 +2,8 @@ from bot import Bot, Actions
 from gamestates import cache_state
 import time
 
+t = 0
+first_time = None
 
 # Plays flushes if possible
 # otherwise keeps the most common suit
@@ -12,7 +14,7 @@ class FlushBot(Bot):
         cache_state("skip_or_select_blind", G)
         return [Actions.SELECT_BLIND]
 
-    def play_flushes(self, G):
+    def select_cards_from_hand(self, G):
         global t
         global first_time
         t += 1

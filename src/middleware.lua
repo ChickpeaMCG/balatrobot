@@ -520,6 +520,8 @@ function Middleware.c_start_run()
 end
 
 
+local _menu_start_triggered = false
+
 local function w_gamestate(...)
     local _t, _k, _v = ...
 
@@ -529,8 +531,20 @@ local function w_gamestate(...)
         G.FUNCS.go_to_menu({})
     end
 
+    -- Reset guard whenever state leaves MENU
+    if _k == 'STATE' and _v ~= G.STATES.MENU then
+        _menu_start_triggered = false
+    end
+
+    -- Only trigger c_start_run once per MENU visit.
+    -- G.STATE = MENU can be written many times per frame, so without this guard
+    -- c_start_run (and its API breakpoint) fires hundreds of times, causing
+    -- the Python bot to spam START_RUN actions faster than the game can process them.
     if _k == 'STATE' and _v == G.STATES.MENU then
-        Middleware.c_start_run()
+        if not _menu_start_triggered then
+            _menu_start_triggered = true
+            Middleware.c_start_run()
+        end
     end
 end
 
