@@ -1,9 +1,8 @@
-from bot import Bot, Actions
-from gamestates import cache_state
 import time
 
-t = 0
-first_time = None
+from balatrobot.core.bot import Bot, Actions
+from balatrobot.utils.gamestates import cache_state
+
 
 # Plays flushes if possible
 # otherwise keeps the most common suit
@@ -15,13 +14,7 @@ class FlushBot(Bot):
         return [Actions.SELECT_BLIND]
 
     def select_cards_from_hand(self, G):
-        global t
-        global first_time
-        t += 1
         cache_state("select_cards_from_hand", G)
-
-        if first_time is None:
-            first_time = time.time()
 
         suit_count = {
             "Hearts": 0,
@@ -65,8 +58,6 @@ class FlushBot(Bot):
         return [Actions.PLAY_HAND, [1]]
 
     def select_shop_action(self, G):
-        global t
-        t += 1
         cache_state("select_shop_action", G)
         return [Actions.END_SHOP]
 
@@ -95,51 +86,3 @@ class FlushBot(Bot):
     def rearrange_hand(self, G):
         cache_state("rearrange_hand", G)
         return [Actions.REARRANGE_HAND, []]
-
-
-def benchmark_multi_instance():
-    global t
-    t = 0
-    global first_time
-    first_time = None
-
-    # Benchmark the game states per second for different bot counts
-    bot_counts = range(1, 21, 3)
-    for bot_count in bot_counts:
-        target_t = 50 * bot_count
-        t = 0
-        first_time = None
-
-        bots = []
-        for i in range(bot_count):
-            mybot = FlushBot(
-                deck="Blue Deck",
-                stake=1,
-                seed=None,
-                challenge=None,
-                bot_port=12348 + i,
-            )
-
-            bots.append(mybot)
-
-        try:
-            for bot in bots:
-                bot.start_balatro_instance()
-            time.sleep(20)
-
-            start_time = time.time()
-            while t < target_t:
-                for bot in bots:
-                    bot.run_step()
-            end_time = time.time()
-
-            t_per_sec = target_t / (end_time - start_time)
-            print(f"Bot count: {bot_count}, t/sec: {t_per_sec}")
-        finally:
-            # Stop the bots
-            for bot in bots:
-                bot.stop_balatro_instance()
-
-
-if __name__ == "__main__":
-    benchmark_multi_instance()

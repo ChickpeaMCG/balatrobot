@@ -5,7 +5,7 @@ import json
 import socket
 import time
 from enum import Enum
-from gamestates import cache_state
+from balatrobot.utils.gamestates import cache_state
 import subprocess
 import random
 

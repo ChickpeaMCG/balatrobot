@@ -12,8 +12,8 @@ import glob
 import pytest
 from pathlib import Path
 
-from flush_bot import FlushBot
-from bot import Actions
+from balatrobot.bots.flush_bot import FlushBot
+from balatrobot.core.bot import Actions
 
 CACHE_DIR = Path(__file__).parent.parent / "gamestate_cache"
 
