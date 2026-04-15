@@ -38,6 +38,21 @@ The upstream code did not run against Steamodded 1.0.0. This commit brought it t
 - **`tests/test_flush_bot.py`** — offline test suite: runs FlushBot against cached gamestates without needing the game running
 - **`docs/PLAN_PHASE1.md`** — detailed implementation plan for Phase 1
 
+### Commit `8b81e65` — Restructure Python code into `balatrobot/` package
+
+Flat Python files reorganised into a proper package:
+
+- **`balatrobot/core/bot.py`** — `Bot` base class (was `bot.py`)
+- **`balatrobot/bots/flush_bot.py`** — `FlushBot` strategy (was `flush_bot.py`)
+- **`balatrobot/bots/replay_bot.py`** — `ReplayBot` (was `replay_bot.py`)
+- **`balatrobot/bots/example_bot.py`** — minimal example bot
+- **`balatrobot/runners/recording.py`** — `RecordingFlushBot` runner with `--seed` flag
+- **`balatrobot/runners/benchmark.py`** — multi-instance parallel benchmarking
+- **`balatrobot/utils/gamestates.py`** — gamestate cache writer; caching now **opt-in** (`cache_states=False` by default on `Bot`) to prevent generating millions of files during long benchmark runs
+- **`balatrobot/utils/run_history.py`** — run history persistence
+- **`balatrobot/analytics/analyse_runs.py`** — run history analysis
+- **`run_flush_bot.py`** / **`replay_bot.py`** — thin root-level entry points retained for convenience
+
 ### Commits `9fee92d` + `c033dc9` — Phase 1: Run history, replay recording, GAME_OVER detection
 
 #### Problem solved
@@ -81,31 +96,40 @@ The bot played full games but threw away all run data on exit. There was no way 
 ## Repository Layout (current)
 
 ```
-balatrobot/
-├── main.lua              # Steamodded mod entry point
-├── config.lua            # Mod settings (port, speedup, frame skip)
-├── bot.py                # Bot base class, State/Actions enums, socket loop
-├── flush_bot.py          # FlushBot strategy (hunt flushes, skip shop)
-├── run_flush_bot.py      # RecordingFlushBot runner — writes history + replays
-├── replay_bot.py         # Replays a recorded run from a .replay.json file
-├── run_history.py        # Run history persistence (record_run, load_history)
-├── gamestates.py         # Gamestate cache writer
-├── bot_example.py        # Minimal bot example
+balatrobot/                      # repo root (also the Steamodded mod folder)
+├── main.lua                     # Steamodded mod entry point
+├── config.lua                   # Mod settings (port, speedup, frame skip)
+├── run_flush_bot.py             # Entry point: RecordingFlushBot runner
+├── replay_bot.py                # Entry point: replay a .replay.json file
 ├── src/
-│   ├── api.lua           # UDP server, action queue, speedup hooks
-│   ├── bot.lua           # Bot action definitions, ACTIONPARAMS validation
-│   ├── middleware.lua     # Hooks into Balatro game loop, UI interaction
-│   ├── botlogger.lua     # Lua-side action logging to .run files
-│   └── utils.lua         # Gamestate serialisation, action parsing/validation
-├── lib/                  # External Lua libraries (sock, json, hook, bitser, list)
+│   ├── api.lua                  # UDP server, action queue, speedup hooks
+│   ├── bot.lua                  # Bot action definitions, ACTIONPARAMS validation
+│   ├── middleware.lua            # Hooks into Balatro game loop, UI interaction
+│   ├── botlogger.lua            # Lua-side action logging to .run files
+│   └── utils.lua                # Gamestate serialisation, action parsing/validation
+├── lib/                         # External Lua libraries (sock, json, hook, bitser, list)
+├── balatrobot/                  # Python package
+│   ├── core/bot.py              # Bot base class, State/Actions enums, socket loop
+│   ├── bots/
+│   │   ├── flush_bot.py         # FlushBot strategy (hunt flushes, skip shop)
+│   │   ├── replay_bot.py        # ReplayBot — replays a recorded run
+│   │   └── example_bot.py      # Minimal example bot
+│   ├── runners/
+│   │   ├── recording.py         # RecordingFlushBot — writes history + replays
+│   │   └── benchmark.py         # Multi-instance parallel benchmarking
+│   ├── utils/
+│   │   ├── gamestates.py        # Gamestate cache writer (opt-in)
+│   │   └── run_history.py       # Run history persistence
+│   └── analytics/
+│       └── analyse_runs.py      # Run history analysis
 ├── tests/
-│   └── test_flush_bot.py # Offline test suite against cached gamestates
+│   └── test_flush_bot.py        # Offline test suite against cached gamestates
 ├── docs/
-│   ├── PLAN_PHASE1.md    # Phase 1 detailed implementation plan
-│   └── FORK_AND_CHANGES.md  # This file
-├── PLAN.md               # Full development roadmap (Phases 1–4)
-├── CLAUDE.md             # Claude Code project instructions
-└── README.md             # Project overview and usage guide
+│   ├── PLAN.md                  # Full development roadmap (Phases 1–4)
+│   ├── PLAN_PHASE1.md           # Phase 1 detailed implementation plan
+│   └── FORK_AND_CHANGES.md      # This file
+├── CLAUDE.md                    # Claude Code project instructions
+└── README.md                    # Project overview and usage guide
 ```
 
 ---

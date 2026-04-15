@@ -63,6 +63,7 @@ class Bot:
         seed: str = None,
         challenge: str = None,
         bot_port: int = 12346,
+        cache_states: bool = False,
     ):
         self.G = None
         self.deck = deck
@@ -71,6 +72,7 @@ class Bot:
         self.challenge = challenge
 
         self.bot_port = bot_port
+        self.cache_states = cache_states
 
         self.addr = ("localhost", self.bot_port)
         self.running = False
@@ -252,7 +254,8 @@ class Bot:
             if self.G["waitingForAction"]:
                 if self.G["waitingFor"] == "start_run":
                     self._action_log = []
-                cache_state(self.G["waitingFor"], self.G)
+                if self.cache_states:
+                    cache_state(self.G["waitingFor"], self.G)
                 action = self.chooseaction()
                 if action is None:
                     raise ValueError("All actions must return a value!")

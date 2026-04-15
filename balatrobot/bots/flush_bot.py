@@ -1,7 +1,6 @@
 import time
 
 from balatrobot.core.bot import Bot, Actions
-from balatrobot.utils.gamestates import cache_state
 
 
 # Plays flushes if possible
@@ -10,12 +9,9 @@ from balatrobot.utils.gamestates import cache_state
 class FlushBot(Bot):
 
     def skip_or_select_blind(self, G):
-        cache_state("skip_or_select_blind", G)
         return [Actions.SELECT_BLIND]
 
     def select_cards_from_hand(self, G):
-        cache_state("select_cards_from_hand", G)
-
         suit_count = {
             "Hearts": 0,
             "Diamonds": 0,
@@ -58,31 +54,24 @@ class FlushBot(Bot):
         return [Actions.PLAY_HAND, [1]]
 
     def select_shop_action(self, G):
-        cache_state("select_shop_action", G)
         return [Actions.END_SHOP]
 
     def select_booster_action(self, G):
-        cache_state("select_booster_action", G)
         return [Actions.SKIP_BOOSTER_PACK]
 
     def sell_jokers(self, G):
-        cache_state("sell_jokers", G)
         if len(G["jokers"]) > 1:
             return [Actions.SELL_JOKER, [2]]
         return [Actions.SELL_JOKER, []]
 
     def rearrange_jokers(self, G):
-        cache_state("rearrange_jokers", G)
         return [Actions.REARRANGE_JOKERS, []]
 
     def use_or_sell_consumables(self, G):
-        cache_state("use_or_sell_consumables", G)
         return [Actions.USE_CONSUMABLE, []]
 
     def rearrange_consumables(self, G):
-        cache_state("rearrange_consumables", G)
         return [Actions.REARRANGE_CONSUMABLES, []]
 
     def rearrange_hand(self, G):
-        cache_state("rearrange_hand", G)
         return [Actions.REARRANGE_HAND, []]
