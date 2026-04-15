@@ -28,6 +28,15 @@ class ReplayBot(Bot):
         if G is None:
             return
 
+        from bot import State
+        if G.get("state") == State.GAME_OVER.value:
+            print("Replay complete.")
+            self.running = False
+            return
+
+        if not G.get("waitingForAction"):
+            return
+
         if self._replay_idx >= len(self._replay_actions):
             print("Replay complete.")
             self.running = False
