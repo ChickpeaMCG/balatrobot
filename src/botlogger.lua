@@ -22,7 +22,7 @@ function Botlogger.getfilename(settings)
     local port = arg[1] or BALATRO_BOT_CONFIG.port
     _filename = _filename .. '_' .. port
     _filename = _filename .. '.run'
-    --_filename = Botlogger.path .. _filename
+    _filename = Botlogger.path .. _filename
     sendDebugMessage(_filename)
     return _filename
 end

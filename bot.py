@@ -79,6 +79,8 @@ class Bot:
         self.sock = None
 
         self.state = {}
+        self._action_log: list[dict] = []
+        self._current_seed: str = None
 
     def skip_or_select_blind(self):
         raise NotImplementedError(
@@ -116,6 +118,10 @@ class Bot:
 
     def rearrange_hand(self):
         raise NotImplementedError("Error: Bot.rearrange_hand must be implemented.")
+
+    def _on_run_complete(self, G: dict) -> None:
+        """Called once when the game reaches GAME_OVER. Override in subclasses."""
+        pass
 
     def start_balatro_instance(self):
         balatro_exec_path = (
@@ -168,14 +174,12 @@ class Bot:
         return "".join(random.choices("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=7))
 
     def chooseaction(self):
-        if self.G["state"] == State.GAME_OVER:
-            self.running = False
-
         match self.G["waitingFor"]:
             case "start_run":
                 seed = self.seed
                 if seed is None:
                     seed = self.random_seed()
+                self._current_seed = seed
                 return [
                     Actions.START_RUN,
                     self.stake,
@@ -202,6 +206,26 @@ class Bot:
             case "rearrange_hand":
                 return self.rearrange_hand(self.G)
 
+    def _recv_gamestate(self):
+        self.sendcmd("HELLO")
+        try:
+            data = self.sock.recv(65536)
+            jsondata = json.loads(data)
+            if "response" in jsondata:
+                print(jsondata["response"])
+                return None
+            return jsondata
+        except socket.error as e:
+            print(e)
+            print("Socket error, reconnecting...")
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.sock.settimeout(1)
+            self.sock.connect(self.addr)
+            return None
+
+    def _send_action(self, cmdstr: str):
+        self.sendcmd(cmdstr)
+
     def run_step(self):
         if self.sock is None:
             self.verifyimplemented()
@@ -214,31 +238,27 @@ class Bot:
             self.sock.connect(self.addr)
 
         if self.running:
-            self.sendcmd("HELLO")
+            G = self._recv_gamestate()
+            if G is None:
+                return
 
-            jsondata = {}
-            try:
-                data = self.sock.recv(65536)
-                jsondata = json.loads(data)
+            self.G = G
 
-                if "response" in jsondata:
-                    print(jsondata["response"])
-                else:
-                    self.G = jsondata
-                    if self.G["waitingForAction"]:
-                        cache_state(self.G["waitingFor"], self.G)
-                        action = self.chooseaction()
-                        if action == None:
-                            raise ValueError("All actions must return a value!")
+            if self.G.get("state") == State.GAME_OVER.value:
+                self._on_run_complete(self.G)
+                self.running = False
+                return
 
-                        cmdstr = self.actionToCmd(action)
-                        self.sendcmd(cmdstr)
-            except socket.error as e:
-                print(e)
-                print("Socket error, reconnecting...")
-                self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                self.sock.settimeout(1)
-                self.sock.connect(self.addr)
+            if self.G["waitingForAction"]:
+                if self.G["waitingFor"] == "start_run":
+                    self._action_log = []
+                cache_state(self.G["waitingFor"], self.G)
+                action = self.chooseaction()
+                if action is None:
+                    raise ValueError("All actions must return a value!")
+                cmdstr = self.actionToCmd(action)
+                self._action_log.append({"state": self.G, "action": cmdstr})
+                self._send_action(cmdstr)
 
     def run(self):
         while True:
