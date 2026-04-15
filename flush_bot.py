@@ -18,6 +18,7 @@ class FlushBot(Bot):
         global t
         global first_time
         t += 1
+        cache_state("select_cards_from_hand", G)
 
         if first_time is None:
             first_time = time.time()
@@ -66,28 +67,33 @@ class FlushBot(Bot):
     def select_shop_action(self, G):
         global t
         t += 1
-
+        cache_state("select_shop_action", G)
         return [Actions.END_SHOP]
 
     def select_booster_action(self, G):
+        cache_state("select_booster_action", G)
         return [Actions.SKIP_BOOSTER_PACK]
 
     def sell_jokers(self, G):
+        cache_state("sell_jokers", G)
         if len(G["jokers"]) > 1:
             return [Actions.SELL_JOKER, [2]]
-
         return [Actions.SELL_JOKER, []]
 
     def rearrange_jokers(self, G):
+        cache_state("rearrange_jokers", G)
         return [Actions.REARRANGE_JOKERS, []]
 
     def use_or_sell_consumables(self, G):
+        cache_state("use_or_sell_consumables", G)
         return [Actions.USE_CONSUMABLE, []]
 
     def rearrange_consumables(self, G):
+        cache_state("rearrange_consumables", G)
         return [Actions.REARRANGE_CONSUMABLES, []]
 
     def rearrange_hand(self, G):
+        cache_state("rearrange_hand", G)
         return [Actions.REARRANGE_HAND, []]
 
 
