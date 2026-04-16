@@ -1,4 +1,4 @@
-from balatrobot.core.bot import Bot, Actions
+from balatrobot.core.bot import Actions, Bot
 
 
 def skip_or_select_blind(self, G):

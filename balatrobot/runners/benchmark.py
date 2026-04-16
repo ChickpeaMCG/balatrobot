@@ -4,16 +4,11 @@ from balatrobot.bots.flush_bot import FlushBot
 
 
 def benchmark_multi_instance():
-    t = 0
-    first_time = None
-
     # Benchmark the game states per second for different bot counts
     bot_counts = range(1, 21, 3)
     for bot_count in bot_counts:
         target_t = 50 * bot_count
         t = 0
-        first_time = None
-
         bots = []
         for i in range(bot_count):
             mybot = FlushBot(

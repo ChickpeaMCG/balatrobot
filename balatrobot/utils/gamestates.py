@@ -1,6 +1,6 @@
 import json
-from datetime import datetime
 import os
+from datetime import datetime
 
 
 def cache_state(game_step, G):

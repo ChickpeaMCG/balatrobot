@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-import sys
 import json
-import socket
-import time
-from enum import Enum
-from balatrobot.utils.gamestates import cache_state
-import subprocess
 import random
+import socket
+import subprocess
+import sys
+from enum import Enum
+
+from balatrobot.utils.gamestates import cache_state
 
 
 class State(Enum):
@@ -64,6 +64,8 @@ class Bot:
         challenge: str = None,
         bot_port: int = 12346,
         cache_states: bool = False,
+        speed: str = "fast",
+        balatro_path: str = r"C:\Program Files (x86)\Steam\steamapps\common\Balatro\Balatro.exe",
     ):
         self.G = None
         self.deck = deck
@@ -73,6 +75,8 @@ class Bot:
 
         self.bot_port = bot_port
         self.cache_states = cache_states
+        self.speed = speed
+        self.balatro_path = balatro_path
 
         self.addr = ("localhost", self.bot_port)
         self.running = False
@@ -126,11 +130,8 @@ class Bot:
         pass
 
     def start_balatro_instance(self):
-        balatro_exec_path = (
-            r"C:\Program Files (x86)\Steam\steamapps\common\Balatro\Balatro.exe"
-        )
         self.balatro_instance = subprocess.Popen(
-            [balatro_exec_path, str(self.bot_port)]
+            [self.balatro_path, str(self.bot_port), self.speed]
         )
 
     def stop_balatro_instance(self):
@@ -147,7 +148,7 @@ class Bot:
         for x in action:
             if isinstance(x, Actions):
                 result.append(x.name)
-            elif type(x) is list:
+            elif isinstance(x, list):
                 result.append(",".join([str(y) for y in x]))
             else:
                 result.append(str(x))
@@ -168,7 +169,7 @@ class Bot:
         except NotImplementedError as e:
             print(e)
             sys.exit(0)
-        except:
+        except Exception:
             pass
 
     def random_seed(self):
@@ -217,7 +218,7 @@ class Bot:
                 print(jsondata["response"])
                 return None
             return jsondata
-        except socket.error as e:
+        except OSError as e:
             print(e)
             print("Socket error, reconnecting...")
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

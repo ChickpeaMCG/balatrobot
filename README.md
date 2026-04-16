@@ -35,36 +35,42 @@ The system has two halves that communicate over a local UDP socket:
 
 ## Installation
 
-1. Clone this repo into your Balatro mods directory:
+1. Clone this repo somewhere on your machine (e.g. `C:\bots\balatrobot`).
+
+2. Create a directory junction so the mod is visible to Balatro without copying files:
    ```
-   cd %AppData%\Roaming\Balatro\Mods
-   git clone <your-repo-url> balatrobot
+   mklink /J "%AppData%\Roaming\Balatro\Mods\balatrobot" "C:\bots\balatrobot"
    ```
 
-2. Verify your mod folder structure:
+3. Verify your mod folder structure:
    ```
    %AppData%\Roaming\Balatro\Mods\
    ├── lovely\              ← Lovely Injector logs (auto-created)
    ├── smods-1.0.0-beta\    ← Steamodded
-   └── balatrobot\          ← this repo
-       └── version.dll      ← NOT here — this goes in the game folder
+   └── balatrobot\          ← junction pointing to this repo
+                               (version.dll does NOT go here)
 
    C:\Program Files (x86)\Steam\steamapps\common\Balatro\
    └── version.dll          ← Lovely Injector goes here
    ```
 
-3. Launch Balatro via Steam. You should see the Steamodded mod list on startup with **Balatrobot** listed.
+4. Launch Balatro via Steam. You should see the Steamodded mod list on startup with **Balatrobot** listed.
 
 ---
 
-## Running the Example Bot
+## Running the Included Bot
 
 ```bash
-cd %AppData%\Roaming\Balatro\Mods\balatrobot
+# Run the recording flush bot — plays continuously, saves replays and run history
 python run_flush_bot.py
+
+# Replay a saved run
+python replay_bot.py replays/SEED_2026-04-15T15-41-56.replay.json
 ```
 
-This launches Balatro automatically, waits for it to load, then connects and starts playing. Press **Ctrl+C** to stop cleanly.
+`run_flush_bot.py` launches Balatro automatically, loops games until you press **Ctrl+C**, and after each run saves:
+- a `.replay.json` file to `replays/`
+- a summary entry to `run_history.json`
 
 The included `FlushBot` always selects every blind, tries to build and play flushes, skips boosters, and ends the shop immediately.
 
@@ -72,10 +78,10 @@ The included `FlushBot` always selects every blind, tries to build and play flus
 
 ## Writing Your Own Bot
 
-Subclass `Bot` from `bot.py` and implement these methods. Each receives the current game state `G` (a dict) and returns an action list:
+Subclass `Bot` from `balatrobot.core.bot` and implement these methods. Each receives the current game state `G` (a dict) and returns an action list:
 
 ```python
-from bot import Bot, Actions
+from balatrobot.core.bot import Bot, Actions
 
 class MyBot(Bot):
     def skip_or_select_blind(self, G):
@@ -189,10 +195,15 @@ For **fast headless botting**, restore the defaults above.
 
 ---
 
-## Game State Logging
+## Game State Caching (optional)
 
-All game states are cached to disk automatically during a run:
+Game states are **not** cached by default. To enable, pass `cache_states=True` to the `Bot` constructor:
 
+```python
+bot = MyBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345, cache_states=True)
+```
+
+Snapshots are written to:
 ```
 gamestate_cache/
 ├── skip_or_select_blind/
@@ -209,14 +220,9 @@ This is useful for understanding the state schema and building training datasets
 ## Project Structure
 
 ```
-balatrobot/
+balatrobot/                   # Steamodded mod (Lua) — loaded by the game
 ├── main.lua                  # Steamodded entry point — loads all Lua modules
 ├── config.lua                # Speed and port configuration
-├── bot.py                    # Python Bot base class, Actions/State enums, protocol
-├── flush_bot.py              # Example bot: plays flushes greedily
-├── bot_example.py            # Minimal functional-style bot example
-├── run_flush_bot.py          # Runner: launches game + starts FlushBot
-├── gamestates.py             # Game state cache (writes JSON snapshots to disk)
 ├── src/
 │   ├── api.lua               # UDP socket server + game speedup hooks
 │   ├── middleware.lua        # Hooks Balatro UI; translates actions into button clicks
@@ -229,6 +235,26 @@ balatrobot/
     ├── hook.lua              # Function hooking (callbacks, breakpoints, onwrite)
     ├── list.lua              # Doubly-linked list
     └── bitser.lua            # Binary serialisation (unused by API path)
+
+balatrobot/                   # Python package — bot logic lives here
+├── core/bot.py               # Bot base class, Actions/State enums, socket loop
+├── bots/
+│   ├── flush_bot.py          # FlushBot strategy (hunt flushes, skip shop)
+│   ├── replay_bot.py         # ReplayBot — replays a recorded .replay.json
+│   └── example_bot.py        # Minimal example bot
+├── runners/
+│   ├── recording.py          # RecordingFlushBot — saves replays + run history
+│   └── benchmark.py          # Multi-instance parallel benchmarking
+├── utils/
+│   ├── gamestates.py         # Gamestate cache writer (opt-in)
+│   └── run_history.py        # Run history persistence (record_run, load_history)
+└── analytics/
+    └── analyse_runs.py       # Run history analysis
+
+run_flush_bot.py              # Entry point: launches game + runs RecordingFlushBot
+replay_bot.py                 # Entry point: replays a .replay.json file
+replays/                      # Saved replay files (.replay.json)
+run_history.json              # Cumulative run history
 ```
 
 ---

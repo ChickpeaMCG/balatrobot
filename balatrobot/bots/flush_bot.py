@@ -1,6 +1,5 @@
-import time
 
-from balatrobot.core.bot import Bot, Actions
+from balatrobot.core.bot import Actions, Bot
 
 
 # Plays flushes if possible

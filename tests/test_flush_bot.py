@@ -8,9 +8,9 @@ for at least one full game with FlushBot (it caches every decision point).
 Run with:  pytest tests/
 """
 import json
-import glob
-import pytest
 from pathlib import Path
+
+import pytest
 
 from balatrobot.bots.flush_bot import FlushBot
 from balatrobot.core.bot import Actions

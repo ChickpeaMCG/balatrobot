@@ -1,2 +1,23 @@
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes (undefined names, unused imports)
+    "I",   # isort
+    "UP",  # pyupgrade (modern Python syntax)
+    "B",   # flake8-bugbear (common bugs)
+]
+ignore = [
+    "E501",  # line too long — ruff format handles this
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true
+warn_return_any = true
+check_untyped_defs = true

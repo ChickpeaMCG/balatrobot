@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 
 from balatrobot.bots.flush_bot import FlushBot
-from balatrobot.utils.run_history import record_run, print_run_summary
+from balatrobot.utils.run_history import print_run_summary, record_run
 
 REPLAYS_DIR = Path("replays")
 
@@ -33,6 +33,8 @@ class RecordingFlushBot(FlushBot):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", default=None)
+    parser.add_argument("--runs", type=int, default=0,
+                        help="Number of runs before exiting (0 = unlimited)")
     args = parser.parse_args()
 
     bot = RecordingFlushBot(deck="Blue Deck", stake=1, seed=args.seed, bot_port=12345)
@@ -40,9 +42,11 @@ def main():
     print("Waiting for game to load...")
     time.sleep(15)
 
+    completed = 0
     try:
-        while True:
+        while args.runs == 0 or completed < args.runs:
             bot.run()
+            completed += 1
             bot.running = True  # reset for next game
     except KeyboardInterrupt:
         print("\nStopped.")

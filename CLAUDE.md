@@ -75,6 +75,33 @@ balatrobot/
 ### Gamestate Caching
 `balatrobot/utils/gamestates.py:cache_state()` writes JSON snapshots to `gamestate_cache/<game_step>/<timestamp>.json`. Caching is **off by default** — pass `cache_states=True` to the `Bot` constructor to enable it for debugging.
 
+## Coding Standards
+
+### Testing convention
+Every new feature or bug fix must include tests. No exceptions.
+
+- **Bot decision logic** (methods that take `G` and return an action): test using cached gamestates from `gamestate_cache/`. Use `load_states("<phase>")` from the existing test helper. Run the bot once with `cache_states=True` to generate cache if the phase is new.
+- **Infrastructure / pure Python logic** (constructors, serialization, subprocess args): test with `unittest.mock` — no game required. See `tests/test_bot.py` for the pattern.
+- Tests live in `tests/`. One file per module being tested (`test_bot.py`, `test_flush_bot.py`).
+- Run with `pytest tests/`.
+
+### Linting and type checking
+Ruff and Mypy are configured in `pyproject.toml`. Run before committing:
+```bash
+ruff check --fix balatrobot/ tests/
+mypy balatrobot/
+```
+
+Both are enforced by `.pre-commit-config.yaml`. Install hooks once with:
+```bash
+pip install pre-commit && pre-commit install
+```
+
+### Style rules
+- Use `isinstance(x, list)` not `type(x) is list`
+- No bare `except:` — always `except Exception:` or a specific type
+- New public methods should have type annotations on parameters and return type
+
 ## Steamodded Installation
 
 The mod folder must be symlinked or placed at `%AppData%\Roaming\Balatro\Mods\balatrobot`. Requires Steamodded v0.9.3+. The mod is loaded via `main.lua` SMODS header; all files are loaded manually via `NFS.read` + `load()`.
