@@ -5,4 +5,5 @@ gamestate_cache
 run_history.json
 replays/
 *.run
-.claude/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

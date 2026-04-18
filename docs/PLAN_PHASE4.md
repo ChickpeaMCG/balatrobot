@@ -80,3 +80,15 @@ python -m balatrobot.analytics.analyse_runs --label phase4_checkered_vs_blue --d
 | **4b. `current_chips` Lua field** | ⏳ Carried from Phase 2 | `G.GAME.chips` is always 0 |
 | **4b. `_should_play` re-enable** | ⏳ Carried from Phase 2 | Blocked on `current_chips` |
 | **4b. Blind skipping** | ⏳ Carried from Phase 2 | Requires Lua `getBlindData()` change |
+
+
+## Best Run — phase-4-analytics (20 runs)
+
+| Metric | Value |
+|--------|-------|
+| Ante reached | 2 |
+| Hands played | 18 |
+| Seed | `4XD6AY3` |
+| Deck | Checkered Deck |
+| Stake | 1 |
+| Replay | `replays\4XD6AY3_2026-04-18T15-07-10.replay.json` |
