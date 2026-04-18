@@ -46,8 +46,8 @@ See `docs/PLAN_PHASE2.md` for full implementation record, bugs found, and deferr
 - [x] Flush-first: if 5+ cards of same suit, always play — scores accumulate across hands
 - [x] Discard off-suit cards to fish for flush when discards remain and not last hand
 - [x] Play forced hand when no flush available and no discards (or last hand)
-- [~] `current_chips` — `G.GAME.chips` is always 0 (wrong field); carried to Phase 3
-- [~] Score-vs-deficit check (`_should_play`) — scaffolded, not wired in; carried to Phase 3
+- [~] `current_chips` — `G.GAME.chips` is always 0 (wrong field); carried to Phase 4
+- [~] Score-vs-deficit check (`_should_play`) — scaffolded, not wired in; carried to Phase 4
 
 ### 2b. Shop strategy
 - [x] `FLUSH_JOKERS` priority list defined: `j_4_fingers`, `j_flush`, `j_runner`, `j_shortcut`, `j_fibonacci`
@@ -56,7 +56,7 @@ See `docs/PLAN_PHASE2.md` for full implementation record, bugs found, and deferr
 - [~] Priority list too narrow to trigger reliably — joker selection to be data-driven in Phase 3
 
 ### 2c. Blind skipping
-- [~] Deferred to Phase 3 — requires exposing offered tag in `Utils.getBlindData()` (Lua)
+- [~] Deferred to Phase 4 — requires exposing offered tag in `Utils.getBlindData()` (Lua)
 
 ### Deck
 - [x] Switched to Checkered Deck (26 Hearts + 26 Spades) — optimal for flush bot
@@ -67,22 +67,49 @@ See `docs/PLAN_PHASE2.md` for full implementation record, bugs found, and deferr
 
 ---
 
-## Phase 3 — Run Analytics
+## Phase 3 — Game Mechanics Catalogue
+
+**Goal:** Give bots structured, typed knowledge of what every item in the game does — replacing hardcoded key lists with a query-able catalogue. Also lays the feature-vector foundation for RL (Phase 5).
+
+See `docs/PLAN_PHASE3.md` for full implementation record.
+
+### 3a. Static data catalogue (`balatrobot/data/`)
+- [x] `scripts/extract_balatro_data.py` — parses Balatro Lua source files to output skeleton JSON for all item categories (jokers, tarots, planets, spectrals, vouchers)
+- [x] `balatrobot/data/models.py` — `JokerData`, `TarotData`, etc. dataclasses; `EffectType` and `TriggerCondition` enums
+- [x] `balatrobot/data/catalogue.py` — `get_joker()`, `all_jokers()`, `lru_cache` loaders; runtime warning on unknown keys
+- [x] JSON data files: `jokers.json` (150 extracted, 22 annotated), `tarots.json`, `planets.json`, `spectrals.json`, `vouchers.json`, `editions.json`, `seals.json`, `enhancements.json`
+- [x] `tests/test_catalogue.py` — 18 tests: load, parse, lookup, unknown-key warning
+
+### 3b. Feature encoder (`balatrobot/features/`)
+- [x] `balatrobot/features/constants.py` — `SUITS`, `VALUES`, `HAND_TYPES`, `OBSERVATION_SHAPE = 300`
+- [x] `balatrobot/features/encoder.py` — `GamestateEncoder.encode(G) -> np.ndarray(float32, shape=(300,))`
+- [x] Feature layout: 9 global scalars + 152 hand card dims + 80 joker dims + 12 consumable dims + 39 hand-score dims + 8 shop flags
+- [x] `tests/test_encoder.py` — shape/dtype correct, values in [0, 1], handles unknown joker keys (zero vector)
+
+### 3c. Bot integration
+- [x] Replace `FlushBot.FLUSH_JOKERS` hardcoded list with catalogue query: `all_jokers()` filtered by `flush_synergy >= 0.7`
+
+---
+
+## Phase 4 — Run Analytics
 
 **Goal:** Understand where runs fail so bot improvement is data-driven.
 
 - [ ] `analyse_runs.py` script: reads `run_history.json`, outputs win rate, average ante, most common exit ante
 - [ ] Correlate run outcomes with jokers held, deck used, stake
 - [ ] Identify the most common failure mode: out of hands, chip deficit, or bad blind matchup
+- [ ] Resolve `current_chips` — find the correct Balatro Lua field for chips scored toward the current blind
+- [ ] Re-enable `_should_play` with correct `current_chips` for smarter play/discard decisions
+- [ ] Blind skipping — expose offered tag in `Utils.getBlindData()` (Lua), then re-implement skip logic
 
 ---
 
-## Phase 4 — RL Groundwork
+## Phase 5 — RL Groundwork
 
 **Goal:** Replace hand-coded heuristics with a learned policy.
 
-- [ ] Define observation vector: flattened hand cards (suit/value/enhancement one-hot), chips_needed, hands_left, discards_left, joker keys (encoded), ante, dollars
-- [ ] Define action space: discrete over (PLAY_HAND variants, DISCARD_HAND variants) for the hand selection phase as a starting point
+- [ ] `BalatroEnv(gym.Env)` wraps the bot loop; observation = `GamestateEncoder.encode(G)` (300-dim float32, from Phase 3)
+- [ ] Define action space: `Discrete` over (PLAY_HAND variants, DISCARD_HAND variants) for hand selection as a starting point
 - [ ] Define reward: +1 per ante cleared, -1 on game over, shaped by chips scored vs chips needed
 - [ ] Instrument `Bot` to optionally record `(obs, action, reward)` tuples per step into a replay buffer
 - [ ] Train a simple policy with Stable Baselines3 (MlpPolicy, PPO) against the gamestate cache first, then live

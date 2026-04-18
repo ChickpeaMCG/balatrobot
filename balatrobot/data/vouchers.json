@@ -1,0 +1,229 @@
+{
+  "balatro_version": "1.0.1o",
+  "vouchers": [
+    {
+      "key": "v_antimatter",
+      "name": "Antimatter",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_blank",
+      "name": "Blank",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_clearance_sale",
+      "name": "Clearance Sale",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_crystal_ball",
+      "name": "Crystal Ball",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_directors_cut",
+      "name": "Director's Cut",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_glow_up",
+      "name": "Glow Up",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_grabber",
+      "name": "Grabber",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_hieroglyph",
+      "name": "Hieroglyph",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_hone",
+      "name": "Hone",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_illusion",
+      "name": "Illusion",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_liquidation",
+      "name": "Liquidation",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_magic_trick",
+      "name": "Magic Trick",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_money_tree",
+      "name": "Money Tree",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_nacho_tong",
+      "name": "Nacho Tong",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_observatory",
+      "name": "Observatory",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_omen_globe",
+      "name": "Omen Globe",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_overstock",
+      "name": "Overstock",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_overstock_plus",
+      "name": "Overstock Plus",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_paint_brush",
+      "name": "Paint Brush",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_palette",
+      "name": "Palette",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_petroglyph",
+      "name": "Petroglyph",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_planet_merchant",
+      "name": "Planet Merchant",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_planet_tycoon",
+      "name": "Planet Tycoon",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_recyclomancy",
+      "name": "Recyclomancy",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_reroll_glut",
+      "name": "Reroll Glut",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_reroll_surplus",
+      "name": "Reroll Surplus",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_retcon",
+      "name": "Retcon",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_seed_money",
+      "name": "Seed Money",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_tarot_merchant",
+      "name": "Tarot Merchant",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_tarot_tycoon",
+      "name": "Tarot Tycoon",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_telescope",
+      "name": "Telescope",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "v_wasteful",
+      "name": "Wasteful",
+      "base_cost": 10,
+      "effect_types": [],
+      "description": ""
+    }
+  ]
+}

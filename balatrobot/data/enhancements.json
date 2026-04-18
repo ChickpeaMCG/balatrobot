@@ -1,0 +1,59 @@
+{
+  "balatro_version": "1.0.1o",
+  "enhancements": [
+    {
+      "key": "Default Base",
+      "name": "Default Base",
+      "base_chips": 0,
+      "description": "No enhancement"
+    },
+    {
+      "key": "Bonus",
+      "name": "Bonus Card",
+      "base_chips": 30,
+      "description": "+30 Chips when scored"
+    },
+    {
+      "key": "Mult",
+      "name": "Mult Card",
+      "base_chips": 0,
+      "description": "+4 Mult when scored"
+    },
+    {
+      "key": "Wild",
+      "name": "Wild Card",
+      "base_chips": 0,
+      "description": "Counts as every suit"
+    },
+    {
+      "key": "Glass",
+      "name": "Glass Card",
+      "base_chips": 0,
+      "description": "X2 Mult when scored; 1-in-4 chance to destroy itself"
+    },
+    {
+      "key": "Steel",
+      "name": "Steel Card",
+      "base_chips": 0,
+      "description": "X1.5 Mult while this card stays in hand"
+    },
+    {
+      "key": "Stone",
+      "name": "Stone Card",
+      "base_chips": 50,
+      "description": "+50 Chips; no rank or suit"
+    },
+    {
+      "key": "Gold",
+      "name": "Gold Card",
+      "base_chips": 0,
+      "description": "Earn $3 if this card is held in hand at end of round"
+    },
+    {
+      "key": "Lucky",
+      "name": "Lucky Card",
+      "base_chips": 0,
+      "description": "1-in-5 chance for +20 Mult; 1-in-15 chance to earn $20"
+    }
+  ]
+}

@@ -1,14 +1,24 @@
 
 from balatrobot.core.bot import Actions, Bot
+from balatrobot.data.catalogue import all_jokers
 
 CARD_CHIPS = {
     "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
     "Jack": 10, "Queen": 10, "King": 10, "Ace": 11,
 }
 
+# Derived from catalogue: jokers with flush_synergy >= 0.7, ordered by synergy descending.
+# Previously this list was hardcoded with two incorrect keys (j_flush, j_4_fingers) that
+# don't exist in the game — the shop strategy never triggered as a result.
+_FLUSH_JOKERS = [
+    j.key
+    for j in sorted(all_jokers(), key=lambda j: j.flush_synergy, reverse=True)
+    if j.flush_synergy >= 0.7
+]
+
 
 class FlushBot(Bot):
-    FLUSH_JOKERS = ["j_4_fingers", "j_flush", "j_runner", "j_shortcut", "j_fibonacci"]
+    FLUSH_JOKERS = _FLUSH_JOKERS
     SKIP_TAGS = {"tag_double", "tag_economy", "tag_voucher", "tag_coupon"}
 
     def skip_or_select_blind(self, G):

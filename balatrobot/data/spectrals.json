@@ -1,0 +1,131 @@
+{
+  "balatro_version": "1.0.1o",
+  "spectrals": [
+    {
+      "key": "c_ankh",
+      "name": "Ankh",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_aura",
+      "name": "Aura",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_black_hole",
+      "name": "Black Hole",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_cryptid",
+      "name": "Cryptid",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_deja_vu",
+      "name": "Deja Vu",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_ectoplasm",
+      "name": "Ectoplasm",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_familiar",
+      "name": "Familiar",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_grim",
+      "name": "Grim",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_hex",
+      "name": "Hex",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_immolate",
+      "name": "Immolate",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_incantation",
+      "name": "Incantation",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_medium",
+      "name": "Medium",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_ouija",
+      "name": "Ouija",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_sigil",
+      "name": "Sigil",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_soul",
+      "name": "The Soul",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_talisman",
+      "name": "Talisman",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_trance",
+      "name": "Trance",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_wraith",
+      "name": "Wraith",
+      "base_cost": 4,
+      "effect_types": [],
+      "description": ""
+    }
+  ]
+}

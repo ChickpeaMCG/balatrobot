@@ -2,9 +2,9 @@
 
 ## Context
 
-Phase 1 established run persistence. Phase 2 makes FlushBot decisions informed by actual game state rather than blind heuristics. The scope was deliberately narrow: three sub-tasks (play/discard logic, shop strategy, blind skipping). Complex mechanics (economy, rerolling, comprehensive joker tiers) were explicitly deferred — Phase 3 analytics will show empirically where runs fail and guide further improvements.
+Phase 1 established run persistence. Phase 2 makes FlushBot decisions informed by actual game state rather than blind heuristics. The scope was deliberately narrow: three sub-tasks (play/discard logic, shop strategy, blind skipping). Complex mechanics (economy, rerolling, comprehensive joker tiers) were deferred.
 
-**Key constraint:** A full game mechanics catalogue was considered and rejected. Incremental implementation teaches us what mechanics matter as we go.
+A full game mechanics catalogue was deferred at Phase 2 time — incremental implementation first teaches us what mechanics matter. Phase 3 now delivers that catalogue, replacing the hardcoded `FLUSH_JOKERS` list with a data-driven, typed approach and laying the feature-vector foundation for Phase 5 RL.
 
 ---
 

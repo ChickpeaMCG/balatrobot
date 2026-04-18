@@ -131,21 +131,22 @@ def _shop_G(cards, dollars=20):
 
 
 def test_shop_buys_priority_joker(bot):
-    G = _shop_G([{"key": "j_flush", "cost": 5, "name": "Flush"}])
+    # j_droll is the real Flush mult joker key (was incorrectly j_flush before)
+    G = _shop_G([{"key": "j_droll", "cost": 4, "name": "Droll Joker"}])
     action = bot.select_shop_action(G)
     assert action[0] == Actions.BUY_CARD
     assert action[1] == [1]
 
 
 def test_shop_respects_priority_order(bot):
-    # j_4_fingers is higher priority than j_flush
+    # j_four_fingers (flush_synergy=1.0) beats j_crafty (flush_synergy=0.7)
     G = _shop_G([
-        {"key": "j_flush", "cost": 5, "name": "Flush"},
-        {"key": "j_4_fingers", "cost": 5, "name": "4 Fingers"},
+        {"key": "j_crafty", "cost": 4, "name": "Crafty Joker"},
+        {"key": "j_four_fingers", "cost": 7, "name": "Four Fingers"},
     ])
     action = bot.select_shop_action(G)
     assert action[0] == Actions.BUY_CARD
-    assert action[1] == [2]  # j_4_fingers is at index 2 (1-based)
+    assert action[1] == [2]  # j_four_fingers is at index 2 (1-based)
 
 
 def test_shop_skips_unaffordable_joker(bot):

@@ -1,0 +1,159 @@
+{
+  "balatro_version": "1.0.1o",
+  "tarots": [
+    {
+      "key": "c_chariot",
+      "name": "The Chariot",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_death",
+      "name": "Death",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_devil",
+      "name": "The Devil",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_emperor",
+      "name": "The Emperor",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_empress",
+      "name": "The Empress",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_fool",
+      "name": "The Fool",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_hanged_man",
+      "name": "The Hanged Man",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_heirophant",
+      "name": "The Hierophant",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_hermit",
+      "name": "The Hermit",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_high_priestess",
+      "name": "The High Priestess",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_judgement",
+      "name": "Judgement",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_justice",
+      "name": "Justice",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_lovers",
+      "name": "The Lovers",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_magician",
+      "name": "The Magician",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_moon",
+      "name": "The Moon",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_star",
+      "name": "The Star",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_strength",
+      "name": "Strength",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_sun",
+      "name": "The Sun",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_temperance",
+      "name": "Temperance",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_tower",
+      "name": "The Tower",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_wheel_of_fortune",
+      "name": "The Wheel of Fortune",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    },
+    {
+      "key": "c_world",
+      "name": "The World",
+      "base_cost": 3,
+      "effect_types": [],
+      "description": ""
+    }
+  ]
+}

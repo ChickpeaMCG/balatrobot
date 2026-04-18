@@ -1,0 +1,45 @@
+{
+  "balatro_version": "1.0.1o",
+  "editions": [
+    {
+      "key": "foil",
+      "name": "Foil",
+      "base_chips": 50,
+      "base_mult": 0,
+      "xmult": 1.0,
+      "extra_joker_slot": false
+    },
+    {
+      "key": "holographic",
+      "name": "Holographic",
+      "base_chips": 0,
+      "base_mult": 10,
+      "xmult": 1.0,
+      "extra_joker_slot": false
+    },
+    {
+      "key": "polychrome",
+      "name": "Polychrome",
+      "base_chips": 0,
+      "base_mult": 0,
+      "xmult": 1.5,
+      "extra_joker_slot": false
+    },
+    {
+      "key": "negative",
+      "name": "Negative",
+      "base_chips": 0,
+      "base_mult": 0,
+      "xmult": 1.0,
+      "extra_joker_slot": true
+    },
+    {
+      "key": "none",
+      "name": "None",
+      "base_chips": 0,
+      "base_mult": 0,
+      "xmult": 1.0,
+      "extra_joker_slot": false
+    }
+  ]
+}

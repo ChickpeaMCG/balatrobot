@@ -1,0 +1,25 @@
+{
+  "balatro_version": "1.0.1o",
+  "seals": [
+    {
+      "key": "Gold",
+      "name": "Gold Seal",
+      "description": "Earn $3 when this card is played and scores"
+    },
+    {
+      "key": "Red",
+      "name": "Red Seal",
+      "description": "Retrigger this card once"
+    },
+    {
+      "key": "Blue",
+      "name": "Blue Seal",
+      "description": "Create the Planet card for the most played hand this round if held in hand at end of round"
+    },
+    {
+      "key": "Purple",
+      "name": "Purple Seal",
+      "description": "Create a Tarot card when discarded"
+    }
+  ]
+}
