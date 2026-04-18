@@ -3,9 +3,11 @@ Unit tests for Bot base class constructor and start_balatro_instance.
 No game or socket required — subprocess.Popen is mocked.
 """
 import argparse
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from balatrobot.core.bot import Actions, Bot
+from balatrobot.runners.recording import RecordingFlushBot
 
 
 class DummyBot(Bot):
@@ -86,3 +88,30 @@ def test_replay_bot_argparse_accepts_fast():
     parser.add_argument("--speed", default="watch", choices=["fast", "watch"])
     args = parser.parse_args(["some.replay.json", "--speed", "fast"])
     assert args.speed == "fast"
+
+
+_RECORD_RUN_RETURN = {
+    "timestamp": "2026-01-01T00:00:00+00:00",
+    "seed": "GAME123", "deck": "Blue Deck", "stake": 1,
+    "ante_reached": 3, "result": "loss", "hands_played": 10, "best_hand": "Flush",
+}
+
+
+def test_recording_uses_G_seed_when_available():
+    bot = RecordingFlushBot(deck="Blue Deck", stake=1, bot_port=12345)
+    bot._current_seed = "PYTHON1"
+    G = {"seed": "GAME123", "ante": {"ante": 3}, "num_hands_played": 10}
+    with patch("balatrobot.runners.recording.record_run", return_value=_RECORD_RUN_RETURN) as mock_record, \
+         patch.object(Path, "write_text"):
+        bot._on_run_complete(G)
+        assert mock_record.call_args.kwargs["seed"] == "GAME123"
+
+
+def test_recording_falls_back_to_python_seed_when_G_has_none():
+    bot = RecordingFlushBot(deck="Blue Deck", stake=1, bot_port=12345)
+    bot._current_seed = "PYTHON1"
+    G = {"ante": {"ante": 3}, "num_hands_played": 10}
+    with patch("balatrobot.runners.recording.record_run", return_value=_RECORD_RUN_RETURN) as mock_record, \
+         patch.object(Path, "write_text"):
+        bot._on_run_complete(G)
+        assert mock_record.call_args.kwargs["seed"] == "PYTHON1"

@@ -208,6 +208,7 @@ function Utils.getGameData()
         _game.dollars             = G.GAME.dollars
         _game.max_jokers          = G.GAME.max_jokers
         _game.bankrupt_at         = G.GAME.bankrupt_at
+        _game.seed                = G.GAME.pseudorandom and tostring(G.GAME.pseudorandom.seed) or nil
     end
 
     return _game

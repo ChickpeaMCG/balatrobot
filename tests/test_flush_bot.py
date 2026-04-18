@@ -146,3 +146,9 @@ def test_jokers_have_name_and_key():
         for joker in G.get("jokers", []):
             assert "name" in joker, f"Joker missing 'name': {joker}"
             assert "key" in joker, f"Joker missing 'key': {joker}"
+
+
+def test_gamestate_includes_seed():
+    for G in load_states("select_cards_from_hand"):
+        assert "seed" in G, "seed missing from gamestate — check getGameData() in utils.lua"
+        assert isinstance(G["seed"], str) and len(G["seed"]) > 0, f"seed is empty or wrong type: {G.get('seed')!r}"

@@ -13,7 +13,7 @@ class RecordingFlushBot(FlushBot):
     def _on_run_complete(self, G):
         ante = (G.get("ante") or {}).get("ante") or 0
         entry = record_run(
-            seed=self._current_seed,
+            seed=G.get("seed") or self._current_seed,
             deck=self.deck,
             stake=self.stake,
             ante_reached=ante,
@@ -25,7 +25,8 @@ class RecordingFlushBot(FlushBot):
 
         REPLAYS_DIR.mkdir(exist_ok=True)
         safe_ts = entry["timestamp"][:19].replace(":", "-")
-        replay_path = REPLAYS_DIR / f"{self._current_seed or 'unseeded'}_{safe_ts}.replay.json"
+        seed_label = G.get("seed") or self._current_seed or "unseeded"
+        replay_path = REPLAYS_DIR / f"{seed_label}_{safe_ts}.replay.json"
         replay_path.write_text(json.dumps(self._action_log, indent=2))
         print(f"Replay saved -> {replay_path}")
 
