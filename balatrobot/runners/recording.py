@@ -1,5 +1,6 @@
 import argparse
 import json
+import subprocess
 import time
 from pathlib import Path
 
@@ -9,7 +10,23 @@ from balatrobot.utils.run_history import print_run_summary, record_run
 REPLAYS_DIR = Path("replays")
 
 
+def get_git_branch() -> str:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        branch = result.stdout.strip()
+        return branch if branch else "unlabelled"
+    except Exception:
+        return "unlabelled"
+
+
 class RecordingFlushBot(FlushBot):
+    def __init__(self, *args, label: str | None = None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._label = label
+
     def _on_run_complete(self, G):
         ante = (G.get("ante") or {}).get("ante") or 0
         entry = record_run(
@@ -20,6 +37,7 @@ class RecordingFlushBot(FlushBot):
             result="loss",
             hands_played=G.get("num_hands_played", 0),
             best_hand="Flush",
+            label=self._label,
         )
         print_run_summary(entry)
 
@@ -36,11 +54,20 @@ def main():
     parser.add_argument("--seed", default=None)
     parser.add_argument("--runs", type=int, default=0,
                         help="Number of runs before exiting (0 = unlimited)")
+    parser.add_argument("--label", default=None,
+                        help="Label for this batch of runs (default: current git branch)")
     args = parser.parse_args()
 
-    bot = RecordingFlushBot(deck="Checkered Deck", stake=1, seed=args.seed, bot_port=12345)
+    label = args.label or get_git_branch()
+    if label in ("main", "master"):
+        print(
+            f"Warning: running on '{label}' — runs will be labelled '{label}'.\n"
+            "  Use --label <name> or switch to a feature branch to group runs by phase."
+        )
+
+    bot = RecordingFlushBot(deck="Checkered Deck", stake=1, seed=args.seed, bot_port=12345, label=label)
     bot.start_balatro_instance()
-    print("Waiting for game to load...")
+    print(f"Waiting for game to load... (label: {label})")
     time.sleep(15)
 
     completed = 0

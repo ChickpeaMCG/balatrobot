@@ -95,7 +95,16 @@ See `docs/PLAN_PHASE3.md` for full implementation record.
 
 **Goal:** Understand where runs fail so bot improvement is data-driven.
 
-- [ ] `analyse_runs.py` script: reads `run_history.json`, outputs win rate, average ante, most common exit ante
+See `docs/PLAN_PHASE4.md` for full implementation record.
+
+### 4a. Run labelling & best-run capture
+- [x] `label` field added to run history entries (auto-derived from git branch, `--label` to override)
+- [x] `runs_for_label()`, `best_run_for_label()`, `format_best_run_markdown()` in `run_history.py`
+- [x] `--label` / `--doc` flags on `analyse_runs.py` — appends best-run markdown block to a phase doc
+- [x] Warning when running on `main`/`master` branch
+- [x] `tests/test_run_history.py` — 7 tests
+
+### 4b. Analytics & failure mode analysis
 - [ ] Correlate run outcomes with jokers held, deck used, stake
 - [ ] Identify the most common failure mode: out of hands, chip deficit, or bad blind matchup
 - [ ] Resolve `current_chips` — find the correct Balatro Lua field for chips scored toward the current blind
