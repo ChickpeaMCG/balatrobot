@@ -18,52 +18,52 @@ The `FlushBot` strategy is naive: always select blinds, hunt flushes, never buy 
 **Goal:** Every run can be stored, replayed, and compared. Builds the foundation for analytics and eventually training data.
 
 ### 1a. Action logging (Lua)
-- [ ] Fix `botlogger.lua`: uncomment and correct the `.run` file save path so files land in the mod directory
-- [ ] When `api=true`, hook incoming API actions through `logbotdecision` so Python-driven runs are recorded, not just Lua-native runs
-- [ ] `.run` files are keyed by `seed_deck_stake_challenge_port.run` — verify this works for seeded and unseeded runs
+- [x] `botlogger.lua` handles `.run` file naming for seeded and unseeded runs (`seed_deck_stake_challenge_port.run`)
+- [x] API-driven action recording superseded by Python-side `_action_log` in `bot.py` — Lua `.run` files are no longer the primary record for Python-driven runs
+- Note: `Botlogger.path` is still `''` (files land in CWD); intentionally left — Python recording is the canonical approach
 
 ### 1b. Run outcome tracking (Python)
-- [ ] Detect `G["state"] == State.GAME_OVER` in `Bot.chooseaction()` and emit a structured run record
-- [ ] Write `run_history.json` — append one entry per completed run:
-  ```json
-  {
-    "timestamp": "2026-04-12T21:00:00",
-    "seed": "ABC1234",
-    "deck": "Blue Deck",
-    "stake": 1,
-    "ante_reached": 3,
-    "result": "loss",
-    "hands_played": 42,
-    "best_hand": "Flush"
-  }
-  ```
-- [ ] Track `best_run` pointer (highest ante reached) in a summary header in `run_history.json`
-- [ ] Print a one-line summary on exit: `Run complete — Ante 3 | 42 hands | loss`
+- [x] Detect `G["state"] == State.GAME_OVER` in `bot.py:run_step()`, call `_on_run_complete` hook
+- [x] `run_history.json` written via `balatrobot/utils/run_history.py:record_run()` — one entry per completed run with timestamp, seed, deck, stake, ante_reached, result, hands_played, best_hand
+- [x] `best_run` pointer (index of highest ante reached) stored in `run_history.json` header
+- [x] One-line summary printed via `print_run_summary()`: `Run complete — Ante N | N hands | result | seed=...`
 
 ### 1c. Replay runner
-- [ ] Add `--replay <seed>` flag to `run_flush_bot.py` that sets `Bot.SETTINGS.replay=true` and the correct seed, replaying a stored `.run` file without Python decision logic
-- [ ] Validate that a replayed run produces the same game progression as the original (same seed = deterministic)
+- [x] `ReplayBot` in `balatrobot/bots/replay_bot.py` replays runs from `.replay.json` files saved by `RecordingFlushBot`
+- [x] `replay_bot.py` CLI entry point (`python replay_bot.py <file>`)
+- [x] `.replay.json` files record full gamestate + action string at every step (richer than the original `.run` format)
+- Note: approach is action-sequence replay (Python) rather than seed-determinism replay (Lua). Trade-off: action replay can desync on game version changes; seed replay would be immune but requires more Lua infrastructure. Current approach is sufficient for debugging and run comparison.
 
 ---
 
-## Phase 2 — Smarter FlushBot
+## Phase 2 — Smarter FlushBot ✅ Complete
 
 **Goal:** Use the richer game state to make decisions that are actually informed by the game situation.
 
+See `docs/PLAN_PHASE2.md` for full implementation record, bugs found, and deferred items.
+
 ### 2a. Play/discard decisions
-- [ ] Calculate expected chips for best available hand using `handscores` + card values
-- [ ] Compare against `chips_needed - current_chips` to decide whether to play or fish for a better hand
-- [ ] Respect `hands_left`: if on last hand, always play regardless of hand quality
-- [ ] Only discard when `discards_left > 0` AND expected best hand is below chip target with hands remaining
+- [x] Flush-first: if 5+ cards of same suit, always play — scores accumulate across hands
+- [x] Discard off-suit cards to fish for flush when discards remain and not last hand
+- [x] Play forced hand when no flush available and no discards (or last hand)
+- [~] `current_chips` — `G.GAME.chips` is always 0 (wrong field); carried to Phase 3
+- [~] Score-vs-deficit check (`_should_play`) — scaffolded, not wired in; carried to Phase 3
 
 ### 2b. Shop strategy
-- [ ] Define a priority list of flush-synergy joker keys (e.g. `j_runner`, `j_shortcut`, `j_fibonacci`, `j_flush`, `j_4_fingers`)
-- [ ] Buy highest-priority joker that is affordable and in stock
-- [ ] Skip shop if no priority jokers are available
+- [x] `FLUSH_JOKERS` priority list defined: `j_4_fingers`, `j_flush`, `j_runner`, `j_shortcut`, `j_fibonacci`
+- [x] Buys highest-priority affordable joker, ends shop otherwise
+- [x] No rerolling (out of scope)
+- [~] Priority list too narrow to trigger reliably — joker selection to be data-driven in Phase 3
 
 ### 2c. Blind skipping
-- [ ] Track tags awarded for skipping — if a useful tag is on offer (e.g. `tag_double`), factor into skip decision
-- [ ] Always select Boss blind (can't skip), skip Small/Big if a good tag is offered and ante allows it
+- [~] Deferred to Phase 3 — requires exposing offered tag in `Utils.getBlindData()` (Lua)
+
+### Deck
+- [x] Switched to Checkered Deck (26 Hearts + 26 Spades) — optimal for flush bot
+
+### Baseline performance (20 runs, Checkered Deck, Stake 1)
+- Avg ante: ~1.5 | Ante 1: 50% | Ante 2: 48% | Ante 4: 2% (outlier)
+- Failure mode: chip wall at Ante 2 — naked flushes cannot reliably hit without jokers
 
 ---
 

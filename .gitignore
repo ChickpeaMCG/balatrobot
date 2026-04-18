@@ -5,3 +5,4 @@ gamestate_cache
 run_history.json
 replays/
 *.run
+.claude/

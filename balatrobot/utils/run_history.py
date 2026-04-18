@@ -24,8 +24,8 @@ def record_run(seed, deck, stake, ante_reached, result, hands_played, best_hand)
         "best_hand": best_hand,
     }
     history["runs"].append(entry)
-    best = history.get("best_run")
-    if best is None or ante_reached > history["runs"][best]["ante_reached"]:
+    best_idx = history.get("best_run")
+    if best_idx is None or ante_reached > history["runs"][best_idx]["ante_reached"]:
         history["best_run"] = len(history["runs"]) - 1
     HISTORY_FILE.write_text(json.dumps(history, indent=2))
     return entry

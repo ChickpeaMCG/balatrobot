@@ -40,11 +40,36 @@ def test_select_blind_always_returns_valid_action(bot):
         assert action[0] in (Actions.SELECT_BLIND, Actions.SKIP_BLIND)
 
 
-def test_flush_bot_always_selects_blind(bot):
-    """FlushBot never skips — it wants to play every round."""
-    for G in load_states("skip_or_select_blind"):
-        action = bot.skip_or_select_blind(G)
-        assert action[0] == Actions.SELECT_BLIND
+# --- unit tests with mock G dicts (no game required) ---
+
+def _blind_G(boss=False, tags=None):
+    return {
+        "ante": {"blinds": {"boss": boss, "chips_needed": 300}},
+        "tags": [{"key": k, "name": k} for k in (tags or [])],
+        "current_chips": 0,
+    }
+
+
+def test_select_blind_boss_always_selects(bot):
+    G = _blind_G(boss=True, tags=["tag_double"])
+    assert bot.skip_or_select_blind(G)[0] == Actions.SELECT_BLIND
+
+
+def test_skip_blind_on_good_tag(bot):
+    # Skip logic deferred — G["tags"] = already-collected tags, not the offered skip tag.
+    # Bot always selects until offered tags are exposed in gamestate.
+    G = _blind_G(boss=False, tags=["tag_double"])
+    assert bot.skip_or_select_blind(G)[0] == Actions.SELECT_BLIND
+
+
+def test_select_blind_no_useful_tag(bot):
+    G = _blind_G(boss=False, tags=["tag_unknown"])
+    assert bot.skip_or_select_blind(G)[0] == Actions.SELECT_BLIND
+
+
+def test_select_blind_no_tags(bot):
+    G = _blind_G(boss=False, tags=[])
+    assert bot.skip_or_select_blind(G)[0] == Actions.SELECT_BLIND
 
 
 # ---------------------------------------------------------------------------
@@ -99,10 +124,43 @@ def test_shop_action_returns_valid_action(bot):
         assert action[0] in valid
 
 
-def test_flush_bot_always_ends_shop(bot):
-    for G in load_states("select_shop_action"):
-        action = bot.select_shop_action(G)
-        assert action[0] == Actions.END_SHOP
+# --- unit tests with mock G dicts (no game required) ---
+
+def _shop_G(cards, dollars=20):
+    return {"shop": {"cards": cards}, "dollars": dollars}
+
+
+def test_shop_buys_priority_joker(bot):
+    G = _shop_G([{"key": "j_flush", "cost": 5, "name": "Flush"}])
+    action = bot.select_shop_action(G)
+    assert action[0] == Actions.BUY_CARD
+    assert action[1] == [1]
+
+
+def test_shop_respects_priority_order(bot):
+    # j_4_fingers is higher priority than j_flush
+    G = _shop_G([
+        {"key": "j_flush", "cost": 5, "name": "Flush"},
+        {"key": "j_4_fingers", "cost": 5, "name": "4 Fingers"},
+    ])
+    action = bot.select_shop_action(G)
+    assert action[0] == Actions.BUY_CARD
+    assert action[1] == [2]  # j_4_fingers is at index 2 (1-based)
+
+
+def test_shop_skips_unaffordable_joker(bot):
+    G = _shop_G([{"key": "j_flush", "cost": 50, "name": "Flush"}], dollars=5)
+    assert bot.select_shop_action(G)[0] == Actions.END_SHOP
+
+
+def test_shop_ends_no_priority_joker(bot):
+    G = _shop_G([{"key": "j_some_other", "cost": 4, "name": "Other"}])
+    assert bot.select_shop_action(G)[0] == Actions.END_SHOP
+
+
+def test_shop_ends_empty(bot):
+    G = _shop_G([])
+    assert bot.select_shop_action(G)[0] == Actions.END_SHOP
 
 
 # ---------------------------------------------------------------------------
@@ -152,3 +210,63 @@ def test_gamestate_includes_seed():
     for G in load_states("select_cards_from_hand"):
         assert "seed" in G, "seed missing from gamestate — check getGameData() in utils.lua"
         assert isinstance(G["seed"], str) and len(G["seed"]) > 0, f"seed is empty or wrong type: {G.get('seed')!r}"
+
+
+def test_gamestate_includes_current_chips():
+    for G in load_states("select_cards_from_hand"):
+        assert "current_chips" in G, "current_chips missing — add it to getGameData() in utils.lua"
+        assert isinstance(G["current_chips"], (int, float))
+
+
+# ---------------------------------------------------------------------------
+# select_cards_from_hand — play/discard logic (mock G dicts)
+# ---------------------------------------------------------------------------
+
+def _hand_G(suits, hands_left=3, discards_left=3, chips_needed=300, current_chips=0):
+    hand = [
+        {"suit": s, "value": v, "name": f"{v} of {s}", "card_key": f"{s[0]}{v}"}
+        for s, v in suits
+    ]
+    return {
+        "hand": hand,
+        "current_round": {"hands_left": hands_left, "discards_left": discards_left},
+        "ante": {"blinds": {"chips_needed": chips_needed, "boss": False}},
+        "current_chips": current_chips,
+        "handscores": {
+            "Flush": {"chips": 35, "mult": 4, "level": 1, "order": 6},
+            "High Card": {"chips": 5, "mult": 1, "level": 1, "order": 1},
+        },
+        "tags": [],
+        "dollars": 10,
+        "shop": {"cards": []},
+    }
+
+
+def test_plays_flush_when_score_meets_target(bot):
+    # 5 hearts; expected flush score well above 300 deficit
+    suits = [("Hearts", v) for v in [2, 4, 6, 8, 10]] + [("Spades", 3), ("Clubs", 5)]
+    G = _hand_G(suits, chips_needed=50, current_chips=0)
+    action = bot.select_cards_from_hand(G)
+    assert action[0] == Actions.PLAY_HAND
+
+
+def test_discards_when_below_target_and_discards_remain(bot):
+    # 3 hearts, 4 spades — no flush, score will be low, discards available
+    suits = [("Hearts", v) for v in [2, 3, 4]] + [("Spades", v) for v in [5, 6, 7, 8]]
+    G = _hand_G(suits, chips_needed=9999, current_chips=0, discards_left=3)
+    action = bot.select_cards_from_hand(G)
+    assert action[0] == Actions.DISCARD_HAND
+
+
+def test_plays_on_last_hand_regardless_of_score(bot):
+    suits = [("Hearts", v) for v in [2, 3, 4]] + [("Spades", v) for v in [5, 6, 7, 8]]
+    G = _hand_G(suits, hands_left=1, chips_needed=9999, current_chips=0)
+    action = bot.select_cards_from_hand(G)
+    assert action[0] == Actions.PLAY_HAND
+
+
+def test_plays_when_no_discards_left(bot):
+    suits = [("Hearts", v) for v in [2, 3, 4]] + [("Spades", v) for v in [5, 6, 7, 8]]
+    G = _hand_G(suits, chips_needed=9999, current_chips=0, discards_left=0)
+    action = bot.select_cards_from_hand(G)
+    assert action[0] == Actions.PLAY_HAND

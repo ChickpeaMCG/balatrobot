@@ -38,7 +38,7 @@ def main():
                         help="Number of runs before exiting (0 = unlimited)")
     args = parser.parse_args()
 
-    bot = RecordingFlushBot(deck="Blue Deck", stake=1, seed=args.seed, bot_port=12345)
+    bot = RecordingFlushBot(deck="Checkered Deck", stake=1, seed=args.seed, bot_port=12345)
     bot.start_balatro_instance()
     print("Waiting for game to load...")
     time.sleep(15)

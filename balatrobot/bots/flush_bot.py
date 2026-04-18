@@ -1,58 +1,74 @@
 
 from balatrobot.core.bot import Actions, Bot
 
+CARD_CHIPS = {
+    "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+    "Jack": 10, "Queen": 10, "King": 10, "Ace": 11,
+}
 
-# Plays flushes if possible
-# otherwise keeps the most common suit
-# Discarding the rest, or playing the rest if there are no discards left
+
 class FlushBot(Bot):
+    FLUSH_JOKERS = ["j_4_fingers", "j_flush", "j_runner", "j_shortcut", "j_fibonacci"]
+    SKIP_TAGS = {"tag_double", "tag_economy", "tag_voucher", "tag_coupon"}
 
     def skip_or_select_blind(self, G):
+        # Always select — skip logic deferred until offered tags are exposed in gamestate.
+        # G["tags"] = already-collected tags, not the tag currently on offer for skipping.
         return [Actions.SELECT_BLIND]
 
     def select_cards_from_hand(self, G):
-        suit_count = {
-            "Hearts": 0,
-            "Diamonds": 0,
-            "Clubs": 0,
-            "Spades": 0,
-        }
-        for card in G["hand"]:
-            suit_count[card["suit"]] += 1
+        hand = G["hand"]
+        hands_left = G["current_round"]["hands_left"]
+        discards_left = G["current_round"]["discards_left"]
 
-        most_common_suit = max(suit_count, key=suit_count.get)
-        most_common_suit_count = suit_count[most_common_suit]
-        if most_common_suit_count >= 5:
-            flush_cards = []
-            for card in G["hand"]:
-                if card["suit"] == most_common_suit:
-                    flush_cards.append(card)
-            flush_cards.sort(key=lambda x: x["value"], reverse=True)
-            return [
-                Actions.PLAY_HAND,
-                [G["hand"].index(card) + 1 for card in flush_cards[:5]],
-            ]
+        # Count suits and track card indices (avoids hand.index() which breaks on duplicate cards)
+        suit_indices: dict[str, list[int]] = {}
+        for i, card in enumerate(hand):
+            suit = card.get("suit") or "Unknown"
+            suit_indices.setdefault(suit, []).append(i)
 
-        # We don't have a flush, so we discard up to 5 cards that are not of the most common suit
-        discards = []
-        for card in G["hand"]:
-            if card["suit"] != most_common_suit:
-                discards.append(card)
-        discards.sort(key=lambda x: x["value"], reverse=True)
-        discards = discards[:5]
-        if len(discards) > 0:
-            if G["current_round"]["discards_left"] > 0:
-                action = Actions.DISCARD_HAND
-            else:
-                action = Actions.PLAY_HAND
-            return [action, [G["hand"].index(card) + 1 for card in discards]]
+        most_common_suit = max(suit_indices, key=lambda s: len(suit_indices[s]))
 
-        print(
-            "Somehow don't have a flush, but also don't have any cards to discard. Playing the first card"
-        )
-        return [Actions.PLAY_HAND, [1]]
+        # If we have a flush, always play it — scores accumulate across hands
+        if len(suit_indices[most_common_suit]) >= 5:
+            suit_cards = sorted(
+                [(i, hand[i]) for i in suit_indices[most_common_suit]],
+                key=lambda x: x[1]["value"],
+                reverse=True,
+            )
+            return [Actions.PLAY_HAND, [i + 1 for i, _ in suit_cards[:5]]]
+
+        # No flush — discard off-suit cards to fish for one
+        off_suit_indices = [i for s, idxs in suit_indices.items() if s != most_common_suit for i in idxs][:5]
+        if off_suit_indices and discards_left > 0 and hands_left > 1:
+            return [Actions.DISCARD_HAND, [i + 1 for i in off_suit_indices]]
+
+        # Forced play — no flush and no discards (or last hand)
+        forced_indices = sorted(suit_indices[most_common_suit], key=lambda i: hand[i]["value"], reverse=True)[:5]
+        if not forced_indices:
+            forced_indices = list(range(min(5, len(hand))))
+        return [Actions.PLAY_HAND, [i + 1 for i in forced_indices]]
+
+    def _should_play(self, cards: list[dict], hand_name: str, G: dict) -> bool:
+        """Estimate whether expected score meets the remaining chip deficit. Reserved for future use."""
+        if G["current_round"]["hands_left"] == 1:
+            return True
+        score_data = G.get("handscores", {}).get(hand_name, {})
+        hand_chips = score_data.get("chips", 0)
+        mult = score_data.get("mult", 1)
+        card_chips = sum(CARD_CHIPS.get(str(c["value"]), 0) for c in cards)
+        expected = (hand_chips + card_chips) * mult
+        chips_needed = G["ante"]["blinds"]["chips_needed"]
+        deficit = chips_needed - G.get("current_chips", 0)
+        return expected >= deficit
 
     def select_shop_action(self, G):
+        dollars = G["dollars"]
+        shop_cards = G.get("shop", {}).get("cards", [])
+        for priority_key in self.FLUSH_JOKERS:
+            for idx, card in enumerate(shop_cards):
+                if card.get("key") == priority_key and card.get("cost", 999) <= dollars:
+                    return [Actions.BUY_CARD, [idx + 1]]
         return [Actions.END_SHOP]
 
     def select_booster_action(self, G):

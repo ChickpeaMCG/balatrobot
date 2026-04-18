@@ -5,6 +5,7 @@ import random
 import socket
 import subprocess
 import sys
+import time
 from enum import Enum
 
 from balatrobot.utils.gamestates import cache_state
@@ -209,6 +210,9 @@ class Bot:
             case "rearrange_hand":
                 return self.rearrange_hand(self.G)
 
+    def _balatro_alive(self) -> bool:
+        return self.balatro_instance is None or self.balatro_instance.poll() is None
+
     def _recv_gamestate(self):
         self.sendcmd("HELLO")
         try:
@@ -219,8 +223,12 @@ class Bot:
                 return None
             return jsondata
         except OSError as e:
-            print(e)
-            print("Socket error, reconnecting...")
+            if not self._balatro_alive():
+                print("Balatro process exited.")
+                self.running = False
+                return None
+            print(f"Socket error, reconnecting... ({e})")
+            time.sleep(1)
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.sock.settimeout(1)
             self.sock.connect(self.addr)

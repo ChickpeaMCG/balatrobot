@@ -209,6 +209,7 @@ function Utils.getGameData()
         _game.max_jokers          = G.GAME.max_jokers
         _game.bankrupt_at         = G.GAME.bankrupt_at
         _game.seed                = G.GAME.pseudorandom and tostring(G.GAME.pseudorandom.seed) or nil
+        _game.current_chips       = G.GAME.chips or 0
     end
 
     return _game
