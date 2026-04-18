@@ -6,6 +6,35 @@ A botting framework for [Balatro](https://store.steampowered.com/app/2379780/Bal
 
 ---
 
+## Origin & Credits
+
+This project is forked from [giewev/balatrobot](https://github.com/giewev/balatrobot). The upstream work provided the foundation this project is built on: the Lua mod framework, UDP communication protocol, `Bot` base class, initial `FlushBot` strategy, speedup hooks, and multi-instance benchmarking.
+
+This fork has extended that foundation across four development phases:
+
+- **Phase 1** — Run persistence and replay: `run_history.json`, `.replay.json` files, `ReplayBot`, `GAME_OVER` detection fix
+- **Phase 2** — Smarter `FlushBot`: flush-first play logic, discard-to-fish strategy, Checkered Deck, shop joker buying, corrected joker keys
+- **Phase 3** — Game mechanics catalogue: full extraction of 150+ jokers/consumables from the Balatro binary, typed dataclasses, `flush_synergy` annotations, 300-dim feature encoder for ML
+- **Phase 4a** — Run analytics infrastructure: labelled run batches (auto-derived from git branch), per-phase best-run documentation, hall of fame replays
+
+See [`docs/FORK_AND_CHANGES.md`](docs/FORK_AND_CHANGES.md) for a full commit-by-commit record of changes from the upstream, and [`docs/PLAN.md`](docs/PLAN.md) for the development roadmap.
+
+---
+
+## Current Performance
+
+| Phase | Runs | Avg Ante | Ante 1 exit | Ante 2 exit | Best run |
+|-------|------|----------|-------------|-------------|----------|
+| phase-1 (dev/testing) | 71 | 1.6 | 47% | 52% | Ante 4 (seed `N5VFU69`) |
+| phase-2 (post-fix) | 5 | 2.0 | 0% | 100% | Ante 2 |
+| phase-4-analytics | 20 | 1.9 | 5% | 95% | Ante 2 |
+
+Best run replay: [`replays/hall_of_fame/phase-1-best_N5VFU69.replay.json`](replays/hall_of_fame/phase-1-best_N5VFU69.replay.json) — Ante 4, 31 hands.
+
+Current bottleneck: chip wall at Ante 2 — a naked flush strategy can't reliably clear the blind requirement without jokers. Phase 4b will analyse failure modes; Phase 5 introduces RL.
+
+---
+
 ## How It Works
 
 The system has two halves that communicate over a local UDP socket:
