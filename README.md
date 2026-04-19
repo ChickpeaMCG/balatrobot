@@ -296,6 +296,21 @@ run_history.json              # Cumulative run history
 
 ---
 
+## Development Tools
+
+This project uses several Claude Code tools to assist development:
+
+| Tool | Type | Activation | Purpose |
+|------|------|------------|---------|
+| **Superpowers** | Plugin / Skills | Manual — invoke the matching skill by name | Structured workflows for planning (`superpowers:writing-plans`), brainstorming features (`superpowers:brainstorming`), executing plans (`superpowers:executing-plans`), debugging (`superpowers:systematic-debugging`), and verifying completion (`superpowers:verification-before-completion`) |
+| **Context7** | MCP Server | Automatic — fires when asking about any library or framework | Fetches live documentation for Python packages, Lua libraries, APIs, and CLI tools so answers reflect current versions, not stale training data |
+| **Code Simplifier** | Agent | Manual — ask Claude to "run the code-simplifier" after a feature is complete | Reviews recently modified code for clarity, redundancy, and maintainability without changing behaviour |
+| **Sequential Thinking** | MCP Server | Manual — ask Claude to "use sequential thinking" | Structures complex multi-step reasoning (architecture decisions, debugging with many possible causes) into explicit, reviewable steps |
+
+**Workflow pattern:** Brainstorm → Plan → Execute → Simplify → Verify → Finish branch.
+
+---
+
 ## Known Limitations
 
 - `use_or_sell_consumables` action execution is not yet implemented in `middleware.lua`
