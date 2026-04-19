@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The full Balatro Lua source (extracted from `Balatro.exe`) is at:
 ```
-C:\Users\Vince\Desktop\sandbox\balatro_game_src\
+../balatro_game_src/
 ```
 Use this when investigating game internals — no need to re-extract from the .exe. Key files: `game.lua`, `functions/state_events.lua`, `functions/button_callbacks.lua`, `functions/common_events.lua`.
 
