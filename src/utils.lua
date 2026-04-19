@@ -209,7 +209,16 @@ function Utils.getGameData()
         _game.max_jokers          = G.GAME.max_jokers
         _game.bankrupt_at         = G.GAME.bankrupt_at
         _game.seed                = G.GAME.pseudorandom and tostring(G.GAME.pseudorandom.seed) or nil
-        _game.current_chips       = G.GAME.chips or 0
+        _game.current_chips = G.GAME.chips or 0
+        -- DEBUG: dump blind fields
+        if G.GAME.blind then
+            for k, v in pairs(G.GAME.blind) do
+                if type(v) ~= 'table' and type(v) ~= 'function' then
+                    sendDebugMessage('blind.'..tostring(k)..' = '..tostring(v))
+                end
+            end
+        end
+        _game.current_chips = G.GAME.chips or 0
     end
 
     return _game

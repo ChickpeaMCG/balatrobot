@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Balatro Game Source
+
+The full Balatro Lua source (extracted from `Balatro.exe`) is at:
+```
+C:\Users\Vince\Desktop\sandbox\balatro_game_src\
+```
+Use this when investigating game internals — no need to re-extract from the .exe. Key files: `game.lua`, `functions/state_events.lua`, `functions/button_callbacks.lua`, `functions/common_events.lua`.
+
+Steamodded debug logs go to: `%AppData%\Roaming\Balatro\Mods\lovely\log\` (most recent file).
+
 ## Project Overview
 
 Balatrobot is a two-part system: a **Lua mod** that runs inside Balatro (via Steamodded) and a **Python client** that drives bot logic externally. They communicate over UDP sockets.
@@ -101,6 +111,26 @@ pip install pre-commit && pre-commit install
 - Use `isinstance(x, list)` not `type(x) is list`
 - No bare `except:` — always `except Exception:` or a specific type
 - New public methods should have type annotations on parameters and return type
+
+## Superpowers Workflow
+
+### Finishing a phase or feature branch
+
+When using `superpowers:finishing-a-development-branch`, always create a phase implementation record before merging:
+
+1. Create `docs/superpowers/records/phase-<N>-<slug>.md` using the standard structure:
+   - Header metadata (Date, Branch, Follows, Precedes)
+   - Overview (2–3 sentences)
+   - Scope table (items + independence)
+   - What Was Planned
+   - What Was Built
+   - Bugs Found During Implementation
+   - Current State Per Sub-Task table
+   - What Is Explicitly Out of Scope
+   - Deferred Items
+2. Update `docs/PLAN_DOCS_SITE.md` nav if a new phase page was added
+
+The records serve as both internal archaeology and the source content for the public MkDocs documentation site — no separate phase pages are needed.
 
 ## Steamodded Installation
 
