@@ -31,13 +31,22 @@ class FlushBot(Bot):
         hands_left = G["current_round"]["hands_left"]
         discards_left = G["current_round"]["discards_left"]
 
-        # Count suits and track card indices (avoids hand.index() which breaks on duplicate cards)
         suit_indices: dict[str, list[int]] = {}
         for i, card in enumerate(hand):
             suit = card.get("suit") or "Unknown"
             suit_indices.setdefault(suit, []).append(i)
 
         most_common_suit = max(suit_indices, key=lambda s: len(suit_indices[s]))
+
+        # Already beaten the chip requirement — stop fishing, play best available
+        current_chips = G.get("current_chips", 0)
+        chips_needed = G["ante"]["blinds"]["chips_needed"]
+        if current_chips > 0 and current_chips >= chips_needed:
+            best_cards = sorted(
+                suit_indices[most_common_suit], key=lambda i: hand[i]["value"], reverse=True
+            )[:5]
+            self._last_hand_type = "Other"
+            return [Actions.PLAY_HAND, [i + 1 for i in best_cards]]
 
         # If we have a flush, always play it — scores accumulate across hands
         if len(suit_indices[most_common_suit]) >= 5:
@@ -46,17 +55,23 @@ class FlushBot(Bot):
                 key=lambda x: x[1]["value"],
                 reverse=True,
             )
+            self._last_hand_type = "Flush"
             return [Actions.PLAY_HAND, [i + 1 for i, _ in suit_cards[:5]]]
 
         # No flush — discard off-suit cards to fish for one
-        off_suit_indices = [i for s, idxs in suit_indices.items() if s != most_common_suit for i in idxs][:5]
+        off_suit_indices = [
+            i for s, idxs in suit_indices.items() if s != most_common_suit for i in idxs
+        ][:5]
         if off_suit_indices and discards_left > 0 and hands_left > 1:
             return [Actions.DISCARD_HAND, [i + 1 for i in off_suit_indices]]
 
         # Forced play — no flush and no discards (or last hand)
-        forced_indices = sorted(suit_indices[most_common_suit], key=lambda i: hand[i]["value"], reverse=True)[:5]
+        forced_indices = sorted(
+            suit_indices[most_common_suit], key=lambda i: hand[i]["value"], reverse=True
+        )[:5]
         if not forced_indices:
             forced_indices = list(range(min(5, len(hand))))
+        self._last_hand_type = "Other"
         return [Actions.PLAY_HAND, [i + 1 for i in forced_indices]]
 
     def _should_play(self, cards: list[dict], hand_name: str, G: dict) -> bool:

@@ -286,3 +286,41 @@ def test_current_chips_field_is_accessible():
     }
     assert isinstance(G["current_chips"], int)
     assert G["current_chips"] >= 0
+
+
+def test_plays_hand_when_chips_already_meet_requirement(bot):
+    """When current_chips >= chips_needed, play instead of discarding to fish for flush."""
+    # 3 Hearts + 2 Spades: would normally trigger discard (no 5-card flush)
+    G = _hand_G(
+        suits=[("Hearts", "Ace"), ("Hearts", "King"), ("Hearts", "Queen"),
+               ("Spades", "2"), ("Spades", "3")],
+        hands_left=3, discards_left=3,
+        chips_needed=300, current_chips=500,
+    )
+    action = bot.select_cards_from_hand(G)
+    assert action[0] == Actions.PLAY_HAND
+
+
+def test_discards_normally_when_chips_below_requirement(bot):
+    """When current_chips < chips_needed, normal flush-fishing logic applies."""
+    G = _hand_G(
+        suits=[("Hearts", "Ace"), ("Hearts", "King"), ("Hearts", "Queen"),
+               ("Spades", "2"), ("Spades", "3")],
+        hands_left=3, discards_left=3,
+        chips_needed=300, current_chips=0,
+    )
+    action = bot.select_cards_from_hand(G)
+    assert action[0] == Actions.DISCARD_HAND
+
+
+def test_current_chips_zero_guard_does_not_skip_flush_fishing(bot):
+    """current_chips=0 must not trigger the 'already won' path even if chips_needed=0."""
+    G = _hand_G(
+        suits=[("Hearts", "Ace"), ("Hearts", "King"), ("Hearts", "Queen"),
+               ("Spades", "2"), ("Spades", "3")],
+        hands_left=3, discards_left=3,
+        chips_needed=0, current_chips=0,
+    )
+    action = bot.select_cards_from_hand(G)
+    # current_chips=0 guard prevents false positive — should still discard
+    assert action[0] == Actions.DISCARD_HAND
