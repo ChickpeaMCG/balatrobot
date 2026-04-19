@@ -271,3 +271,18 @@ def test_plays_when_no_discards_left(bot):
     G = _hand_G(suits, chips_needed=9999, current_chips=0, discards_left=0)
     action = bot.select_cards_from_hand(G)
     assert action[0] == Actions.PLAY_HAND
+
+
+def test_current_chips_field_is_accessible():
+    """Smoke test: gamestate dict includes current_chips as a non-negative integer."""
+    G = {
+        "hand": [
+            {"suit": "Hearts", "value": "Ace", "name": "Ace of Hearts", "card_key": "HAce"},
+        ],
+        "current_round": {"hands_left": 3, "discards_left": 3},
+        "current_chips": 150,
+        "ante": {"blinds": {"chips_needed": 300}},
+        "handscores": {},
+    }
+    assert isinstance(G["current_chips"], int)
+    assert G["current_chips"] >= 0
