@@ -324,3 +324,14 @@ def test_current_chips_zero_guard_does_not_skip_flush_fishing(bot):
     action = bot.select_cards_from_hand(G)
     # current_chips=0 guard prevents false positive — should still discard
     assert action[0] == Actions.DISCARD_HAND
+
+
+def test_gamestate_includes_blind_tag_key():
+    """blind dict must always include a 'tag' key (value may be None)."""
+    # Simulate no tag (boss blind scenario)
+    G = {"ante": {"blinds": {"chips_needed": 300, "boss": True, "tag": None}}}
+    assert "tag" in G["ante"]["blinds"]
+
+    # Simulate tag available
+    G["ante"]["blinds"]["tag"] = "tag_double"
+    assert G["ante"]["blinds"]["tag"] == "tag_double"

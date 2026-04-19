@@ -137,6 +137,12 @@ function Utils.getBlindData()
             _blinds.name        = G.GAME.blind.name
             _blinds.boss        = G.GAME.blind.boss or false
         end
+
+        -- Offered skip tag (nil for boss blind or when no tag is available)
+        _blinds.tag = nil
+        if G.tags and #G.tags > 0 then
+            _blinds.tag = G.tags[1].key or nil
+        end
     end
 
     return _blinds
