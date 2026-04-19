@@ -6,9 +6,10 @@ HISTORY_FILE = Path("run_history.json")
 
 
 def load_history() -> dict:
-    if HISTORY_FILE.exists():
+    try:
         return json.loads(HISTORY_FILE.read_text())
-    return {"best_run": None, "runs": []}
+    except FileNotFoundError:
+        return {"best_run": None, "runs": []}
 
 
 def record_run(
@@ -61,8 +62,10 @@ def best_run_for_label(history: dict, label: str) -> dict | None:
 
 def format_best_run_markdown(label: str, entry: dict, total_runs: int) -> str:
     seed = entry.get("seed", "unknown")
-    replay_matches = sorted(Path("replays").glob(f"{seed}_*.replay.json")) if Path("replays").exists() else []
-    replay_path = str(replay_matches[0]) if replay_matches else f"replays/{seed}_*.replay.json"
+    replay_path = next(
+        (str(m) for m in Path("replays").glob(f"{seed}_*.replay.json")),
+        f"replays/{seed}_*.replay.json",
+    )
     return (
         f"## Best Run — {label} ({total_runs} runs)\n\n"
         f"| Metric | Value |\n"

@@ -25,7 +25,7 @@ def _run(ante, hands=10, label=None, seed="AAAAAAA"):
 
 @patch("balatrobot.utils.run_history.HISTORY_FILE")
 def test_record_run_stores_label(mock_path):
-    mock_path.exists.return_value = False
+    mock_path.read_text.side_effect = FileNotFoundError
     written = {}
 
     def fake_write(text):
@@ -39,7 +39,7 @@ def test_record_run_stores_label(mock_path):
 
 @patch("balatrobot.utils.run_history.HISTORY_FILE")
 def test_record_run_omits_label_when_none(mock_path):
-    mock_path.exists.return_value = False
+    mock_path.read_text.side_effect = FileNotFoundError
     written = {}
     mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
     entry = record_run("ABC1234", "Blue Deck", 1, 2, "loss", 15, "Flush")
@@ -88,7 +88,7 @@ def test_format_best_run_markdown_contains_seed():
 
 @patch("balatrobot.utils.run_history.HISTORY_FILE")
 def test_record_run_stores_failure_mode_fields(mock_path):
-    mock_path.exists.return_value = False
+    mock_path.read_text.side_effect = FileNotFoundError
     written = {}
     mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
     entry = record_run(
@@ -107,7 +107,7 @@ def test_record_run_stores_failure_mode_fields(mock_path):
 
 @patch("balatrobot.utils.run_history.HISTORY_FILE")
 def test_record_run_omits_failure_fields_when_none(mock_path):
-    mock_path.exists.return_value = False
+    mock_path.read_text.side_effect = FileNotFoundError
     written = {}
     mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
     entry = record_run("ABC1234", "Blue Deck", 1, 2, "loss", 15, "Flush")
