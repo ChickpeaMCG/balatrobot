@@ -14,6 +14,10 @@ def load_history() -> dict:
 def record_run(
     seed, deck, stake, ante_reached, result, hands_played, best_hand,
     label: str | None = None,
+    final_chips_needed: int | None = None,
+    final_chips_scored: int | None = None,
+    final_discards_remaining: int | None = None,
+    final_hand_type: str | None = None,
 ) -> dict:
     history = load_history()
     entry: dict = {
@@ -28,6 +32,14 @@ def record_run(
     }
     if label is not None:
         entry["label"] = label
+    if final_chips_needed is not None:
+        entry["final_chips_needed"] = final_chips_needed
+    if final_chips_scored is not None:
+        entry["final_chips_scored"] = final_chips_scored
+    if final_discards_remaining is not None:
+        entry["final_discards_remaining"] = final_discards_remaining
+    if final_hand_type is not None:
+        entry["final_hand_type"] = final_hand_type
     history["runs"].append(entry)
     best_idx = history.get("best_run")
     if best_idx is None or ante_reached > history["runs"][best_idx]["ante_reached"]:

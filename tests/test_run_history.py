@@ -84,3 +84,41 @@ def test_format_best_run_markdown_contains_seed():
     assert "phase4" in md
     assert "50 runs" in md
     assert "4" in md  # ante
+
+
+@patch("balatrobot.utils.run_history.HISTORY_FILE")
+def test_record_run_stores_failure_mode_fields(mock_path):
+    mock_path.exists.return_value = False
+    written = {}
+    mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
+    entry = record_run(
+        "ABC1234", "Blue Deck", 1, 2, "loss", 15, "Flush",
+        final_chips_needed=300,
+        final_chips_scored=250,
+        final_discards_remaining=0,
+        final_hand_type="Flush",
+    )
+    assert entry["final_chips_needed"] == 300
+    assert entry["final_chips_scored"] == 250
+    assert entry["final_discards_remaining"] == 0
+    assert entry["final_hand_type"] == "Flush"
+    assert written["data"]["runs"][0]["final_chips_needed"] == 300
+
+
+@patch("balatrobot.utils.run_history.HISTORY_FILE")
+def test_record_run_omits_failure_fields_when_none(mock_path):
+    mock_path.exists.return_value = False
+    written = {}
+    mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
+    entry = record_run("ABC1234", "Blue Deck", 1, 2, "loss", 15, "Flush")
+    assert "final_chips_needed" not in entry
+    assert "final_chips_scored" not in entry
+
+
+def test_runs_for_label_handles_missing_failure_fields():
+    """Old run history entries without failure fields must not break label queries."""
+    history = _history(_run(2, label="phase4"))
+    runs = runs_for_label(history, "phase4")
+    assert len(runs) == 1
+    assert runs[0].get("final_chips_needed") is None
+    assert runs[0].get("final_chips_scored") is None

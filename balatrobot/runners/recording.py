@@ -29,6 +29,8 @@ class RecordingFlushBot(FlushBot):
 
     def _on_run_complete(self, G):
         ante = (G.get("ante") or {}).get("ante") or 0
+        blind = (G.get("ante") or {}).get("blinds") or {}
+        round_data = G.get("current_round") or {}
         entry = record_run(
             seed=G.get("seed") or self._current_seed,
             deck=self.deck,
@@ -38,6 +40,10 @@ class RecordingFlushBot(FlushBot):
             hands_played=G.get("num_hands_played", 0),
             best_hand="Flush",
             label=self._label,
+            final_chips_needed=blind.get("chips_needed"),
+            final_chips_scored=G.get("current_chips"),
+            final_discards_remaining=round_data.get("discards_left"),
+            final_hand_type=getattr(self, "_last_hand_type", None),
         )
         print_run_summary(entry)
 
