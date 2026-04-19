@@ -7,3 +7,4 @@ replays/*.replay.json
 *.run
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+.worktrees/
