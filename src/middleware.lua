@@ -17,18 +17,6 @@ Middleware.BUTTONS = {
 
 }
 
-function random_key(tb)
-    local keys = {}
-    for k in pairs(tb) do table.insert(keys, k) end
-    return keys[math.random(#keys)]
-end
-
-function random_element(tb)
-    local keys = {}
-    for k in pairs(tb) do table.insert(keys, k) end
-    return tb[keys[math.random(#keys)]]
-end
-
 function Middleware.add_event_sequence(events)
 
     local _lastevent = nil
@@ -556,6 +544,17 @@ local function c_initgamehooks()
             push = function() end
         }
     }
+
+    -- Track chips synchronously: intercept the ease event before it animates
+    local _orig_add_event = G.E_MANAGER.add_event
+    G.E_MANAGER.add_event = function(self, event, queue, front)
+        if event and event.ease and
+           event.ease.ref_table == G.GAME and
+           event.ease.ref_value == 'chips' then
+            BalatrobotAPI.chips_total = math.floor(event.ease.end_val or 0)
+        end
+        return _orig_add_event(self, event, queue, front)
+    end
 
     -- Detect when hand has been drawn
     G.GAME.blind.drawn_to_hand = Hook.addcallback(G.GAME.blind.drawn_to_hand, function(...)

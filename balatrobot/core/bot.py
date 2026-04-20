@@ -158,15 +158,15 @@ class Bot:
 
     def verifyimplemented(self):
         try:
-            self.skip_or_select_blind(self, {})
-            self.select_cards_from_hand(self, {})
-            self.select_shop_action(self, {})
-            self.select_booster_action(self, {})
-            self.sell_jokers(self, {})
-            self.rearrange_jokers(self, {})
-            self.use_or_sell_consumables(self, {})
-            self.rearrange_consumables(self, {})
-            self.rearrange_hand(self, {})
+            self.skip_or_select_blind({})
+            self.select_cards_from_hand({})
+            self.select_shop_action({})
+            self.select_booster_action({})
+            self.sell_jokers({})
+            self.rearrange_jokers({})
+            self.use_or_sell_consumables({})
+            self.rearrange_consumables({})
+            self.rearrange_hand({})
         except NotImplementedError as e:
             print(e)
             sys.exit(0)
@@ -234,9 +234,6 @@ class Bot:
             self.sock.connect(self.addr)
             return None
 
-    def _send_action(self, cmdstr: str):
-        self.sendcmd(cmdstr)
-
     def run_step(self):
         if self.sock is None:
             self.verifyimplemented()
@@ -270,7 +267,7 @@ class Bot:
                     raise ValueError("All actions must return a value!")
                 cmdstr = self.actionToCmd(action)
                 self._action_log.append({"state": self.G, "action": cmdstr})
-                self._send_action(cmdstr)
+                self.sendcmd(cmdstr)
 
     def run(self):
         while True:

@@ -3,6 +3,8 @@ __pycache__
 Balatro
 gamestate_cache
 run_history.json
-replays/
+replays/*.replay.json
 *.run
-.claude/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.worktrees/

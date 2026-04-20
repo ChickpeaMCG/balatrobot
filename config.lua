@@ -17,7 +17,7 @@ local SPEED_PROFILES = {
     },
 }
 
-local speed = arg[2] or "fast"
+local speed = arg[2] or "watch"
 local profile = SPEED_PROFILES[speed] or SPEED_PROFILES["fast"]
 
 BALATRO_BOT_CONFIG = {

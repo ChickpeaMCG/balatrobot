@@ -137,6 +137,12 @@ function Utils.getBlindData()
             _blinds.name        = G.GAME.blind.name
             _blinds.boss        = G.GAME.blind.boss or false
         end
+
+        -- Offered skip tag (nil for boss blind or when no tag is available)
+        _blinds.tag = nil
+        if G.tags and #G.tags > 0 then
+            _blinds.tag = G.tags[1].key or nil
+        end
     end
 
     return _blinds
@@ -209,7 +215,7 @@ function Utils.getGameData()
         _game.max_jokers          = G.GAME.max_jokers
         _game.bankrupt_at         = G.GAME.bankrupt_at
         _game.seed                = G.GAME.pseudorandom and tostring(G.GAME.pseudorandom.seed) or nil
-        _game.current_chips       = G.GAME.chips or 0
+        _game.current_chips       = BalatrobotAPI.chips_total or 0
     end
 
     return _game

@@ -6,6 +6,35 @@ A botting framework for [Balatro](https://store.steampowered.com/app/2379780/Bal
 
 ---
 
+## Origin & Credits
+
+This project is forked from [giewev/balatrobot](https://github.com/giewev/balatrobot). The upstream work provided the foundation this project is built on: the Lua mod framework, UDP communication protocol, `Bot` base class, initial `FlushBot` strategy, speedup hooks, and multi-instance benchmarking.
+
+This fork has extended that foundation across four development phases:
+
+- **Phase 1** — Run persistence and replay: `run_history.json`, `.replay.json` files, `ReplayBot`, `GAME_OVER` detection fix
+- **Phase 2** — Smarter `FlushBot`: flush-first play logic, discard-to-fish strategy, Checkered Deck, shop joker buying, corrected joker keys
+- **Phase 3** — Game mechanics catalogue: full extraction of 150+ jokers/consumables from the Balatro binary, typed dataclasses, `flush_synergy` annotations, 300-dim feature encoder for ML
+- **Phase 4a** — Run analytics infrastructure: labelled run batches (auto-derived from git branch), per-phase best-run documentation, hall of fame replays
+
+See [`docs/FORK_AND_CHANGES.md`](docs/FORK_AND_CHANGES.md) for a full commit-by-commit record of changes from the upstream, and [`docs/PLAN.md`](docs/PLAN.md) for the development roadmap.
+
+---
+
+## Current Performance
+
+| Phase | Runs | Avg Ante | Ante 1 exit | Ante 2 exit | Best run |
+|-------|------|----------|-------------|-------------|----------|
+| phase-1 (dev/testing) | 71 | 1.6 | 47% | 52% | Ante 4 (seed `N5VFU69`) |
+| phase-2 (post-fix) | 5 | 2.0 | 0% | 100% | Ante 2 |
+| phase-4-analytics | 20 | 1.9 | 5% | 95% | Ante 2 |
+
+Best run replay: [`replays/hall_of_fame/phase-1-best_N5VFU69.replay.json`](replays/hall_of_fame/phase-1-best_N5VFU69.replay.json) — Ante 4, 31 hands.
+
+Current bottleneck: chip wall at Ante 2 — a naked flush strategy can't reliably clear the blind requirement without jokers. Phase 4b will analyse failure modes; Phase 5 introduces RL.
+
+---
+
 ## How It Works
 
 The system has two halves that communicate over a local UDP socket:
@@ -264,6 +293,21 @@ run_history.json              # Cumulative run history
 - **Action flow (API mode):** Python → UDP → `api.lua` receives action → pushed to `Botlogger` queue → `middleware.lua` `firewhenready` pops queue → UI interaction queued as Love2D Event → game progresses → next decision point → breakpoint fires → Python notified.
 - **`Hook` library** (`lib/hook.lua`) wraps functions and tables with callbacks, breakpoints (pre-call interceptors), and onwrite listeners. Used pervasively to intercept Balatro's internal game loop without modifying game source files.
 - **Saving is disabled** while the bot runs — the game's save manager is stubbed out in `middleware.lua`.
+
+---
+
+## Development Tools
+
+This project uses several Claude Code tools to assist development:
+
+| Tool | Type | Activation | Purpose |
+|------|------|------------|---------|
+| **Superpowers** | Plugin / Skills | Manual — invoke the matching skill by name | Structured workflows for planning (`superpowers:writing-plans`), brainstorming features (`superpowers:brainstorming`), executing plans (`superpowers:executing-plans`), debugging (`superpowers:systematic-debugging`), and verifying completion (`superpowers:verification-before-completion`) |
+| **Context7** | MCP Server | Automatic — fires when asking about any library or framework | Fetches live documentation for Python packages, Lua libraries, APIs, and CLI tools so answers reflect current versions, not stale training data |
+| **Code Simplifier** | Agent | Manual — ask Claude to "run the code-simplifier" after a feature is complete | Reviews recently modified code for clarity, redundancy, and maintainability without changing behaviour |
+| **Sequential Thinking** | MCP Server | Manual — ask Claude to "use sequential thinking" | Structures complex multi-step reasoning (architecture decisions, debugging with many possible causes) into explicit, reviewable steps |
+
+**Workflow pattern:** Brainstorm → Plan → Execute → Simplify → Verify → Finish branch.
 
 ---
 

@@ -1,0 +1,27 @@
+{
+  "model": "sonnet",
+  "permissions": {
+    "allow": [
+      "Bash(python run_flush_bot.py*)",
+      "Bash(python replay_bot.py*)",
+      "Bash(python -m pytest*)",
+      "Bash(pytest*)",
+      "Bash(python -m balatrobot.*)"
+    ],
+    "additionalDirectories": ["../balatro_game_src"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // \"\"' | tr -d '\\r' | { read -r f; echo \"$f\" | grep -q '\\.py$' && ruff check --fix \"$f\"; } 2>/dev/null || true",
+            "statusMessage": "Linting..."
+          }
+        ]
+      }
+    ]
+  }
+}

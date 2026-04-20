@@ -41,7 +41,7 @@ class ReplayBot(Bot):
 
         action_str = self._replay_actions[self._replay_idx]
         self._replay_idx += 1
-        self._send_action(action_str)
+        self.sendcmd(action_str)
 
     # Stubs — not called during replay
     def skip_or_select_blind(self, G): pass

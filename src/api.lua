@@ -5,6 +5,7 @@ local data, msg_or_ip, port_or_nil
 
 BalatrobotAPI = { }
 BalatrobotAPI.socket = nil
+BalatrobotAPI.chips_total = 0
 
 BalatrobotAPI.waitingFor = nil
 BalatrobotAPI.waitingForAction = true
