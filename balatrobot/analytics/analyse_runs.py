@@ -43,7 +43,7 @@ def analyse(history_path: Path = HISTORY_FILE, label: str | None = None, doc: st
     else:
         best_idx = data.get("best_run")
         best = all_runs[best_idx] if best_idx is not None else max(all_runs, key=lambda r: r.get("ante_reached", 0))
-    assert best is not None
+    assert best is not None  # guaranteed: runs is non-empty and best_run_for_label only returns None on empty
 
     label_display = f" [{label}]" if label else ""
     print(f"Runs: {total}{label_display}  |  Wins: {wins} ({wins/total*100:.0f}%)  |  Avg ante: {avg_ante:.1f}")
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--label", default=None,
                         help="Filter to runs with this label (default: current git branch)")
     parser.add_argument("--doc", default=None, metavar="PATH",
-                        help="Append best-run markdown block to this file")
+                        help="Append best-run markdown block to this file; uses current git branch as label if --label is omitted")
     args = parser.parse_args()
 
     label = args.label or (get_git_branch() if args.doc else None)

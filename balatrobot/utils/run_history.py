@@ -21,7 +21,7 @@ def record_run(
     final_hand_type: str | None = None,
 ) -> dict:
     history = load_history()
-    entry: dict = {
+    entry = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "seed": seed,
         "deck": deck,
@@ -64,8 +64,9 @@ def format_best_run_markdown(label: str, entry: dict, total_runs: int) -> str:
     seed = entry.get("seed", "unknown")
     replay_path = next(
         (str(m) for m in Path("replays").glob(f"{seed}_*.replay.json")),
-        f"replays/{seed}_*.replay.json",
+        None,
     )
+    replay_row = f"| Replay | `{replay_path}` |" if replay_path else "| Replay | *(not saved)* |"
     return (
         f"## Best Run — {label} ({total_runs} runs)\n\n"
         f"| Metric | Value |\n"
@@ -75,7 +76,7 @@ def format_best_run_markdown(label: str, entry: dict, total_runs: int) -> str:
         f"| Seed | `{seed}` |\n"
         f"| Deck | {entry.get('deck', 'unknown')} |\n"
         f"| Stake | {entry.get('stake', 1)} |\n"
-        f"| Replay | `{replay_path}` |"
+        f"{replay_row}"
     )
 
 

@@ -273,20 +273,6 @@ def test_plays_when_no_discards_left(bot):
     assert action[0] == Actions.PLAY_HAND
 
 
-def test_current_chips_field_is_accessible():
-    """Smoke test: gamestate dict includes current_chips as a non-negative integer."""
-    G = {
-        "hand": [
-            {"suit": "Hearts", "value": "Ace", "name": "Ace of Hearts", "card_key": "HAce"},
-        ],
-        "current_round": {"hands_left": 3, "discards_left": 3},
-        "current_chips": 150,
-        "ante": {"blinds": {"chips_needed": 300}},
-        "handscores": {},
-    }
-    assert isinstance(G["current_chips"], int)
-    assert G["current_chips"] >= 0
-
 
 def test_plays_hand_when_chips_already_meet_requirement(bot):
     """When current_chips >= chips_needed, play instead of discarding to fish for flush."""
@@ -327,11 +313,7 @@ def test_current_chips_zero_guard_does_not_skip_flush_fishing(bot):
 
 
 def test_gamestate_includes_blind_tag_key():
-    """blind dict must always include a 'tag' key (value may be None)."""
-    # Simulate no tag (boss blind scenario)
-    G = {"ante": {"blinds": {"chips_needed": 300, "boss": True, "tag": None}}}
-    assert "tag" in G["ante"]["blinds"]
-
-    # Simulate tag available
-    G["ante"]["blinds"]["tag"] = "tag_double"
-    assert G["ante"]["blinds"]["tag"] == "tag_double"
+    """Cached gamestates must include a 'tag' key in blinds (value may be None)."""
+    for G in load_states("select_cards_from_hand"):
+        blinds = (G.get("ante") or {}).get("blinds") or {}
+        assert "tag" in blinds, f"'tag' missing from blinds: {blinds}"
