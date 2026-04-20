@@ -32,3 +32,10 @@ nav:
       - Phase 3 — Mechanics Catalogue: superpowers/records/phase-3-game-mechanics-catalogue.md
       - Phase 4 — Run Analytics: superpowers/records/phase-4-run-analytics.md
   - Architecture: architecture.md
+
+exclude_docs: |
+  PLAN.md
+  PLAN_DOCS_SITE.md
+  FORK_AND_CHANGES.md
+  superpowers/specs/
+  superpowers/plans/
