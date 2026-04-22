@@ -258,6 +258,15 @@ function Middleware.c_choose_booster_cards()
                         Middleware.c_select_blind()
                     end)
                 end, 0.0)
+            elseif G.GAME.PACK_INTERRUPT == G.STATES.SHOP then
+                queueaction(function()
+                    firewhenready(function()
+                        return G.STATE_COMPLETE and G.STATE == G.STATES.SHOP
+                    end, function()
+                        Middleware.choosingboostercards = false
+                        Middleware.c_shop()
+                    end)
+                end, 0.0)
             end
         end
     end)
