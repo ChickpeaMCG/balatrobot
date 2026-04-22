@@ -31,6 +31,7 @@ nav:
       - Phase 2 — Smarter FlushBot: superpowers/records/phase-2-smarter-flushbot.md
       - Phase 3 — Mechanics Catalogue: superpowers/records/phase-3-game-mechanics-catalogue.md
       - Phase 4 — Run Analytics: superpowers/records/phase-4-run-analytics.md
+      - Phase 5 — Documentation Site: superpowers/records/phase-5-docs-site.md
   - Architecture: architecture.md
 
 exclude_docs: |

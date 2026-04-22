@@ -3,7 +3,7 @@
 **Date:** 2026-04-18 / 2026-04-19
 **Branch:** phase-4-analytics
 **Follows:** Phase 3 (game mechanics catalogue, feature encoder)
-**Precedes:** Phase 5 (RL training, SB3 integration)
+**Precedes:** Phase 5 (documentation site)
 
 > **Note:** Phase 4 is the first phase using the superpowers workflow. Design specs for sub-phases live in `docs/superpowers/specs/`.
 
@@ -117,8 +117,8 @@ None documented for 4a.
 | **4b. `_should_play` re-enable** | ✅ Done | Early-exit in `select_cards_from_hand` when `current_chips >= chips_needed`; `_last_hand_type` tracked |
 | **4b. Blind skipping infrastructure** | ✅ Done | `Utils.getBlindData()` exposes `tag` field via `G.tags[1].key`; SKIP_BLIND wiring pre-existing |
 | **4b. Run history schema extension** | ✅ Done | `record_run()` gains 4 optional failure-mode fields; `_on_run_complete` passes them; verified in live run |
-| **4c. Joker/outcome correlation** | ⬜ Planned | After 4b lands |
-| **4c. Failure mode analysis** | ⬜ Planned | After 4b lands |
+| **4c. Joker/outcome correlation** | ⬜ Deferred indefinitely | Needs 200+ run corpus; backlog |
+| **4c. Failure mode analysis** | ⬜ Deferred indefinitely | Needs 200+ run corpus; backlog |
 
 ---
 
@@ -131,9 +131,10 @@ None documented for 4a.
 
 ---
 
-## Deferred Items (carry into Phase 5)
+## Deferred Items
 
-To be determined after 4b and 4c complete.
+- **4c. Joker/outcome correlation** — deferred indefinitely; needs a 200+ run corpus accumulated on a stable bot. Can be revisited once Phase 6 (RL) generates sufficient data.
+- **4c. Failure mode analysis** — deferred indefinitely; same prerequisite as correlation analysis.
 
 ---
 

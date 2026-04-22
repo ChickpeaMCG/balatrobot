@@ -8,16 +8,16 @@ Completed phase records: `docs/superpowers/records/`
 
 ---
 
-## Phase 5 — Documentation Site
+## Phase 5 — Documentation Site ✅
 
 **Goal:** Public MkDocs site chronicling Balatrobot's development, auto-deployed to GitHub Pages on push to `main`.
 
-- [ ] `mkdocs.yml` at repo root — Material theme, dark/red/amber, phase records wired into nav
-- [ ] `docs/index.md` — project overview
-- [ ] `docs/architecture.md` — system overview
-- [ ] `pyproject.toml` `[docs]` optional dependency (`mkdocs-material>=9.5`)
-- [ ] `.github/workflows/docs.yml` — auto-deploy on push to `main`
-- [ ] `site/` added to `.gitignore`
+- [x] `mkdocs.yml` at repo root — Material theme, dark/red/amber, phase records wired into nav
+- [x] `docs/index.md` — project overview
+- [x] `docs/architecture.md` — system overview
+- [x] `pyproject.toml` `[docs]` optional dependency (`mkdocs-material>=9.5`)
+- [x] `.github/workflows/docs.yml` — auto-deploy on push to `main`
+- [x] `site/` added to `.gitignore`
 
 Spec: `docs/superpowers/specs/2026-04-20-phase-5-docs-site-design.md`
 
