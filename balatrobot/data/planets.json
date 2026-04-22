@@ -1,89 +1,17 @@
 {
   "balatro_version": "1.0.1o",
   "planets": [
-    {
-      "key": "c_ceres",
-      "name": "Ceres",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_earth",
-      "name": "Earth",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_eris",
-      "name": "Eris",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_jupiter",
-      "name": "Jupiter",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_mars",
-      "name": "Mars",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_mercury",
-      "name": "Mercury",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_neptune",
-      "name": "Neptune",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_planet_x",
-      "name": "Planet X",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_pluto",
-      "name": "Pluto",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_saturn",
-      "name": "Saturn",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_uranus",
-      "name": "Uranus",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    },
-    {
-      "key": "c_venus",
-      "name": "Venus",
-      "base_cost": 3,
-      "effect_types": [],
-      "description": ""
-    }
+    { "key": "c_mercury",  "name": "Mercury",  "base_cost": 3, "hand_type": "Pair",             "softlock": false, "description": "" },
+    { "key": "c_venus",    "name": "Venus",    "base_cost": 3, "hand_type": "Three of a Kind",  "softlock": false, "description": "" },
+    { "key": "c_earth",    "name": "Earth",    "base_cost": 3, "hand_type": "Full House",       "softlock": false, "description": "" },
+    { "key": "c_mars",     "name": "Mars",     "base_cost": 3, "hand_type": "Four of a Kind",   "softlock": false, "description": "" },
+    { "key": "c_jupiter",  "name": "Jupiter",  "base_cost": 3, "hand_type": "Flush",            "softlock": false, "description": "" },
+    { "key": "c_saturn",   "name": "Saturn",   "base_cost": 3, "hand_type": "Straight",         "softlock": false, "description": "" },
+    { "key": "c_uranus",   "name": "Uranus",   "base_cost": 3, "hand_type": "Two Pair",         "softlock": false, "description": "" },
+    { "key": "c_neptune",  "name": "Neptune",  "base_cost": 3, "hand_type": "Straight Flush",   "softlock": false, "description": "" },
+    { "key": "c_pluto",    "name": "Pluto",    "base_cost": 3, "hand_type": "High Card",        "softlock": false, "description": "" },
+    { "key": "c_planet_x", "name": "Planet X", "base_cost": 3, "hand_type": "Five of a Kind",   "softlock": true,  "description": "" },
+    { "key": "c_ceres",    "name": "Ceres",    "base_cost": 3, "hand_type": "Flush House",      "softlock": true,  "description": "" },
+    { "key": "c_eris",     "name": "Eris",     "base_cost": 3, "hand_type": "Flush Five",       "softlock": true,  "description": "" }
   ]
 }

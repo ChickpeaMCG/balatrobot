@@ -9,6 +9,7 @@ from balatrobot.data.models import (
     EffectType,
     EnhancementData,
     JokerData,
+    PlanetData,
     SealData,
     TriggerCondition,
 )
@@ -46,6 +47,17 @@ def _parse_consumable(entry: dict) -> ConsumableData:
     )
 
 
+def _parse_planet(entry: dict) -> PlanetData:
+    return PlanetData(
+        key=entry["key"],
+        name=entry["name"],
+        base_cost=entry["base_cost"],
+        hand_type=entry["hand_type"],
+        softlock=entry.get("softlock", False),
+        description=entry.get("description", ""),
+    )
+
+
 @cache
 def _load_jokers() -> dict[str, JokerData]:
     raw = json.loads((_DATA_DIR / "jokers.json").read_text(encoding="utf-8"))
@@ -59,9 +71,9 @@ def _load_tarots() -> dict[str, ConsumableData]:
 
 
 @cache
-def _load_planets() -> dict[str, ConsumableData]:
+def _load_planets() -> dict[str, PlanetData]:
     raw = json.loads((_DATA_DIR / "planets.json").read_text(encoding="utf-8"))
-    return {entry["key"]: _parse_consumable(entry) for entry in raw["planets"]}
+    return {entry["key"]: _parse_planet(entry) for entry in raw["planets"]}
 
 
 @cache
@@ -127,11 +139,22 @@ def get_tarot(key: str) -> ConsumableData | None:
     return result
 
 
-def get_planet(key: str) -> ConsumableData | None:
+def get_planet(key: str) -> PlanetData | None:
     result = _load_planets().get(key)
     if result is None:
         logger.warning("Unknown planet key encountered: %s", key)
     return result
+
+
+def all_planets() -> list[PlanetData]:
+    return list(_load_planets().values())
+
+
+def planet_for_hand(hand_type: str) -> PlanetData | None:
+    for p in _load_planets().values():
+        if p.hand_type == hand_type:
+            return p
+    return None
 
 
 def get_spectral(key: str) -> ConsumableData | None:
