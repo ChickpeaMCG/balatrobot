@@ -1,6 +1,6 @@
 
 from balatrobot.core.bot import Actions, Bot
-from balatrobot.data.catalogue import all_jokers
+from balatrobot.data.catalogue import all_jokers, get_planet
 
 CARD_CHIPS = {
     "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
@@ -15,6 +15,27 @@ _FLUSH_JOKERS = [
     for j in sorted(all_jokers(), key=lambda j: j.flush_synergy, reverse=True)
     if j.flush_synergy >= 0.7
 ]
+
+
+def _card_key(card: dict) -> str | None:
+    """Extract the catalogue key from a card dict.
+
+    Cards from shop/pack/consumables use either a top-level `key` field or
+    nest it under `config.center.key` (per utils.lua:186). Handle both.
+    """
+    if not isinstance(card, dict):
+        return None
+    if "key" in card and card["key"]:
+        return card["key"]
+    center = (card.get("config") or {}).get("center") or {}
+    return center.get("key")
+
+
+def _is_planet_key(key: str | None) -> bool:
+    """True if the key matches a known planet in the catalogue."""
+    if not key:
+        return False
+    return get_planet(key) is not None
 
 
 class FlushBot(Bot):
@@ -90,10 +111,29 @@ class FlushBot(Bot):
     def select_shop_action(self, G):
         dollars = G["dollars"]
         shop_cards = G.get("shop", {}).get("cards", [])
+        shop_boosters = G.get("shop", {}).get("boosters", [])
+
+        # Priority 1: flush-synergy joker
         for priority_key in self.FLUSH_JOKERS:
             for idx, card in enumerate(shop_cards):
                 if card.get("key") == priority_key and card.get("cost", 999) <= dollars:
                     return [Actions.BUY_CARD, [idx + 1]]
+
+        # Priority 2: Celestial pack (only if no planet already waiting in consumables)
+        consumables = G.get("consumables", []) or []
+        has_planet = any(_is_planet_key(_card_key(c)) for c in consumables)
+        if not has_planet:
+            for idx, pack in enumerate(shop_boosters):
+                name = pack.get("name", "")
+                if "Celestial" in name and pack.get("cost", 999) <= dollars:
+                    return [Actions.BUY_BOOSTER, [idx + 1]]
+
+        # Priority 3: Buffoon pack
+        for idx, pack in enumerate(shop_boosters):
+            name = pack.get("name", "")
+            if "Buffoon" in name and pack.get("cost", 999) <= dollars:
+                return [Actions.BUY_BOOSTER, [idx + 1]]
+
         return [Actions.END_SHOP]
 
     def select_booster_action(self, G):
