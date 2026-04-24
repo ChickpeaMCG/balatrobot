@@ -23,15 +23,32 @@ Spec: `docs/superpowers/specs/2026-04-20-phase-5-docs-site-design.md`
 
 ---
 
-## Phase 6 — RL Groundwork
+## Phase 6 — Booster Pack & Planet Consumable Use 🔧
+
+**Branch:** `phase-6-boosters`
+**Goal:** Buy Celestial/Buffoon packs in the shop, open them intelligently (Jupiter-first for Celestial, flush-joker-first for Buffoon), and use planet consumables immediately to level Flush.
+
+Spec: `docs/superpowers/specs/2026-04-22-phase-6-booster-pack-consumable-use-design.md`
+
+- [x] **6a** — Planet catalogue: `planets.json` + `PlanetData` + `catalogue.py` (get_planet, planet_for_hand)
+- [x] **6b** — Shop: buy Celestial & Buffoon packs (priority: flush joker > Celestial pack > Buffoon pack > END_SHOP)
+- [x] **6.infra** — Middleware: pack→shop transition fixed (SHOP-wait `firewhenready`, SMODS_BOOSTER_OPENED=999 added to all `isvalid` checks, skip-path bypasses `pack_choices` loop)
+- [x] **6.tools** — Debug tooling: `tail_log.py`, auto-timeout (30s stuck kills + restarts Balatro), `debug-balatro` skill
+- [x] **6c** — `select_booster_action`: Jupiter-first for Celestial, flush-joker-first for Buffoon
+- [x] **6d** — `use_or_sell_consumables`: use planet consumables immediately (Jupiter preferred)
+- [ ] **6e** — A/B benchmark: 30 runs `phase-6-boosters` vs 30 runs `phase-5-baseline`, ≥30% improvement in ante-3 reach
+
+---
+
+## Phase 7 — RL Groundwork *(deferred)*
 
 **Goal:** Replace hand-coded heuristics with a learned policy.
 
 - [ ] `BalatroEnv(gym.Env)` wraps the bot loop; observation = `GamestateEncoder.encode(G)` (300-dim float32)
 - [ ] Define action space: `Discrete` over (PLAY_HAND variants, DISCARD_HAND variants)
-- [ ] Define reward: +1 per ante cleared, -1 on game over, shaped by chips scored vs chips needed
-- [ ] Instrument `Bot` to optionally record `(obs, action, reward)` tuples per step into a replay buffer
-- [ ] Train a simple policy with Stable Baselines3 (MlpPolicy, PPO) against the gamestate cache first, then live
+- [ ] Define reward: +1 ante cleared, -1 game over, shaped by chips scored vs chips needed
+- [ ] Instrument `Bot` to record `(obs, action, reward)` tuples into a replay buffer
+- [ ] Train a simple policy with Stable Baselines3 (MlpPolicy, PPO) against gamestate cache first, then live
 
 ---
 
