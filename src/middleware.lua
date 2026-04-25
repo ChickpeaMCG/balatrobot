@@ -223,28 +223,48 @@ function Middleware.c_choose_booster_cards()
     end,
 
     function(_action, _card, _hand_cards)
-        if _action == Bot.ACTIONS.SKIP_BOOSTER_PACK then
-            pushbutton(Middleware.BUTTONS.SKIP_PACK)
-        elseif _action == Bot.ACTIONS.SELECT_BOOSTER_CARD then
-    
-            -- Click each card from your deck first (only occurs if _pack_card is consumable)
-            for i = 1, #_hand_cards do
-                clickcard(G.hand.cards[_hand_cards[i]])
-            end
-    
-            -- Then select the booster card to activate
-            clickcard(G.pack_cards.cards[_card[1]])
-            usecard(G.pack_cards.cards[_card[1]])
+        -- G.FUNCS.use_card inner event never fires end_consumeable for state=999 (SMODS packs)
+        -- so pack never closes; skip them unconditionally
+        if G.STATE == G.STATES.SMODS_BOOSTER_OPENED then
+            _action = Bot.ACTIONS.SKIP_BOOSTER_PACK
         end
-    
-        if G.GAME.pack_choices - 1 > 0 then
+        if _action == Bot.ACTIONS.SKIP_BOOSTER_PACK then
+            if G.STATE == G.STATES.SMODS_BOOSTER_OPENED and Middleware.BUTTONS.SKIP_PACK then
+                -- STOP_USE > 0 makes config.button nil for state=999; call skip_booster directly
+                queueaction(function()
+                    G.FUNCS.skip_booster(Middleware.BUTTONS.SKIP_PACK)
+                end)
+            else
+                pushbutton(Middleware.BUTTONS.SKIP_PACK)
+            end
+        elseif _action == Bot.ACTIONS.SELECT_BOOSTER_CARD then
+
+            -- Click each card from your deck first (only occurs if _pack_card is consumable)
+            local _hand_cards_safe = _hand_cards or {}
+            for i = 1, #_hand_cards_safe do
+                clickcard(G.hand.cards[_hand_cards_safe[i]])
+            end
+
+            -- Pack cards are not in a highlightable area (type='pack'), so card:click()
+            -- is a no-op and use_button is never created. Call use_card directly instead.
+            local _pack_card = G.pack_cards.cards[_card[1]]
+            queueaction(function()
+                G.FUNCS.use_card({ config = { ref_table = _pack_card, button = 'use_card' } })
+            end)
+        end
+
+        -- Skip exits the pack entirely regardless of remaining choices.
+        -- SELECT_BOOSTER_CARD loops back if more choices remain.
+        if _action == Bot.ACTIONS.SELECT_BOOSTER_CARD and G.GAME.pack_choices - 1 > 0 then
+            local _expected_choices = G.GAME.pack_choices - 1
             queueaction(function()
                 firewhenready(function()
-                    return Middleware.BUTTONS.SKIP_PACK ~= nil and
-                    Middleware.BUTTONS.SKIP_PACK.config.button == 'skip_booster' and
-                    Middleware.choosingboostercards == false and
-                    G and G.pack_cards and G.pack_cards.cards
+                    return G.GAME.pack_choices <= _expected_choices and
+                    G and G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] and
+                    (G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.BUFFOON_PACK or
+                     G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED)
                 end, function()
+                    Middleware.choosingboostercards = false
                     Middleware.c_choose_booster_cards()
                 end)
             end, 0.0)
@@ -264,7 +284,7 @@ function Middleware.c_choose_booster_cards()
                         return G.STATE_COMPLETE and G.STATE == G.STATES.SHOP
                     end, function()
                         Middleware.choosingboostercards = false
-                        Middleware.c_shop()
+                        -- snap_to hook handles c_shop()
                     end)
                 end, 0.0)
             end
@@ -526,6 +546,7 @@ local function w_gamestate(...)
     -- Before we try to start a new run
     if _k == 'STATE' and _v == G.STATES.GAME_OVER then
         G.FUNCS.go_to_menu({})
+        Middleware.choosingboostercards = false
     end
 
     -- Reset guard whenever state leaves MENU
@@ -545,6 +566,11 @@ local function w_gamestate(...)
     end
 end
 
+-- Guards global (cross-run) hooks from accumulating across runs.
+-- G.CONTROLLER.snap_to, G.FUNCS.can_skip_booster, etc. persist across runs;
+-- re-registering them each run doubles callbacks and causes duplicate actions.
+local _global_hooks_registered = false
+
 local function c_initgamehooks()
 
     -- Hooks break SAVE_MANAGER.channel:push so disable saving. Who needs it when you are botting anyway...
@@ -553,6 +579,18 @@ local function c_initgamehooks()
             push = function() end
         }
     }
+
+    -- Detect when hand has been drawn (per-run: G.GAME.blind is a new object each run)
+    G.GAME.blind.drawn_to_hand = Hook.addcallback(G.GAME.blind.drawn_to_hand, function(...)
+        firewhenready(function()
+            return G.buttons and G.STATE_COMPLETE and G.STATE == G.STATES.SELECTING_HAND
+        end, function()
+            Middleware.c_sell_jokers()
+        end)
+    end)
+
+    if _global_hooks_registered then return end
+    _global_hooks_registered = true
 
     -- Track chips synchronously: intercept the ease event before it animates
     local _orig_add_event = G.E_MANAGER.add_event
@@ -565,21 +603,12 @@ local function c_initgamehooks()
         return _orig_add_event(self, event, queue, front)
     end
 
-    -- Detect when hand has been drawn
-    G.GAME.blind.drawn_to_hand = Hook.addcallback(G.GAME.blind.drawn_to_hand, function(...)
-        firewhenready(function()
-            return G.buttons and G.STATE_COMPLETE and G.STATE == G.STATES.SELECTING_HAND
-        end, function()
-            Middleware.c_sell_jokers()
-        end)
-    end)
-
     -- Hook button snaps
     G.CONTROLLER.snap_to = Hook.addcallback(G.CONTROLLER.snap_to, function(...)
         local _self = ...
 
         if _self and _self.snap_cursor_to.node and _self.snap_cursor_to.node.config and _self.snap_cursor_to.node.config.button then
-            
+
             local _button = _self.snap_cursor_to.node
             local _buttonfunc = _self.snap_cursor_to.node.config.button
 
@@ -610,7 +639,9 @@ local function c_initgamehooks()
         if Middleware.BUTTONS.SKIP_PACK ~= nil and
         Middleware.BUTTONS.SKIP_PACK.config.button == 'skip_booster' and
         Middleware.choosingboostercards == false and
-        G and G.pack_cards and G.pack_cards.cards then
+        G and G.pack_cards and G.pack_cards.cards and
+        (G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.BUFFOON_PACK or
+         G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) then
             Middleware.c_choose_booster_cards()
         end
     end)

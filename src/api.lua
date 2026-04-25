@@ -9,23 +9,25 @@ BalatrobotAPI.chips_total = 0
 
 BalatrobotAPI.waitingFor = nil
 BalatrobotAPI.waitingForAction = true
+BalatrobotAPI._lastLoggedWaitingFor = nil
 
 function BalatrobotAPI.notifyapiclient()
     -- TODO Generate gamestate json object
     local _gamestate = Utils.getGamestate()
     _gamestate.waitingFor = BalatrobotAPI.waitingFor
-    sendDebugMessage('WaitingFor '..tostring(BalatrobotAPI.waitingFor))
+    if BalatrobotAPI.waitingFor ~= BalatrobotAPI._lastLoggedWaitingFor then
+        sendDebugMessage('WaitingFor '..tostring(BalatrobotAPI.waitingFor))
+        BalatrobotAPI._lastLoggedWaitingFor = BalatrobotAPI.waitingFor
+    end
     _gamestate.waitingForAction = BalatrobotAPI.waitingFor ~= nil and BalatrobotAPI.waitingForAction or false
     local _gamestateJsonString = json.encode(_gamestate)
 
     if BalatrobotAPI.socket and port_or_nil ~= nil then
-        sendDebugMessage(_gamestate.waitingFor)
         BalatrobotAPI.socket:sendto(string.format("%s", _gamestateJsonString), msg_or_ip, port_or_nil)
     end
 end
 
 function BalatrobotAPI.respond(str)
-    sendDebugMessage('respond')
     if BalatrobotAPI.socket and port_or_nil ~= nil then
         response = { }
         response.response = str
@@ -145,7 +147,6 @@ function BalatrobotAPI.init()
             BalatrobotAPI.waitingForAction = true
         end)
         Middleware.c_shop = Hook.addbreakpoint(Middleware.c_shop, function()
-            sendDebugMessage('SELECT SHOP ACTION')
             BalatrobotAPI.waitingFor = 'select_shop_action'
             BalatrobotAPI.waitingForAction = true
         end)

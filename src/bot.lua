@@ -128,23 +128,25 @@ Bot.ACTIONPARAMS[Bot.ACTIONS.SELECT_BOOSTER_CARD] = {
     func = "select_booster_action",
     isvalid = function(action)
         if G and G.hand and G.pack_cards and
-        G.hand.cards and G.pack_cards.cards and 
+        G.hand.cards and G.pack_cards.cards and
         (G.STATE == G.STATES.TAROT_PACK or
         G.STATE == G.STATES.PLANET_PACK or
         G.STATE == G.STATES.SPECTRAL_PACK or
         G.STATE == G.STATES.STANDARD_PACK or
-        G.STATE == G.STATES.BUFFOON_PACK) and
-        Utils.isTableInRange(action[2], 1, #G.hand.cards) and
-        Utils.isTableUnique(action[2]) and
-        Utils.isTableInRange(action[3], 1, #G.pack_cards.cards) and
+        G.STATE == G.STATES.BUFFOON_PACK or
+        G.STATE == G.STATES.SMODS_BOOSTER_OPENED) and
+        #action[2] == 1 and
+        Utils.isTableInRange(action[2], 1, #G.pack_cards.cards) and
+        Utils.isTableInRange(action[3], 1, #G.hand.cards) and
         Utils.isTableUnique(action[3]) and
         Middleware.BUTTONS.SKIP_PACK ~= nil and
         Middleware.BUTTONS.SKIP_PACK.config.button == 'skip_booster' then
-            if G.pack_cards.cards[action[2][1]].ability.consumeable and G.pack_cards.cards[action[2][1]].ability.consumeable.max_highlighted ~= nil and
-            #action[3] > 0 and #action[3] <= G.pack_cards.cards[action[2][1]].ability.consumeable.max_highlighted then
-                return true
-            else
-                return false
+            local pack_card = G.pack_cards.cards[action[2][1]]
+            if not pack_card then return false end
+            local max_h = pack_card.ability and pack_card.ability.consumeable and pack_card.ability.consumeable.max_highlighted
+            local hand_selection = action[3] or {}
+            if max_h and max_h > 0 then
+                return #hand_selection > 0 and #hand_selection <= max_h
             end
             return true
         end
@@ -155,14 +157,20 @@ Bot.ACTIONPARAMS[Bot.ACTIONS.SKIP_BOOSTER_PACK] = {
     num_args = 1,
     func = "select_booster_action",
     isvalid = function(action)
-        if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] and 
-        (G.STATE == G.STATES.PLANET_PACK or 
-        G.STATE == G.STATES.STANDARD_PACK or 
-        G.STATE == G.STATES.BUFFOON_PACK or 
-        (G.hand and G.hand.cards[1])) and
-        Middleware.BUTTONS.SKIP_PACK ~= nil and
-        Middleware.BUTTONS.SKIP_PACK.config.button == 'skip_booster' then 
-            return true
+        if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] then
+            -- State=999 (Steamodded Jumbo/Mega packs): STOP_USE > 0 makes button nil during
+            -- pack open; we force-skip these unconditionally so bypass the button check.
+            if G.STATE == G.STATES.SMODS_BOOSTER_OPENED then
+                return true
+            end
+            if (G.STATE == G.STATES.PLANET_PACK or
+                G.STATE == G.STATES.STANDARD_PACK or
+                G.STATE == G.STATES.BUFFOON_PACK or
+                (G.hand and G.hand.cards[1])) and
+               Middleware.BUTTONS.SKIP_PACK ~= nil and
+               Middleware.BUTTONS.SKIP_PACK.config.button == 'skip_booster' then
+                return true
+            end
         end
         return false
     end,
