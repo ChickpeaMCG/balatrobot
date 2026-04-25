@@ -62,6 +62,8 @@ def main():
                         help="Number of runs before exiting (0 = unlimited)")
     parser.add_argument("--label", default=None,
                         help="Label for this batch of runs (default: current git branch)")
+    parser.add_argument("--restart", action="store_true",
+                        help="Restart Balatro automatically when it exits (default: exit instead)")
     args = parser.parse_args()
 
     label = args.label or get_git_branch()
@@ -71,7 +73,7 @@ def main():
             "  Use --label <name> or switch to a feature branch to group runs by phase."
         )
 
-    bot = RecordingFlushBot(deck="Checkered Deck", stake=1, seed=args.seed, bot_port=12345, label=label)
+    bot = RecordingFlushBot(deck="Checkered Deck", stake=1, seed=args.seed, bot_port=12345, label=label, cache_states=True)
     bot.start_balatro_instance()
     print(f"Waiting for game to load... (label: {label})")
     time.sleep(15)
@@ -81,7 +83,19 @@ def main():
         while args.runs == 0 or completed < args.runs:
             bot.run()
             completed += 1
-            bot.running = True  # reset for next game
+
+            if not bot._balatro_alive():
+                if args.restart and (args.runs == 0 or completed < args.runs):
+                    print("Restarting Balatro...")
+                    if bot.sock:
+                        bot.sock.close()
+                    bot.sock = None
+                    bot.start_balatro_instance()
+                    time.sleep(15)
+                else:
+                    break
+
+            bot.running = True
     except KeyboardInterrupt:
         print("\nStopped.")
     finally:

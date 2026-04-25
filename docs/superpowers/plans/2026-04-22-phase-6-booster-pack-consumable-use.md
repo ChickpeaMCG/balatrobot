@@ -899,7 +899,12 @@ immediately.
 
 ## Deferred Items
 
-<anything discovered during implementation that should be a future phase>
+**Stuck-loop self-termination (Python `Bot.run_step`)**
+The bot can spin indefinitely on `Action invalid` responses without ever firing the `stuck_timeout` abort. In `_recv_gamestate`, an error response returns `G is None` and `run_step` exits early, **before** the `stuck_timeout` check runs. So when Lua reports `waitingFor='select_booster_action'` in a state where SKIP_BOOSTER_PACK is invalid (e.g. inter-run transition), Python sends → Lua errors → Python reads error → repeats forever. Observed during 6e: bot spammed thousands of "Error: Action invalid for action 11" until Balatro crashed.
+
+Fix sketch: in `run_step`, treat consecutive `G is None` responses as no-progress for stuck-detection purposes — increment a counter and abort once it crosses the same threshold. Two-line change in `bot.py`. Worth its own phase or sub-task because it's defence-in-depth (the underlying state-leak should also be fixed) and changes failure semantics for any future stuck condition, not just boosters.
+
+<anything else discovered during implementation that should be a future phase>
 ```
 
 Fill in the placeholder sections with actual data from the run.
