@@ -47,6 +47,7 @@ All paths relative to `../balatro_game_src/`.
 | `G.shop_jokers` / `G.shop_booster` / `G.shop_vouchers` | Shop card areas |
 | `G.pack_cards` | Cards inside an open booster pack |
 | `G.CONTROLLER.locks` | Non-nil entries block input during animations |
+| `G.GAME.STOP_USE` | Counter incremented by `stop_use()` when a consumable use begins, decremented by `end_use()`. While > 0, Steamodded's `can_skip_booster` sets `config.button = nil`, disabling the skip button. Never use `pushbutton` for skip_booster while in state=999 — call `G.FUNCS.skip_booster()` directly. |
 
 **`G.STATES` values** (from `globals.lua:284`)
 
@@ -58,6 +59,8 @@ NEW_ROUND=19      SMODS_BOOSTER_OPENED=999  (Steamodded — Jumbo/Mega packs)
 ```
 
 **Bot action entry points:** every bot action maps to a `G.FUNCS.*` callback in `button_callbacks.lua` — the same function the UI button calls. Most are guarded by a sibling `can_*` predicate. When debugging a stuck action, check the predicate first.
+
+**Hook accumulation hazard:** `c_initgamehooks()` in `src/middleware.lua` is called on every `G.start_run`. Global hooks (those wrapping singletons like `G.CONTROLLER.snap_to`, `G.FUNCS.can_skip_booster`, `G.E_MANAGER.add_event`) must be guarded by a `_global_hooks_registered` flag so they register only once. Per-run hooks (those wrapping objects re-created each run, like `G.GAME.blind.drawn_to_hand`) are intentionally unguarded.
 
 **Planet → hand type mapping:** `game.lua:557–568`.
 

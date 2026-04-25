@@ -1,0 +1,5 @@
+# Curated replay data — tracked in git but not useful for coding assistance
+replays/
+
+# Third-party vendored Lua libraries
+lib/
