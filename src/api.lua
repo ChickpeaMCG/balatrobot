@@ -62,9 +62,10 @@ function BalatrobotAPI.update(dt)
                 BalatrobotAPI.respond("Error: Incorrect number of params for action " .. _action[1])
             elseif _err == Utils.ERROR.MSGFORMAT then
                 BalatrobotAPI.respond("Error: Incorrect message format. Should be ACTION|arg1|arg2")
-            elseif _err == Utils.ERROR.INVALIDACTION then
-                BalatrobotAPI.respond("Error: Action invalid for action " .. _action[1])
-            else
+            elseif _err ~= Utils.ERROR.INVALIDACTION then
+                -- INVALIDACTION: silently drop; Python retries on next HELLO.
+                -- Responding would pollute the UDP recv buffer with error messages that
+                -- get drained across subsequent runs, causing false error spam.
                 BalatrobotAPI.waitingForAction = false
                 BalatrobotAPI.queueaction(_action)
             end
