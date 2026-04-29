@@ -85,3 +85,14 @@ class EnhancementData:
     name: str
     base_chips: int = 0
     description: str = ""
+
+
+@dataclass
+class PlanetData:
+    key: str
+    name: str
+    base_cost: int
+    hand_type: str
+    softlock: bool = False
+    description: str = ""
+    balatro_version: str = "1.0.1o"

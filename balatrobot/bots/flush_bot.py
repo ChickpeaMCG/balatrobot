@@ -1,6 +1,6 @@
 
 from balatrobot.core.bot import Actions, Bot
-from balatrobot.data.catalogue import all_jokers
+from balatrobot.data.catalogue import all_jokers, all_planets
 
 CARD_CHIPS = {
     "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
@@ -15,6 +15,26 @@ _FLUSH_JOKERS = [
     for j in sorted(all_jokers(), key=lambda j: j.flush_synergy, reverse=True)
     if j.flush_synergy >= 0.7
 ]
+
+_PLANET_KEYS: frozenset[str] = frozenset(p.key for p in all_planets())
+
+
+def _card_key(card: dict) -> str | None:
+    """Extract the catalogue key from a card dict.
+
+    Cards from shop/pack/consumables use either a top-level `key` field or
+    nest it under `config.center.key` (per utils.lua:186). Handle both.
+    """
+    if not isinstance(card, dict):
+        return None
+    if "key" in card and card["key"]:
+        return card["key"]
+    center = (card.get("config") or {}).get("center") or {}
+    return center.get("key")
+
+
+def _is_planet_key(key: str | None) -> bool:
+    return bool(key) and key in _PLANET_KEYS
 
 
 class FlushBot(Bot):
@@ -90,13 +110,53 @@ class FlushBot(Bot):
     def select_shop_action(self, G):
         dollars = G["dollars"]
         shop_cards = G.get("shop", {}).get("cards", [])
+        shop_boosters = G.get("shop", {}).get("boosters", [])
+
+        # Priority 1: flush-synergy joker
         for priority_key in self.FLUSH_JOKERS:
             for idx, card in enumerate(shop_cards):
                 if card.get("key") == priority_key and card.get("cost", 999) <= dollars:
                     return [Actions.BUY_CARD, [idx + 1]]
+
+        # Priority 2: Celestial pack (only if no planet already waiting in consumables)
+        consumables = G.get("consumables", []) or []
+        has_planet = any(_is_planet_key(_card_key(c)) for c in consumables)
+        if not has_planet:
+            for idx, pack in enumerate(shop_boosters):
+                name = pack.get("name", "")
+                if "Celestial" in name and pack.get("cost", 999) <= dollars:
+                    return [Actions.BUY_BOOSTER, [idx + 1]]
+
+        # Priority 3: Buffoon pack
+        for idx, pack in enumerate(shop_boosters):
+            name = pack.get("name", "")
+            if "Buffoon" in name and pack.get("cost", 999) <= dollars:
+                return [Actions.BUY_BOOSTER, [idx + 1]]
+
         return [Actions.END_SHOP]
 
     def select_booster_action(self, G):
+        pack_cards = G.get("pack_cards") or []
+        if not pack_cards:
+            return [Actions.SKIP_BOOSTER_PACK]
+
+        first_key = _card_key(pack_cards[0])
+
+        if _is_planet_key(first_key):
+            # Celestial pack: prefer Jupiter, otherwise take first card
+            for idx, card in enumerate(pack_cards):
+                if _card_key(card) == "c_jupiter":
+                    return [Actions.SELECT_BOOSTER_CARD, [idx + 1], []]
+            return [Actions.SELECT_BOOSTER_CARD, [1], []]
+
+        if first_key and first_key.startswith("j_"):
+            # Buffoon pack: pick first flush-synergy joker found
+            pack_keys = {_card_key(card): i for i, card in enumerate(pack_cards)}
+            for flush_key in self.FLUSH_JOKERS:
+                if flush_key in pack_keys:
+                    return [Actions.SELECT_BOOSTER_CARD, [pack_keys[flush_key] + 1], []]
+            return [Actions.SKIP_BOOSTER_PACK]
+
         return [Actions.SKIP_BOOSTER_PACK]
 
     def sell_jokers(self, G):
@@ -108,7 +168,15 @@ class FlushBot(Bot):
         return [Actions.REARRANGE_JOKERS, []]
 
     def use_or_sell_consumables(self, G):
-        return [Actions.USE_CONSUMABLE, []]
+        consumables = G.get("consumables") or []
+        planets = [(i, c) for i, c in enumerate(consumables) if _is_planet_key(_card_key(c))]
+        if not planets:
+            return [Actions.USE_CONSUMABLE, []]
+        for planet_idx, c in planets:
+            if _card_key(c) == "c_jupiter":
+                return [Actions.USE_CONSUMABLE, [planet_idx + 1]]
+        planet_idx, _ = planets[0]
+        return [Actions.USE_CONSUMABLE, [planet_idx + 1]]
 
     def rearrange_consumables(self, G):
         return [Actions.REARRANGE_CONSUMABLES, []]

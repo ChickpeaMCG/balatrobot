@@ -126,6 +126,22 @@ function Utils.getConsumablesData()
     return _consumables
 end
 
+function Utils.getPackCardsData()
+    local _pack_cards = { }
+
+    if G and G.pack_cards and G.pack_cards.cards then
+        for i = 1, #G.pack_cards.cards do
+            local card = G.pack_cards.cards[i]
+            local _card = { }
+            _card.key  = card.config.center and card.config.center.key or nil
+            _card.name = card.config.center and card.config.center.name or nil
+            _pack_cards[i] = _card
+        end
+    end
+
+    return _pack_cards
+end
+
 function Utils.getBlindData()
     local _blinds = { }
 
@@ -275,6 +291,7 @@ function Utils.getGamestate()
     _gamestate.hand         = Utils.getHandData()
     _gamestate.jokers       = Utils.getJokersData()
     _gamestate.consumables  = Utils.getConsumablesData()
+    _gamestate.pack_cards   = Utils.getPackCardsData()
     _gamestate.ante         = Utils.getAnteData()
     _gamestate.shop         = Utils.getShopData()
     _gamestate.handscores   = Utils.getHandScoreData()

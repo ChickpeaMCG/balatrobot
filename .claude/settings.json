@@ -6,9 +6,15 @@
       "Bash(python replay_bot.py*)",
       "Bash(python -m pytest*)",
       "Bash(pytest*)",
-      "Bash(python -m balatrobot.*)"
+      "Bash(python -m balatrobot.*)",
+      "Bash(ruff check*)",
+      "Bash(mypy*)",
+      "Bash(python -c*)"
     ],
-    "additionalDirectories": ["../balatro_game_src"]
+    "additionalDirectories": [
+      "../balatro_game_src",
+      "C:/Users/Vince/AppData/Roaming/Balatro/Mods/lovely/log/"
+    ]
   },
   "hooks": {
     "PostToolUse": [

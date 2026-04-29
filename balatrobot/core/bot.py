@@ -67,6 +67,7 @@ class Bot:
         cache_states: bool = False,
         speed: str = "fast",
         balatro_path: str = r"C:\Program Files (x86)\Steam\steamapps\common\Balatro\Balatro.exe",
+        stuck_timeout: int = 30,
     ):
         self.G = None
         self.deck = deck
@@ -78,16 +79,21 @@ class Bot:
         self.cache_states = cache_states
         self.speed = speed
         self.balatro_path = balatro_path
+        self.stuck_timeout = stuck_timeout
 
         self.addr = ("localhost", self.bot_port)
         self.running = False
         self.balatro_instance = None
 
         self.sock = None
+        self._last_response: str | None = None
+        self._response_count: int = 0
 
         self.state = {}
         self._action_log: list[dict] = []
         self._current_seed: str = None
+        self._last_waitingFor: str | None = None
+        self._last_progress_time: float = 0.0
 
     def skip_or_select_blind(self):
         raise NotImplementedError(
@@ -213,14 +219,28 @@ class Bot:
     def _balatro_alive(self) -> bool:
         return self.balatro_instance is None or self.balatro_instance.poll() is None
 
+    def _flush_response_repeat(self) -> None:
+        if self._response_count > 1:
+            print(f"  (repeated {self._response_count}x)")
+        self._last_response = None
+        self._response_count = 0
+
     def _recv_gamestate(self):
         self.sendcmd("HELLO")
         try:
             data = self.sock.recv(65536)
             jsondata = json.loads(data)
             if "response" in jsondata:
-                print(jsondata["response"])
+                resp = jsondata["response"]
+                if resp == self._last_response:
+                    self._response_count += 1
+                else:
+                    self._flush_response_repeat()
+                    print(resp)
+                    self._last_response = resp
+                    self._response_count = 1
                 return None
+            self._flush_response_repeat()
             return jsondata
         except OSError as e:
             if not self._balatro_alive():
@@ -241,6 +261,8 @@ class Bot:
             self.G = None
 
             self.running = True
+            self._last_waitingFor = None
+            self._last_progress_time = time.time()
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.sock.settimeout(1)
             self.sock.connect(self.addr)
@@ -251,6 +273,16 @@ class Bot:
                 return
 
             self.G = G
+
+            wf = G.get("waitingFor")
+            if wf != self._last_waitingFor:
+                self._last_waitingFor = wf
+                self._last_progress_time = time.time()
+            elif time.time() - self._last_progress_time > self.stuck_timeout:
+                print(f"Stuck on '{wf}' for >{self.stuck_timeout}s — aborting run.")
+                self.stop_balatro_instance()
+                self.running = False
+                return
 
             if self.G.get("state") == State.GAME_OVER.value:
                 self._on_run_complete(self.G)

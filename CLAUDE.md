@@ -8,9 +8,61 @@ The full Balatro Lua source (extracted from `Balatro.exe`) is at:
 ```
 ../balatro_game_src/
 ```
-Use this when investigating game internals — no need to re-extract from the .exe. Key files: `game.lua`, `functions/state_events.lua`, `functions/button_callbacks.lua`, `functions/common_events.lua`.
+Use this when investigating game internals — no need to re-extract from the .exe.
 
 Steamodded debug logs go to: `%AppData%\Roaming\Balatro\Mods\lovely\log\` (most recent file).
+
+### Source navigation
+
+All paths relative to `../balatro_game_src/`.
+
+**Top-level files**
+
+| File | Purpose |
+|---|---|
+| `globals.lua` | `G.STATES` enum (284–304), `G.STAGES`, screen constants, instance registries |
+| `game.lua` | `Game` class — init, `init_item_prototypes` (all joker/consumable/voucher prototypes in `P_CENTERS` at line 364), `init_game_object` (full `G.GAME` schema at line 1862), main `update` dispatcher (2449) |
+| `card.lua` | `Card` class — every joker/consumable/playing card behavior; `Card:use_consumeable` (1091), `Card:calculate_joker` scoring triggers (2291), `Card:open` booster pack (1681) |
+| `cardarea.lua` | `CardArea` — hand/deck/jokers/shop containers; `can_highlight`, `add_to_highlighted`, `parse_highlighted` (113–201) |
+| `blind.lua` | `Blind` class — `set_blind` (78), `defeat`/`disable` (276, 356), boss hooks `press_play`/`debuff_card`/`modify_hand` (464+) |
+
+**`functions/` files**
+
+| File | Key locations |
+|---|---|
+| `state_events.lua` | `end_round` (87), `new_round` (290), `draw_from_deck_to_hand` (355), `discard_cards_from_highlighted` (379), `play_cards_from_highlighted` (450), `get_poker_hand_info` priority order (540), `evaluate_play` scoring pipeline (571), `evaluate_round` (1135) |
+| `button_callbacks.lua` | Gate predicates: `can_buy`/`can_buy_and_use`/`can_use_consumeable`/`can_skip_booster` (55–124, 2076–2155). Action handlers: **`G.FUNCS.use_card`** (2155), `sell_card` (2318), `buy_from_shop` (2404), `select_blind` (2513), `skip_booster` (2558), `skip_blind` (2740), `cash_out` ROUND_EVAL→SHOP (2912) |
+| `common_events.lua` | `G.UIDEF.use_and_sell_buttons` (239), per-card button factory `card_focus_button` (299–382), `G.UIDEF.shop` layout (637), pack UIBox definitions `create_UIBox_*_pack` (1629–1813), `get_pack` opens booster contents (1944), `create_card` universal card spawner (2082), `calculate_reroll_cost` (2263) |
+| `misc_functions.lua` | `evaluate_poker_hand` + helpers `get_flush`/`get_straight`/`get_X_same` (376–613), deterministic RNG `pseudoseed`/`pseudorandom` (279–315), `get_blind_amount(ante)` chip formula (919) |
+
+**Key global state**
+
+| Variable | Contains |
+|---|---|
+| `G.STATE` | Current state enum value (compare to `G.STATES.*`) |
+| `G.GAME` | Full run state: `dollars`, `current_round`, `hands` (chips/mult/level per hand type), `shop`, `blind`, `round_resets` |
+| `G.GAME.hands` | Per-hand-type table — `level`, `chips`, `mult` (initialized at `game.lua:2001`) |
+| `G.hand` / `G.play` / `G.deck` / `G.discard` | Card areas (CardArea instances) |
+| `G.jokers` / `G.consumeables` | Joker and consumable slots |
+| `G.shop_jokers` / `G.shop_booster` / `G.shop_vouchers` | Shop card areas |
+| `G.pack_cards` | Cards inside an open booster pack |
+| `G.CONTROLLER.locks` | Non-nil entries block input during animations |
+| `G.GAME.STOP_USE` | Counter incremented by `stop_use()` when a consumable use begins, decremented by `end_use()`. While > 0, Steamodded's `can_skip_booster` sets `config.button = nil`, disabling the skip button. Never use `pushbutton` for skip_booster while in state=999 — call `G.FUNCS.skip_booster()` directly. |
+
+**`G.STATES` values** (from `globals.lua:284`)
+
+```
+SELECTING_HAND=1  HAND_PLAYED=2    DRAW_TO_HAND=3   GAME_OVER=4
+SHOP=5            PLAY_TAROT=6     BLIND_SELECT=7   ROUND_EVAL=8
+TAROT_PACK=9      PLANET_PACK=10   BUFFOON_PACK=18  STANDARD_PACK=17
+NEW_ROUND=19      SMODS_BOOSTER_OPENED=999  (Steamodded — Jumbo/Mega packs)
+```
+
+**Bot action entry points:** every bot action maps to a `G.FUNCS.*` callback in `button_callbacks.lua` — the same function the UI button calls. Most are guarded by a sibling `can_*` predicate. When debugging a stuck action, check the predicate first.
+
+**Hook accumulation hazard:** `c_initgamehooks()` in `src/middleware.lua` is called on every `G.start_run`. Global hooks (those wrapping singletons like `G.CONTROLLER.snap_to`, `G.FUNCS.can_skip_booster`, `G.E_MANAGER.add_event`) must be guarded by a `_global_hooks_registered` flag so they register only once. Per-run hooks (those wrapping objects re-created each run, like `G.GAME.blind.drawn_to_hand`) are intentionally unguarded.
+
+**Planet → hand type mapping:** `game.lua:557–568`.
 
 ## Project Overview
 
