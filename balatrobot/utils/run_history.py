@@ -45,6 +45,14 @@ def record_run(
     best_idx = history.get("best_run")
     if best_idx is None or ante_reached > history["runs"][best_idx]["ante_reached"]:
         history["best_run"] = len(history["runs"]) - 1
+    if label is not None:
+        best_by_label = history.setdefault("best_by_label", {})
+        existing = best_by_label.get(label)
+        if existing is None or (ante_reached, hands_played) > (
+            existing.get("ante_reached", 0),
+            existing.get("hands_played", 0),
+        ):
+            best_by_label[label] = entry
     HISTORY_FILE.write_text(json.dumps(history, indent=2))
     return entry
 

@@ -38,6 +38,30 @@ def test_record_run_stores_label(mock_path):
 
 
 @patch("balatrobot.utils.run_history.HISTORY_FILE")
+def test_record_run_updates_best_by_label(mock_path):
+    mock_path.read_text.side_effect = FileNotFoundError
+    written = {}
+    mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
+    record_run("FIRST11", "Blue Deck", 1, 2, "loss", 10, "Flush", label="mytest")
+    record_run("SECOND2", "Blue Deck", 1, 3, "loss", 20, "Flush", label="mytest")
+    best = written["data"]["best_by_label"]["mytest"]
+    assert best["seed"] == "SECOND2"
+    assert best["ante_reached"] == 3
+
+
+@patch("balatrobot.utils.run_history.HISTORY_FILE")
+def test_record_run_best_by_label_tiebreak_hands(mock_path):
+    mock_path.read_text.side_effect = FileNotFoundError
+    written = {}
+    mock_path.write_text.side_effect = lambda t: written.update({"data": json.loads(t)})
+    record_run("LOW1234", "Blue Deck", 1, 3, "loss", 10, "Flush", label="tie")
+    record_run("HIGH234", "Blue Deck", 1, 3, "loss", 25, "Flush", label="tie")
+    best = written["data"]["best_by_label"]["tie"]
+    assert best["seed"] == "HIGH234"
+    assert best["hands_played"] == 25
+
+
+@patch("balatrobot.utils.run_history.HISTORY_FILE")
 def test_record_run_omits_label_when_none(mock_path):
     mock_path.read_text.side_effect = FileNotFoundError
     written = {}
