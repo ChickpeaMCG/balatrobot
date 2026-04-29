@@ -1,0 +1,1298 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An AI bot for Balatro — development chronicle">
+      
+      
+      
+        <link rel="canonical" href="https://ChickpeaMCG.github.io/balatrobot/superpowers/records/phase-4-run-analytics/">
+      
+      
+        <link rel="prev" href="../phase-3-game-mechanics-catalogue/">
+      
+      
+        <link rel="next" href="../phase-5-docs-site/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Phase 4 — Run Analytics - Balatrobot</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-4-run-analytics-implementation-record" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Balatrobot" class="md-header__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Balatrobot
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 4 — Run Analytics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../phase-1-replay-run-history/" class="md-tabs__link">
+          
+  
+  
+  Phases
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Balatrobot" class="md-nav__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Balatrobot
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-replay-run-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 — Replay & History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-smarter-flushbot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 — Smarter FlushBot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-game-mechanics-catalogue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3 — Mechanics Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4 — Run Analytics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4 — Run Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Planned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4a-run-labelling-best-run-capture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4a. Run Labelling &amp; Best-Run Capture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4b-bot-fixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4b. Bot Fixes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4b-bot-fixes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4b. Bot fixes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4c-jokeroutcome-correlation-failure-mode-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4c. Joker/Outcome Correlation &amp; Failure Mode Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4a-run-labelling-best-run-capture_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4a. Run labelling &amp; best-run capture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-run-phase-4-analytics-20-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Run — phase-4-analytics (20 runs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-docs-site/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 5 — Documentation Site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Planned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4a-run-labelling-best-run-capture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4a. Run Labelling &amp; Best-Run Capture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4b-bot-fixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4b. Bot Fixes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4b-bot-fixes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4b. Bot fixes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4c-jokeroutcome-correlation-failure-mode-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4c. Joker/Outcome Correlation &amp; Failure Mode Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4a-run-labelling-best-run-capture_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4a. Run labelling &amp; best-run capture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-run-phase-4-analytics-20-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Run — phase-4-analytics (20 runs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="phase-4-run-analytics-implementation-record">Phase 4: Run Analytics — Implementation Record</h1>
+<p><strong>Date:</strong> 2026-04-18 / 2026-04-19
+<strong>Branch:</strong> phase-4-analytics
+<strong>Follows:</strong> Phase 3 (game mechanics catalogue, feature encoder)
+<strong>Precedes:</strong> Phase 5 (documentation site)</p>
+<blockquote>
+<p><strong>Note:</strong> Phase 4 is the first phase using the superpowers workflow. Design specs for sub-phases live in <code>docs/superpowers/specs/</code>.</p>
+</blockquote>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Phase 3 delivered a typed game mechanics catalogue and feature encoder. Phase 4 turns run data into actionable insight — starting with infrastructure to group results by experiment (4a), then fixing known bot defects before accumulating analytics data (4b), then running correlation and failure mode analysis across 200+ runs (4c).</p>
+<p>This split is intentional: analytics on a broken bot produces noise, not signal.</p>
+<hr />
+<h2 id="scope">Scope</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Independent?</th>
+<th>Design Spec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4a. Run labelling &amp; best-run capture</td>
+<td>Yes</td>
+<td>Inline below</td>
+</tr>
+<tr>
+<td>4b. Bot fixes (current_chips, blind skipping, schema extension)</td>
+<td>Yes</td>
+<td><code>docs/superpowers/specs/2026-04-19-phase-4b-bot-fixes-design.md</code></td>
+</tr>
+<tr>
+<td>4c. Joker/outcome correlation + failure mode analysis</td>
+<td>Depends on 4b</td>
+<td>TBD</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-was-planned">What Was Planned</h2>
+<h3 id="4a-run-labelling-best-run-capture">4a. Run Labelling &amp; Best-Run Capture</h3>
+<p><strong><code>balatrobot/utils/run_history.py</code></strong>
+- <code>record_run()</code> gains optional <code>label</code> param — stored in entry when set, omitted when <code>None</code>
+- <code>runs_for_label(history, label)</code> — filters runs by label
+- <code>best_run_for_label(history, label)</code> — highest <code>ante_reached</code>, tiebreak <code>hands_played</code>
+- <code>format_best_run_markdown(label, entry, total_runs)</code> — markdown table for doc insertion</p>
+<p><strong><code>balatrobot/runners/recording.py</code></strong>
+- <code>get_git_branch()</code> helper — <code>git rev-parse --abbrev-ref HEAD</code>, falls back to <code>"unlabelled"</code>
+- Default label = <code>get_git_branch()</code> at startup; <code>--label</code> overrides
+- Warning printed when label is <code>main</code> or <code>master</code></p>
+<p><strong>Design decisions:</strong>
+- <strong>Git branch as default label</strong> — no flag needed in normal usage; switching to a feature branch automatically groups runs. Works naturally with worktrees: each worktree has its own branch, so two agents benchmarking in parallel are isolated by default.
+- <strong><code>--doc</code> appends, never overwrites</strong> — safe to run multiple times; each call adds a new block.
+- <strong>No schema migration</strong> — old entries without <code>label</code> are simply excluded from label-filtered queries.</p>
+<h3 id="4b-bot-fixes">4b. Bot Fixes</h3>
+<p>See <code>docs/superpowers/specs/2026-04-19-phase-4b-bot-fixes-design.md</code> for full spec. Summary:
+1. Research + fix <code>current_chips</code> Lua field
+2. Re-enable <code>_should_play</code> in FlushBot (depends on 1)
+3. Blind skipping infrastructure (Lua + Python)
+4. Extend run history schema with failure mode fields</p>
+<h3 id="4b-bot-fixes_1">4b. Bot fixes</h3>
+<ul>
+<li><strong><code>current_chips</code> fix</strong> — <code>G.GAME.chips</code> is updated via a 0.5s async ease event; the bot re-enters <code>SELECTING_HAND</code> before it resolves, so it always read 0. Fix: wrap <code>G.E_MANAGER.add_event</code> in <code>c_initgamehooks()</code> to intercept ease events targeting <code>G.GAME.chips</code> and cache the <code>ease_to</code> value synchronously in <code>BalatrobotAPI.chips_total</code>. <code>Utils.getGameData()</code> reads <code>chips_total</code> instead. Verified via live run: <code>final_chips_scored: 980</code> (was always 0).</li>
+<li><strong><code>_should_play</code> wiring</strong> — <code>select_cards_from_hand</code> now short-circuits to PLAY when <code>current_chips &gt; 0 &amp;&amp; current_chips &gt;= chips_needed</code>, stopping flush-fishing when the blind requirement is already met. <code>_last_hand_type</code> tracked on all play paths for run history recording.</li>
+<li><strong>Blind skip tag</strong> — <code>Utils.getBlindData()</code> now returns <code>tag: G.tags[1].key</code> (or nil). This exposes the offered skip reward so <code>skip_or_select_blind</code> can make informed decisions. SKIP_BLIND middleware wiring was already in place.</li>
+<li><strong>Run history schema</strong> — <code>record_run()</code> gains 4 optional keyword params: <code>final_chips_needed</code>, <code>final_chips_scored</code>, <code>final_discards_remaining</code>, <code>final_hand_type</code>. Fields are omitted from JSON when None (backward compatible). <code>RecordingFlushBot._on_run_complete</code> passes all four from the final gamestate. Verified in live run.</li>
+</ul>
+<h3 id="4c-jokeroutcome-correlation-failure-mode-analysis">4c. Joker/Outcome Correlation &amp; Failure Mode Analysis</h3>
+<p>After 4b lands on a clean branch: accumulate 200+ runs, then build:
+- Joker/outcome correlation: which jokers correlate with higher ante reached
+- Failure mode classifier: label each loss using <code>final_chips_needed</code> vs <code>final_chips_scored</code> and <code>final_discards_remaining</code>
+- Summary report appended to this doc via <code>--doc</code> mechanism</p>
+<hr />
+<h2 id="what-was-built">What Was Built</h2>
+<h3 id="4a-run-labelling-best-run-capture_1">4a. Run labelling &amp; best-run capture</h3>
+<p>All 4a sub-tasks implemented as planned. Key details:</p>
+<ul>
+<li><code>format_best_run_markdown</code> globs <code>replays/{seed}_*.replay.json</code> for the replay path — robust to timestamp format drift</li>
+<li><code>analyse_runs.py</code> auto-derives label from git branch only when <code>--doc</code> is passed (not on plain <code>analyse</code> calls)</li>
+<li><code>RecordingFlushBot.__init__</code> accepts <code>label</code> kwarg and stores it for use in <code>_on_run_complete</code></li>
+</ul>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash"># On branch 'phase-4-analytics': label auto-derived
+python run_flush_bot.py --runs 100
+
+# Override for a specific experiment
+python run_flush_bot.py --runs 50 --label phase4_checkered_vs_blue
+
+# Append best-run summary to this doc
+python -m balatrobot.analytics.analyse_runs --doc docs/PLAN_PHASE4.md
+
+# Explicit label
+python -m balatrobot.analytics.analyse_runs --label phase4_checkered_vs_blue --doc docs/PLAN_PHASE4.md
+</code></pre>
+<hr />
+<h2 id="bugs-found-during-implementation">Bugs Found During Implementation</h2>
+<p>None documented for 4a.</p>
+<hr />
+<h2 id="current-state-per-sub-task">Current State Per Sub-Task</h2>
+<table>
+<thead>
+<tr>
+<th>Sub-task</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>4a. run_history label + helpers</strong></td>
+<td>✅ Done</td>
+<td><code>record_run</code>, <code>runs_for_label</code>, <code>best_run_for_label</code>, <code>format_best_run_markdown</code></td>
+</tr>
+<tr>
+<td><strong>4a. recording.py git-branch label</strong></td>
+<td>✅ Done</td>
+<td><code>get_git_branch()</code>, <code>--label</code> arg, main-branch warning</td>
+</tr>
+<tr>
+<td><strong>4a. analyse_runs.py --label/--doc</strong></td>
+<td>✅ Done</td>
+<td>Label filter + doc append</td>
+</tr>
+<tr>
+<td><strong>4a. tests/test_run_history.py</strong></td>
+<td>✅ Done</td>
+<td>7 tests, all passing</td>
+</tr>
+<tr>
+<td><strong>4b. <code>current_chips</code> Lua field</strong></td>
+<td>✅ Done</td>
+<td>Option A: sync tracker via <code>G.E_MANAGER.add_event</code> wrap in <code>middleware.lua</code>; verified non-zero in live run</td>
+</tr>
+<tr>
+<td><strong>4b. <code>_should_play</code> re-enable</strong></td>
+<td>✅ Done</td>
+<td>Early-exit in <code>select_cards_from_hand</code> when <code>current_chips &gt;= chips_needed</code>; <code>_last_hand_type</code> tracked</td>
+</tr>
+<tr>
+<td><strong>4b. Blind skipping infrastructure</strong></td>
+<td>✅ Done</td>
+<td><code>Utils.getBlindData()</code> exposes <code>tag</code> field via <code>G.tags[1].key</code>; SKIP_BLIND wiring pre-existing</td>
+</tr>
+<tr>
+<td><strong>4b. Run history schema extension</strong></td>
+<td>✅ Done</td>
+<td><code>record_run()</code> gains 4 optional failure-mode fields; <code>_on_run_complete</code> passes them; verified in live run</td>
+</tr>
+<tr>
+<td><strong>4c. Joker/outcome correlation</strong></td>
+<td>⬜ Deferred indefinitely</td>
+<td>Needs 200+ run corpus; backlog</td>
+</tr>
+<tr>
+<td><strong>4c. Failure mode analysis</strong></td>
+<td>⬜ Deferred indefinitely</td>
+<td>Needs 200+ run corpus; backlog</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-is-explicitly-out-of-scope">What Is Explicitly Out of Scope</h2>
+<ul>
+<li>Any strategy changes beyond re-enabling <code>_should_play</code> (shop rerolling, consumable use, economy management)</li>
+<li>RL training or SB3 integration (Phase 5)</li>
+<li>Multi-instance benchmarking changes</li>
+<li>Docs site or GitHub Pages (future phase)</li>
+</ul>
+<hr />
+<h2 id="deferred-items">Deferred Items</h2>
+<ul>
+<li><strong>4c. Joker/outcome correlation</strong> — deferred indefinitely; needs a 200+ run corpus accumulated on a stable bot. Can be revisited once Phase 6 (RL) generates sufficient data.</li>
+<li><strong>4c. Failure mode analysis</strong> — deferred indefinitely; same prerequisite as correlation analysis.</li>
+</ul>
+<hr />
+<h2 id="best-run-phase-4-analytics-20-runs">Best Run — phase-4-analytics (20 runs)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ante reached</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Hands played</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Seed</td>
+<td><code>4XD6AY3</code></td>
+</tr>
+<tr>
+<td>Deck</td>
+<td>Checkered Deck</td>
+</tr>
+<tr>
+<td>Stake</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Replay</td>
+<td><code>replays\4XD6AY3_2026-04-18T15-07-10.replay.json</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

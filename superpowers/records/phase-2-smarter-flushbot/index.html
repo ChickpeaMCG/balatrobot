@@ -1,0 +1,1386 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An AI bot for Balatro — development chronicle">
+      
+      
+      
+        <link rel="canonical" href="https://ChickpeaMCG.github.io/balatrobot/superpowers/records/phase-2-smarter-flushbot/">
+      
+      
+        <link rel="prev" href="../phase-1-replay-run-history/">
+      
+      
+        <link rel="next" href="../phase-3-game-mechanics-catalogue/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Phase 2 — Smarter FlushBot - Balatrobot</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-2-smarter-flushbot-implementation-record" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Balatrobot" class="md-header__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Balatrobot
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 2 — Smarter FlushBot
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../phase-1-replay-run-history/" class="md-tabs__link">
+          
+  
+  
+  Phases
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Balatrobot" class="md-nav__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Balatrobot
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-replay-run-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 — Replay & History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 — Smarter FlushBot
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 — Smarter FlushBot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Planned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2a-playdiscard-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a. Play/Discard Decisions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2b-shop-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2b. Shop Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2c-blind-skipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2c. Blind Skipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lua-srcutilslua" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lua: src/utils.lua
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-balatrobotbotsflush_botpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python: balatrobot/bots/flush_bot.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deck-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deck Change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs Found During Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-_should_play-caused-flush-discards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #1 — _should_play caused flush discards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-skip_or_select_blind-used-wrong-tag-field-lua-crash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #2 — skip_or_select_blind used wrong tag field (Lua crash)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-duplicate-card-indices-with-checkered-deck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #3 — Duplicate card indices with Checkered Deck
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-4-reconnect-loop-spins-at-full-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #4 — Reconnect loop spins at full speed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-5-port-conflict-between-simultaneous-balatro-instances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #5 — Port conflict between simultaneous Balatro instances
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-results-20-run-baseline-checkered-deck-stake-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Results (20-run baseline, Checkered Deck, Stake 1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items-carry-into-phase-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items (carry into Phase 3)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-game-mechanics-catalogue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3 — Mechanics Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-run-analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4 — Run Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-docs-site/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 5 — Documentation Site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Planned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2a-playdiscard-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a. Play/Discard Decisions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2b-shop-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2b. Shop Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2c-blind-skipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2c. Blind Skipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lua-srcutilslua" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lua: src/utils.lua
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-balatrobotbotsflush_botpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python: balatrobot/bots/flush_bot.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deck-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deck Change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs Found During Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-_should_play-caused-flush-discards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #1 — _should_play caused flush discards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-skip_or_select_blind-used-wrong-tag-field-lua-crash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #2 — skip_or_select_blind used wrong tag field (Lua crash)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-duplicate-card-indices-with-checkered-deck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #3 — Duplicate card indices with Checkered Deck
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-4-reconnect-loop-spins-at-full-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #4 — Reconnect loop spins at full speed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-5-port-conflict-between-simultaneous-balatro-instances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #5 — Port conflict between simultaneous Balatro instances
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-results-20-run-baseline-checkered-deck-stake-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Results (20-run baseline, Checkered Deck, Stake 1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items-carry-into-phase-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items (carry into Phase 3)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="phase-2-smarter-flushbot-implementation-record">Phase 2: Smarter FlushBot — Implementation Record</h1>
+<p><strong>Date:</strong> 2026-04 (retrospective — predates superpowers adoption)
+<strong>Follows:</strong> Phase 1 (run persistence layer)
+<strong>Precedes:</strong> Phase 3 (game mechanics catalogue)</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Phase 1 established run persistence. Phase 2 makes FlushBot decisions informed by actual game state rather than blind heuristics. The scope was deliberately narrow: play/discard logic, shop strategy, and blind skipping. Complex mechanics (economy, rerolling, comprehensive joker tiers) were deferred.</p>
+<hr />
+<h2 id="scope">Scope</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Independent?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2a. Play/discard decisions</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2b. Shop strategy</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2c. Blind skipping</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>All three items are independent. 2c was partially reverted due to a Lua crash (see Bugs).</p>
+<hr />
+<h2 id="what-was-planned">What Was Planned</h2>
+<h3 id="2a-playdiscard-decisions">2a. Play/Discard Decisions</h3>
+<ul>
+<li>Calculate expected chips for the best available hand using <code>handscores</code> + card values</li>
+<li>Compare against <code>chips_needed - current_chips</code> to decide whether to play or fish for a better hand</li>
+<li>Respect <code>hands_left</code>: if on last hand, always play</li>
+<li>Only discard when <code>discards_left &gt; 0</code> AND expected best hand is below chip target with hands remaining</li>
+</ul>
+<h3 id="2b-shop-strategy">2b. Shop Strategy</h3>
+<ul>
+<li>Priority list of flush-synergy joker keys: <code>j_4_fingers</code>, <code>j_flush</code>, <code>j_runner</code>, <code>j_shortcut</code>, <code>j_fibonacci</code></li>
+<li>Buy highest-priority joker that is affordable and in stock</li>
+<li>Skip shop if no priority jokers available — no rerolling</li>
+</ul>
+<h3 id="2c-blind-skipping">2c. Blind Skipping</h3>
+<ul>
+<li>Skip Small/Big blinds when a useful tag is on offer (<code>tag_double</code>, <code>tag_economy</code>, <code>tag_voucher</code>, <code>tag_coupon</code>)</li>
+<li>Always select Boss blind (can't skip)</li>
+</ul>
+<hr />
+<h2 id="what-was-built">What Was Built</h2>
+<h3 id="lua-srcutilslua">Lua: <code>src/utils.lua</code></h3>
+<p>Added <code>current_chips</code> to <code>Utils.getGameData()</code>:</p>
+<pre><code class="language-lua">_game.current_chips = G.GAME.chips or 0
+</code></pre>
+<p><code>G.GAME.chips</code> turned out to be the wrong field — always 0 during <code>SELECTING_HAND</code>. The correct field is unknown without deeper Balatro source inspection. Deferred.</p>
+<h3 id="python-balatrobotbotsflush_botpy">Python: <code>balatrobot/bots/flush_bot.py</code></h3>
+<p><strong>New constants:</strong></p>
+<pre><code class="language-python">FLUSH_JOKERS = [&quot;j_4_fingers&quot;, &quot;j_flush&quot;, &quot;j_runner&quot;, &quot;j_shortcut&quot;, &quot;j_fibonacci&quot;]
+SKIP_TAGS = {&quot;tag_double&quot;, &quot;tag_economy&quot;, &quot;tag_voucher&quot;, &quot;tag_coupon&quot;}
+CARD_CHIPS = {&quot;2&quot;: 2, ..., &quot;Jack&quot;: 10, &quot;Queen&quot;: 10, &quot;King&quot;: 10, &quot;Ace&quot;: 11}
+</code></pre>
+<p><strong>2b — <code>select_shop_action</code>:</strong> Fully implemented. Scans shop cards in priority order, buys the first affordable match, ends shop otherwise. No rerolling.</p>
+<p><strong>2a — <code>select_cards_from_hand</code>:</strong> Implemented with a key simplification discovered during testing (see Bug #1). Final logic:
+1. If 5+ cards of same suit → <strong>always play the flush</strong>
+2. Else if discards remain and not last hand → <strong>discard off-suit cards</strong>
+3. Else → <strong>play forced hand</strong> (best cards of most common suit)</p>
+<p><code>_should_play()</code> is retained as a utility but is no longer called by <code>select_cards_from_hand</code> (see Bug #1).</p>
+<p><strong>2c — <code>skip_or_select_blind</code>:</strong> Partially implemented, then reverted (see Bug #2). Always returns <code>SELECT_BLIND</code>.</p>
+<h3 id="deck-change">Deck Change</h3>
+<p>Switched from <code>"Blue Deck"</code> (standard 52-card) to <code>"Checkered Deck"</code> (26 Hearts + 26 Spades). Every card contributes to one of exactly two suits, maximising flush frequency.</p>
+<p><strong>File changed:</strong> <code>balatrobot/runners/recording.py</code></p>
+<hr />
+<h2 id="bugs-found-during-implementation">Bugs Found During Implementation</h2>
+<h3 id="bug-1-_should_play-caused-flush-discards">Bug #1 — <code>_should_play</code> caused flush discards</h3>
+<p><strong>Symptom:</strong> Bot discarding good flushes. Debug showed <code>should_play=False</code> for a flush scoring 272 chips against a 300 chip target.</p>
+<p><strong>Root cause:</strong> The score-vs-deficit check was applied to the flush play decision. The bot interpreted "my flush scores 272, I need 300, I should discard and try again." Wrong because chips accumulate across hands, <code>current_chips</code> was always 0 making deficit always equal to <code>chips_needed</code>, and discarding burns precious discards.</p>
+<p><strong>Fix:</strong> Remove <code>_should_play</code> from the flush play path. If we have a flush, always play it.</p>
+<p><strong>Lesson:</strong> The score check makes sense for deciding <em>whether to discard and fish</em>, not <em>whether to play our best available hand</em>.</p>
+<hr />
+<h3 id="bug-2-skip_or_select_blind-used-wrong-tag-field-lua-crash">Bug #2 — <code>skip_or_select_blind</code> used wrong tag field (Lua crash)</h3>
+<p><strong>Symptom:</strong> Game crashed mid-run with <code>WinError 10054</code> (UDP port unreachable — Balatro process died).</p>
+<p><strong>Root cause:</strong> <code>G["tags"]</code> holds tags the bot has <strong>already collected</strong>, not the tag <strong>on offer</strong> for skipping. When a collected tag matched <code>SKIP_TAGS</code>, the bot sent <code>SKIP_BLIND</code>. Lua middleware tried to click a UI element that was nil, crashing the game.</p>
+<p><strong>Fix:</strong> Reverted to always <code>SELECT_BLIND</code>. The correct fix requires exposing the offered tag in <code>Utils.getBlindData()</code>.</p>
+<hr />
+<h3 id="bug-3-duplicate-card-indices-with-checkered-deck">Bug #3 — Duplicate card indices with Checkered Deck</h3>
+<p><strong>Symptom:</strong> <code>Error: Action invalid for action 3</code> (PLAY_HAND) looping indefinitely.</p>
+<p><strong>Root cause:</strong> The Checkered Deck has two copies of each rank per suit. <code>hand.index(card)</code> uses dict value equality, producing duplicate indices for identical cards. Lua's <code>Utils.isTableUnique</code> rejects duplicate indices.</p>
+<p><strong>Fix:</strong> Replaced <code>hand.index()</code> with <code>enumerate(hand)</code> throughout — build <code>(index, card)</code> pairs from the start, never search by value.</p>
+<hr />
+<h3 id="bug-4-reconnect-loop-spins-at-full-speed">Bug #4 — Reconnect loop spins at full speed</h3>
+<p><strong>Symptom:</strong> Hundreds of socket error messages per second when Balatro crashes.</p>
+<p><strong>Root cause:</strong> <code>_recv_gamestate</code> caught <code>OSError</code>, immediately reconnected with no delay, returned <code>None</code>. No exit condition when the Balatro process had died.</p>
+<p><strong>Fix:</strong> Added <code>time.sleep(1)</code> in the error handler and a <code>_balatro_alive()</code> check via <code>subprocess.Popen.poll()</code>.</p>
+<hr />
+<h3 id="bug-5-port-conflict-between-simultaneous-balatro-instances">Bug #5 — Port conflict between simultaneous Balatro instances</h3>
+<p><strong>Symptom:</strong> Background 20-run job failed immediately with <code>WinError 10054</code>.</p>
+<p><strong>Root cause:</strong> Previous interactive run left a Balatro instance on port 12345. New instance could not bind the same port.</p>
+<p><strong>Fix (operational):</strong> Always ensure no Balatro instance is running before starting a new bot session.</p>
+<hr />
+<h2 id="performance-results-20-run-baseline-checkered-deck-stake-1">Performance Results (20-run baseline, Checkered Deck, Stake 1)</h2>
+<table>
+<thead>
+<tr>
+<th>Ante reached</th>
+<th>Count</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>~50%</td>
+<td>Dies on first blind</td>
+</tr>
+<tr>
+<td>2</td>
+<td>~48%</td>
+<td>Reaches Ante 2, fails Big/Boss</td>
+</tr>
+<tr>
+<td>4</td>
+<td>~2%</td>
+<td>Outlier (lucky joker purchase)</td>
+</tr>
+</tbody>
+</table>
+<p>Chip requirement jumps at Ante 2 and naked flushes can't reliably hit it. Joker acquisition is the critical unlock.</p>
+<hr />
+<h2 id="current-state-per-sub-task">Current State Per Sub-Task</h2>
+<table>
+<thead>
+<tr>
+<th>Sub-task</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2a. Play/discard</strong></td>
+<td>✅ Done</td>
+<td>Flush-first logic; <code>_should_play</code> scaffolded but not called</td>
+</tr>
+<tr>
+<td><strong>2b. Shop strategy</strong></td>
+<td>✅ Done</td>
+<td>Logic correct but priority list had wrong keys (fixed in Phase 3)</td>
+</tr>
+<tr>
+<td><strong>2c. Blind skipping</strong></td>
+<td>❌ Deferred</td>
+<td>Requires exposing offered tag in <code>getBlindData()</code></td>
+</tr>
+<tr>
+<td><strong><code>current_chips</code></strong></td>
+<td>❌ Deferred</td>
+<td><code>G.GAME.chips</code> is always 0; correct Lua field unknown</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-is-explicitly-out-of-scope">What Is Explicitly Out of Scope</h2>
+<ul>
+<li>Economy management, rerolling, consumable use</li>
+<li>Comprehensive joker tier list (deferred to Phase 3 catalogue)</li>
+<li>Multi-instance benchmarking</li>
+</ul>
+<hr />
+<h2 id="deferred-items-carry-into-phase-3">Deferred Items (carry into Phase 3)</h2>
+<ol>
+<li><strong>Offered skip tag in gamestate</strong> — Add the tag on offer for skipping to <code>Utils.getBlindData()</code>. Then re-enable skip logic in <code>FlushBot.skip_or_select_blind</code>.</li>
+<li><strong><code>current_chips</code> correct Lua field</strong> — Find the field tracking chips scored toward the current blind mid-round. Then wire <code>_should_play</code> back in.</li>
+<li><strong>Joker priority list accuracy</strong> — Phase 2 keys were invented without consulting the game source. Phase 3 extraction will replace them with correct keys.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1340 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An AI bot for Balatro — development chronicle">
+      
+      
+      
+        <link rel="canonical" href="https://ChickpeaMCG.github.io/balatrobot/superpowers/records/phase-3-game-mechanics-catalogue/">
+      
+      
+        <link rel="prev" href="../phase-2-smarter-flushbot/">
+      
+      
+        <link rel="next" href="../phase-4-run-analytics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Phase 3 — Mechanics Catalogue - Balatrobot</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-3-game-mechanics-catalogue-implementation-record" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Balatrobot" class="md-header__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Balatrobot
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 3 — Mechanics Catalogue
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../phase-1-replay-run-history/" class="md-tabs__link">
+          
+  
+  
+  Phases
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Balatrobot" class="md-nav__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Balatrobot
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-replay-run-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 — Replay & History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-smarter-flushbot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 — Smarter FlushBot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3 — Mechanics Catalogue
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3 — Mechanics Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Planned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3a-static-data-catalogue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3a. Static Data Catalogue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3b-feature-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3b. Feature Encoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3c-flushbot-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3c. FlushBot Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extraction-script-scriptsextract_balatro_datapy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extraction script (scripts/extract_balatro_data.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-package-balatrobotdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data package (balatrobot/data/)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-encoder-balatrobotfeatures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature encoder (balatrobot/features/)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flushbot-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlushBot integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs Found During Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-flushbots-shop-strategy-never-fired-incorrect-joker-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #1 — FlushBot's shop strategy never fired (incorrect joker keys)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-lua-single-quoted-strings-not-matched-by-extractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #2 — Lua single-quoted strings not matched by extractor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items-carry-into-phase-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items (carry into Phase 4)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-run-analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4 — Run Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-docs-site/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 5 — Documentation Site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Planned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3a-static-data-catalogue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3a. Static Data Catalogue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3b-feature-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3b. Feature Encoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3c-flushbot-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3c. FlushBot Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extraction-script-scriptsextract_balatro_datapy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extraction script (scripts/extract_balatro_data.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-package-balatrobotdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data package (balatrobot/data/)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-encoder-balatrobotfeatures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature encoder (balatrobot/features/)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flushbot-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlushBot integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs Found During Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-flushbots-shop-strategy-never-fired-incorrect-joker-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #1 — FlushBot's shop strategy never fired (incorrect joker keys)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-lua-single-quoted-strings-not-matched-by-extractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug #2 — Lua single-quoted strings not matched by extractor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items-carry-into-phase-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items (carry into Phase 4)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="phase-3-game-mechanics-catalogue-implementation-record">Phase 3: Game Mechanics Catalogue — Implementation Record</h1>
+<p><strong>Date:</strong> 2026-04 (retrospective — predates superpowers adoption)
+<strong>Follows:</strong> Phase 2 (smarter FlushBot, 20-run baseline)
+<strong>Precedes:</strong> Phase 4 (run analytics, labelling, failure mode analysis)</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Phase 2 left FlushBot with a hardcoded list of 5 joker keys, two of which didn't exist in the game. Phase 3 delivers a typed, version-controlled catalogue of all Balatro game items and a feature encoder that converts live gamestates into a fixed-size <code>float32</code> array — the foundation required for Phase 5 reinforcement learning.</p>
+<hr />
+<h2 id="scope">Scope</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Independent?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3a. Static data catalogue (<code>balatrobot/data/</code>)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>3b. Feature encoder (<code>balatrobot/features/</code>)</td>
+<td>Depends on 3a (needs <code>JokerData</code>)</td>
+</tr>
+<tr>
+<td>3c. FlushBot integration (catalogue-driven <code>FLUSH_JOKERS</code>)</td>
+<td>Depends on 3a</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-was-planned">What Was Planned</h2>
+<h3 id="3a-static-data-catalogue">3a. Static Data Catalogue</h3>
+<p><strong><code>scripts/extract_balatro_data.py</code></strong> — one-shot parser targeting Balatro's embedded Lua source (ZIP archive inside <code>Balatro.exe</code>). Outputs skeleton JSON for jokers, tarots, planets, spectrals, vouchers. Preserves existing manual annotations when re-run.</p>
+<p><strong><code>balatrobot/data/models.py</code></strong> — typed dataclasses: <code>JokerData</code>, <code>ConsumableData</code>, <code>EditionData</code>, <code>SealData</code>, <code>EnhancementData</code>; <code>EffectType</code> and <code>TriggerCondition</code> enums.</p>
+<p><strong><code>balatrobot/data/catalogue.py</code></strong> — registry with <code>@cache</code> loading (JSON parsed once per process). <code>get_joker(key)</code> logs a warning for unknown keys at runtime. <code>all_jokers()</code> returns the full list.</p>
+<p><strong>Annotation strategy:</strong> All keys extracted automatically. <code>effect_types</code>, <code>trigger</code>, and <code>flush_synergy</code> annotated manually starting with ~25 flush-relevant jokers. Remaining jokers get <code>effect_types: []</code> as placeholders — safe since bots only query <code>flush_synergy &gt;= 0.7</code>.</p>
+<p><strong>Design decisions:</strong>
+- <strong>No database</strong> — JSON files + Python dataclasses. ~300KB, version-controlled, no relational queries needed.
+- <strong>Exhaustiveness guaranteed by extraction</strong> — re-run on any game patch to detect additions/removals by diffing committed JSON.</p>
+<h3 id="3b-feature-encoder">3b. Feature Encoder</h3>
+<p>Converts a live <code>G</code> dict into a fixed-size <code>float32</code> numpy array for SB3 compatibility.</p>
+<p><strong>Observation space: <code>Box(300,) float32</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Segment</th>
+<th>Dims</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Global scalars</td>
+<td>9</td>
+<td>ante, dollars, hands_left, discards_left, log(chips_needed), log(current_chips), deficit_fraction, deck_size/52, hands_played/100</td>
+</tr>
+<tr>
+<td>Hand cards</td>
+<td>152</td>
+<td>8 slots × 19 dims (suit one-hot(4) + value(1) + enhancement one-hot(4) + edition(1) + seal one-hot(3) + is_stone(1) + ...)</td>
+</tr>
+<tr>
+<td>Joker slots</td>
+<td>80</td>
+<td>5 slots × 16 dims (effect_types one-hot(9) + base_chips(1) + base_mult(1) + is_scaling(1) + is_conditional(1) + flush_synergy(1) + edition_bonus(1) + is_eternal(1))</td>
+</tr>
+<tr>
+<td>Consumables</td>
+<td>12</td>
+<td>2 slots × 6 dims (category one-hot(3) + simplified effect(3))</td>
+</tr>
+<tr>
+<td>Hand scores</td>
+<td>39</td>
+<td>13 hand types × 3 dims (chips/200, mult/20, level/10)</td>
+</tr>
+<tr>
+<td>Shop flags</td>
+<td>8</td>
+<td>Binary: is each top-8 flush-synergy joker present and affordable?</td>
+</tr>
+</tbody>
+</table>
+<p>Empty slots zero-padded. Unknown joker keys → zero joker vector (safe degradation).</p>
+<h3 id="3c-flushbot-integration">3c. FlushBot Integration</h3>
+<p>Replace hardcoded <code>FLUSH_JOKERS</code> list with:</p>
+<pre><code class="language-python">from balatrobot.data.catalogue import all_jokers
+FLUSH_JOKERS = [j.key for j in sorted(all_jokers(), key=lambda j: j.flush_synergy, reverse=True) if j.flush_synergy &gt;= 0.7]
+</code></pre>
+<hr />
+<h2 id="what-was-built">What Was Built</h2>
+<h3 id="extraction-script-scriptsextract_balatro_datapy">Extraction script (<code>scripts/extract_balatro_data.py</code>)</h3>
+<p>Reads <code>game.lua</code> from inside the Balatro executable (LÖVE2D ZIP-embedded archive). Handles both single- and double-quoted Lua strings. Merges new skeletons with existing manual annotations on re-run.</p>
+<p>Extracted: <strong>150 jokers</strong>, 22 tarots, 12 planets, 18 spectrals, 32 vouchers.</p>
+<h3 id="data-package-balatrobotdata">Data package (<code>balatrobot/data/</code>)</h3>
+<ul>
+<li><code>models.py</code> — all dataclasses and enums as planned</li>
+<li><code>catalogue.py</code> — all <code>get_*</code> / <code>all_*</code> functions; <code>@cache</code> loaders; runtime unknown-key warning</li>
+<li><code>jokers.json</code> — 150 jokers, 22 annotated with effect_types/trigger/flush_synergy</li>
+<li><code>tarots.json</code>, <code>planets.json</code>, <code>spectrals.json</code>, <code>vouchers.json</code> — full skeletons</li>
+<li><code>editions.json</code>, <code>seals.json</code>, <code>enhancements.json</code> — fully annotated (5, 4, 9 entries)</li>
+</ul>
+<h3 id="feature-encoder-balatrobotfeatures">Feature encoder (<code>balatrobot/features/</code>)</h3>
+<ul>
+<li><code>constants.py</code> — all dimension counts; <code>OBSERVATION_SHAPE = 300</code></li>
+<li><code>encoder.py</code> — <code>GamestateEncoder.encode(G) -&gt; np.ndarray(float32, shape=(300,))</code>; handles missing/None fields and unknown joker keys gracefully</li>
+</ul>
+<p>Game version confirmed: <strong>1.0.1o</strong> (self-reported in <code>globals.lua</code>).</p>
+<h3 id="flushbot-integration">FlushBot integration</h3>
+<p>Replaced hardcoded list with catalogue-driven query. Correct keys: <code>['j_droll', 'j_four_fingers', 'j_tribe', 'j_smeared', 'j_crafty']</code>. Updated two unit tests that referenced the old incorrect keys.</p>
+<hr />
+<h2 id="bugs-found-during-implementation">Bugs Found During Implementation</h2>
+<h3 id="bug-1-flushbots-shop-strategy-never-fired-incorrect-joker-keys">Bug #1 — FlushBot's shop strategy never fired (incorrect joker keys)</h3>
+<p><strong>Symptom:</strong> Extracting all 150 joker keys revealed that <code>j_flush</code> and <code>j_4_fingers</code> don't exist in Balatro. The Phase 2 priority list contained phantom keys.</p>
+<p><strong>Root cause:</strong> Keys were invented without consulting the game source. The correct keys are <code>j_droll</code> ("Droll Joker") and <code>j_four_fingers</code> ("Four Fingers").</p>
+<p><strong>Fix:</strong> Replaced hardcoded list with <code>all_jokers()</code> filtered by <code>flush_synergy &gt;= 0.7</code>.</p>
+<p><strong>Impact:</strong> The bot was blind to its most important shop items for all Phase 2 runs. The baseline result (avg ante 1.5, 2% reaching ante 4) may improve significantly with correct joker purchasing.</p>
+<hr />
+<h3 id="bug-2-lua-single-quoted-strings-not-matched-by-extractor">Bug #2 — Lua single-quoted strings not matched by extractor</h3>
+<p><strong>Symptom:</strong> Initial extraction found only 135 jokers (not 150).</p>
+<p><strong>Root cause:</strong> Regex <code>set = "Joker"</code> didn't handle both quote styles. ~15 jokers in <code>game.lua</code> use single quotes.</p>
+<p><strong>Fix:</strong> Updated <code>_extract_field</code> and all set-detection regexes to use <code>["']...["']</code> pattern.</p>
+<hr />
+<h2 id="current-state-per-sub-task">Current State Per Sub-Task</h2>
+<table>
+<thead>
+<tr>
+<th>Sub-task</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>3a. Extraction script</strong></td>
+<td>✅ Done</td>
+<td>150 jokers, 22 tarots, 12 planets, 18 spectrals, 32 vouchers</td>
+</tr>
+<tr>
+<td><strong>3a. models.py</strong></td>
+<td>✅ Done</td>
+<td>All dataclasses and enums</td>
+</tr>
+<tr>
+<td><strong>3a. catalogue.py</strong></td>
+<td>✅ Done</td>
+<td>All <code>get_*</code> / <code>all_*</code>; <code>@cache</code> loaders; runtime warning</td>
+</tr>
+<tr>
+<td><strong>3a. JSON data files</strong></td>
+<td>✅ Done</td>
+<td>Editions/seals/enhancements complete; jokers 22/150 annotated</td>
+</tr>
+<tr>
+<td><strong>3a. test_catalogue.py</strong></td>
+<td>✅ Done</td>
+<td>18 tests, all passing</td>
+</tr>
+<tr>
+<td><strong>3b. constants.py</strong></td>
+<td>✅ Done</td>
+<td><code>OBSERVATION_SHAPE = 300</code></td>
+</tr>
+<tr>
+<td><strong>3b. encoder.py</strong></td>
+<td>✅ Done</td>
+<td>Shape/dtype verified, values in [0, 1]</td>
+</tr>
+<tr>
+<td><strong>3b. test_encoder.py</strong></td>
+<td>✅ Done</td>
+<td>10 tests against empty states and cached gamestates</td>
+</tr>
+<tr>
+<td><strong>3c. FlushBot integration</strong></td>
+<td>✅ Done</td>
+<td>Catalogue-driven <code>FLUSH_JOKERS</code>; unit tests updated</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-is-explicitly-out-of-scope">What Is Explicitly Out of Scope</h2>
+<ul>
+<li>Full joker annotation (only top ~25 annotated; expand as analytics show what matters)</li>
+<li>Deferred Phase 2 items (<code>current_chips</code>, blind skipping) — carry forward unchanged</li>
+<li>Consumable use strategy</li>
+<li>RL training or SB3 integration (Phase 5)</li>
+</ul>
+<hr />
+<h2 id="deferred-items-carry-into-phase-4">Deferred Items (carry into Phase 4)</h2>
+<p>Items carried from Phase 2:</p>
+<ol>
+<li><strong><code>current_chips</code> correct Lua field</strong> — <code>G.GAME.chips</code> is always 0. Find the correct field, then wire <code>_should_play</code> back in.</li>
+<li><strong>Blind skipping</strong> — expose offered tag in <code>Utils.getBlindData()</code> (Lua), then re-enable skip logic in FlushBot.</li>
+<li><strong>Full joker annotation</strong> — only top ~25 annotated; expand lazily as Phase 4 analytics reveal which jokers matter most.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

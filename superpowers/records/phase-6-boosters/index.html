@@ -1,0 +1,1131 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An AI bot for Balatro — development chronicle">
+      
+      
+      
+        <link rel="canonical" href="https://ChickpeaMCG.github.io/balatrobot/superpowers/records/phase-6-boosters/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Phase 6: Booster Pack & Planet Consumable Use — Implementation Record - Balatrobot</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-6-booster-pack-planet-consumable-use-implementation-record" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Balatrobot" class="md-header__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Balatrobot
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 6: Booster Pack &amp; Planet Consumable Use — Implementation Record
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../phase-1-replay-run-history/" class="md-tabs__link">
+          
+  
+  
+  Phases
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Balatrobot" class="md-nav__button md-logo" aria-label="Balatrobot" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Balatrobot
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ChickpeaMCG/balatrobot" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    balatrobot
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-replay-run-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 — Replay & History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-smarter-flushbot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 — Smarter FlushBot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-game-mechanics-catalogue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3 — Mechanics Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-run-analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4 — Run Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-docs-site/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 5 — Documentation Site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Planned
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Was Built
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Was Built">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6a6b-middleware-select_booster_action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6a–6b. Middleware + select_booster_action
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6c-flushbot-buys-packs-in-shop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6c. FlushBot buys packs in shop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6d-flushbot-uses-planet-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6d. FlushBot uses planet cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6e-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6e. Benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-during-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs Found During Implementation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs Found During Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-state999-packs-never-close-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. State=999 packs never close (critical)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-hook-accumulation-across-runs-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Hook accumulation across runs (critical)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-udp-error-response-buffer-pollution-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. UDP error response buffer pollution (critical)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-choosingboostercards-not-reset-on-game_over" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. choosingboostercards not reset on GAME_OVER
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state-per-sub-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current State Per Sub-Task
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-explicitly-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Explicitly Out of Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred Items
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-6-phase-6-boosters-62-runs-includes-test-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 6 — phase-6-boosters (62 runs, includes test runs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-5-baseline-phase-5-baseline-30-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 5 Baseline — phase-5-baseline (30 runs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="phase-6-booster-pack-planet-consumable-use-implementation-record">Phase 6: Booster Pack &amp; Planet Consumable Use — Implementation Record</h1>
+<p><strong>Date:</strong> 2026-04-24 / 2026-04-25
+<strong>Branch:</strong> phase-6-boosters
+<strong>Follows:</strong> Phase 5 (flush strategy improvements)
+<strong>Precedes:</strong> Phase 7 (TBD)</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>Phase 6 teaches FlushBot to interact with booster packs and consumables. The bot now buys Celestial (planet) and Buffoon packs from the shop, opens them, selects planet cards that level up Flush hands, and skips packs it can't use. A significant portion of the phase was consumed by debugging multi-run stability: Steamodded's state=999 (Jumbo/Mega pack) handling exposed three separate crash vectors that had to be fixed before the benchmark could run.</p>
+<hr />
+<h2 id="scope">Scope</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Independent?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6a. Middleware booster pack opening (Lua)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>6b. FlushBot <code>select_booster_action</code></td>
+<td>Depends on 6a</td>
+</tr>
+<tr>
+<td>6c. FlushBot buys packs in shop</td>
+<td>Depends on 6b</td>
+</tr>
+<tr>
+<td>6d. FlushBot <code>use_or_sell_consumables</code> (planet cards)</td>
+<td>Depends on 6c</td>
+</tr>
+<tr>
+<td>6e. A/B benchmark 30+30 and phase record</td>
+<td>Depends on 6d</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-was-planned">What Was Planned</h2>
+<ul>
+<li>Middleware: hook <code>can_skip_booster</code> to call <code>c_choose_booster_cards()</code> when a pack opens; implement <code>firewhenready</code> callback to skip or select cards</li>
+<li>FlushBot: buy Celestial and Buffoon packs from shop; select planet cards that level Flush; skip Buffoon packs unless a flush joker is present</li>
+<li>FlushBot: use planet cards from <code>consumables</code> after each hand</li>
+<li>Benchmark Phase 6 vs Phase 5 baseline (30 runs each)</li>
+</ul>
+<hr />
+<h2 id="what-was-built">What Was Built</h2>
+<h3 id="6a6b-middleware-select_booster_action">6a–6b. Middleware + <code>select_booster_action</code></h3>
+<p><code>Middleware.c_choose_booster_cards()</code> added to <code>src/middleware.lua</code>. Called from a <code>can_skip_booster</code> hook that fires when a pack opens. Uses <code>firewhenready</code> to wait for pack cards to load, then dispatches SKIP or SELECT. For SELECT, calls <code>G.FUNCS.use_card</code> directly (pack cards are not in a highlightable area, so <code>card:click()</code> is a no-op).</p>
+<p>Multi-choice packs loop back via a <code>firewhenready</code> that re-enters once <code>pack_choices</code> decrements.</p>
+<h3 id="6c-flushbot-buys-packs-in-shop">6c. FlushBot buys packs in shop</h3>
+<p><code>FlushBot.select_shop_action</code> now buys Celestial packs (priority) or Buffoon packs when affordable and a flush joker is present. Planet cards are identified via <code>data/planets.json</code> (added in this phase) which maps planet key → hand type.</p>
+<h3 id="6d-flushbot-uses-planet-cards">6d. FlushBot uses planet cards</h3>
+<p><code>FlushBot.use_or_sell_consumables</code> uses any planet consumable that targets Flush Five, Flush Five → Flush (fallback), or generic Flush-levelling planets. Uses the first matching planet from <code>G.consumables</code>.</p>
+<h3 id="6e-benchmark">6e. Benchmark</h3>
+<p>30 phase-6-boosters runs vs 30 phase-5-baseline runs (Checkered Deck, Stake 1, random seeds).</p>
+<hr />
+<h2 id="bugs-found-during-implementation">Bugs Found During Implementation</h2>
+<h3 id="1-state999-packs-never-close-critical">1. State=999 packs never close (critical)</h3>
+<p><strong>Root cause:</strong> Steamodded uses state=999 (<code>SMODS_BOOSTER_OPENED</code>) for Jumbo/Mega packs. <code>G.FUNCS.use_card</code>'s inner event checks only vanilla pack states when deciding to call <code>end_consumeable</code>; state=999 is skipped, so the pack stays open forever.</p>
+<p><strong>Fix:</strong> In the <code>firewhenready</code> callback, override <code>_action = SKIP_BOOSTER_PACK</code> unconditionally when <code>G.STATE == 999</code>. Also call <code>G.FUNCS.skip_booster()</code> directly (not via <code>pushbutton</code>) because <code>STOP_USE &gt; 0</code> during pack-open animation sets <code>config.button = nil</code>, which <code>pushbutton</code> checks before calling.</p>
+<h3 id="2-hook-accumulation-across-runs-critical">2. Hook accumulation across runs (critical)</h3>
+<p><strong>Root cause:</strong> <code>c_initgamehooks()</code> runs on every <code>G.start_run</code>. It re-registered <code>G.CONTROLLER.snap_to</code>, <code>G.FUNCS.can_skip_booster</code>, <code>G.FUNCS.can_reroll</code>, and <code>G.E_MANAGER.add_event</code> each run, doubling callbacks. By run 2, duplicate <code>snap_to</code> callbacks caused duplicate <code>c_shop()</code> chains → duplicate <code>use_card</code> calls → <code>STOP_USE</code> elevated when the next pack opened → skip button disabled → pack stuck.</p>
+<p><strong>Fix:</strong> Added <code>_global_hooks_registered</code> guard; global (cross-run) hooks register only once. Per-run hook (<code>G.GAME.blind.drawn_to_hand</code>) remains unguarded since <code>G.GAME.blind</code> is a new object each run.</p>
+<h3 id="3-udp-error-response-buffer-pollution-critical">3. UDP error response buffer pollution (critical)</h3>
+<p><strong>Root cause:</strong> <code>api.lua</code> responded to every <code>INVALIDACTION</code> with an error message. During state transitions, brief validation failures accumulated error responses in Python's UDP recv buffer. These were drained one-per-iteration across subsequent runs, causing false error spam and eventually a crash.</p>
+<p><strong>Fix:</strong> INVALIDACTION is now silently dropped; Python retries on the next HELLO cycle. <code>stuck_timeout</code> (30s) provides a safety net if an action never validates.</p>
+<h3 id="4-choosingboostercards-not-reset-on-game_over">4. <code>choosingboostercards</code> not reset on GAME_OVER</h3>
+<p><strong>Root cause:</strong> If the SHOP <code>firewhenready</code> failed to fire at the end of a run (edge case), <code>choosingboostercards</code> stayed <code>true</code> into the next run, preventing <code>c_choose_booster_cards()</code> from setting up the callback.</p>
+<p><strong>Fix:</strong> Reset <code>Middleware.choosingboostercards = false</code> in <code>w_gamestate</code> when <code>G.STATE == GAME_OVER</code>.</p>
+<hr />
+<h2 id="current-state-per-sub-task">Current State Per Sub-Task</h2>
+<table>
+<thead>
+<tr>
+<th>Sub-task</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>6a. Middleware booster pack opening</strong></td>
+<td>✅ Done</td>
+<td><code>c_choose_booster_cards</code>, <code>can_skip_booster</code> hook, state=999 force-skip</td>
+</tr>
+<tr>
+<td><strong>6b. FlushBot <code>select_booster_action</code></strong></td>
+<td>✅ Done</td>
+<td>Selects flush planets, skips buffoon packs without flush jokers</td>
+</tr>
+<tr>
+<td><strong>6c. FlushBot buys packs in shop</strong></td>
+<td>✅ Done</td>
+<td>Buys Celestial &gt; Buffoon when affordable</td>
+</tr>
+<tr>
+<td><strong>6d. FlushBot <code>use_or_sell_consumables</code></strong></td>
+<td>✅ Done</td>
+<td>Uses Flush-levelling planet cards</td>
+</tr>
+<tr>
+<td><strong>6e. A/B benchmark + phase record</strong></td>
+<td>✅ Done</td>
+<td>30+30 runs, results below</td>
+</tr>
+<tr>
+<td><strong>Hook accumulation fix</strong></td>
+<td>✅ Done</td>
+<td><code>_global_hooks_registered</code> guard in middleware</td>
+</tr>
+<tr>
+<td><strong>Silent INVALIDACTION drop</strong></td>
+<td>✅ Done</td>
+<td>api.lua no longer responds to transient failures</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-is-explicitly-out-of-scope">What Is Explicitly Out of Scope</h2>
+<ul>
+<li>Tarot/spectral pack use (separate Phase 7 concern)</li>
+<li>Standard pack card selection</li>
+<li>Selling consumables</li>
+<li>Economy optimisation (rerolling, vouchers)</li>
+<li>Multi-instance benchmarking</li>
+</ul>
+<hr />
+<h2 id="deferred-items">Deferred Items</h2>
+<ul>
+<li><strong>Tarot/spectral pack handling</strong> — skip_booster infrastructure works; SELECT path untested for non-planet consumables</li>
+<li><strong>Buffoon pack joker selection</strong> — currently only used for Flush jokers present in hand; no logic to pick the best joker from the pack</li>
+<li><strong><code>check_run.py</code> health-check utility</strong> — useful for post-run verification; deferred until benchmark loop makes manual checks annoying</li>
+</ul>
+<hr />
+<h2 id="benchmark-results">Benchmark Results</h2>
+<h3 id="phase-6-phase-6-boosters-62-runs-includes-test-runs">Phase 6 — <code>phase-6-boosters</code> (62 runs, includes test runs)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Runs</td>
+<td>62</td>
+</tr>
+<tr>
+<td>Avg ante reached</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>Ante 1 exits</td>
+<td>2 (3.2%)</td>
+</tr>
+<tr>
+<td>Ante 2 exits</td>
+<td>50 (80.6%)</td>
+</tr>
+<tr>
+<td>Ante 3 exits</td>
+<td>9 (14.5%)</td>
+</tr>
+<tr>
+<td>Ante 4 exits</td>
+<td>1 (1.6%)</td>
+</tr>
+<tr>
+<td>Best run</td>
+<td>Ante 4 | 25 hands | seed=MINRLQZ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-5-baseline-phase-5-baseline-30-runs">Phase 5 Baseline — <code>phase-5-baseline</code> (30 runs)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Runs</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Avg ante reached</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>Ante 1 exits</td>
+<td>1 (3.3%)</td>
+</tr>
+<tr>
+<td>Ante 2 exits</td>
+<td>26 (86.7%)</td>
+</tr>
+<tr>
+<td>Ante 3 exits</td>
+<td>3 (10.0%)</td>
+</tr>
+<tr>
+<td>Ante 4 exits</td>
+<td>0 (0%)</td>
+</tr>
+<tr>
+<td>Best run</td>
+<td>Ante 3 | 22 hands | seed=ZPOKEXB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="summary">Summary</h3>
+<p>Average ante reached is identical (2.1) but Phase 6 has a meaningfully higher Ante 3+ rate (16.1% vs 10.0%) and reached Ante 4 for the first time. The improvement is modest and consistent with the strategy: planet cards level Flush hands, which helps clear later blinds that the baseline couldn't reach.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
