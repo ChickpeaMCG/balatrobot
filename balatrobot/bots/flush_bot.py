@@ -1,6 +1,6 @@
 
 from balatrobot.core.bot import Actions, Bot
-from balatrobot.data.catalogue import all_jokers, all_planets
+from balatrobot.data.catalogue import all_jokers, all_planets, get_joker
 
 CARD_CHIPS = {
     "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
@@ -155,11 +155,24 @@ class FlushBot(Bot):
             return [Actions.SKIP_BOOSTER_PACK]
 
         if first_key and first_key.startswith("j_"):
-            # Buffoon pack: pick first flush-synergy joker found
-            pack_keys = {_card_key(card): i for i, card in enumerate(pack_cards)}
-            for flush_key in self.FLUSH_JOKERS:
-                if flush_key in pack_keys:
-                    return [Actions.SELECT_BOOSTER_CARD, [pack_keys[flush_key] + 1], []]
+            # Buffoon pack: pick highest flush-synergy joker if a slot is free
+            jokers_held = G.get("jokers") or []
+            max_jokers = G.get("max_jokers", 5)
+            if len(jokers_held) >= max_jokers:
+                return [Actions.SKIP_BOOSTER_PACK]
+            best_idx: int | None = None
+            best_synergy = 0.0
+            for idx, card in enumerate(pack_cards):
+                key = _card_key(card)
+                if not key:
+                    continue
+                joker_data = get_joker(key)
+                synergy = joker_data.flush_synergy if joker_data else 0.0
+                if synergy > best_synergy:
+                    best_synergy = synergy
+                    best_idx = idx
+            if best_idx is not None and best_synergy > 0:
+                return [Actions.SELECT_BOOSTER_CARD, [best_idx + 1], []]
             return [Actions.SKIP_BOOSTER_PACK]
 
         return [Actions.SKIP_BOOSTER_PACK]

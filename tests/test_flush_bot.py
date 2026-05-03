@@ -411,3 +411,38 @@ def test_no_reroll_when_below_dollar_threshold():
         "jokers": [],
     }
     assert bot.select_shop_action(G) == [Actions.END_SHOP]
+
+
+def test_buffoon_pack_picks_highest_synergy_joker():
+    # j_smeared has flush_synergy 0.9, j_crafty has 0.7 — should pick j_smeared (index 1)
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "pack_cards": [
+            {"key": "j_crafty"},   # index 0 → 1-based position 1
+            {"key": "j_smeared"},  # index 1 → 1-based position 2
+        ],
+        "jokers": [],
+        "max_jokers": 5,
+    }
+    assert bot.select_booster_action(G) == [Actions.SELECT_BOOSTER_CARD, [2], []]
+
+
+def test_buffoon_pack_skips_when_joker_slots_full():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "pack_cards": [{"key": "j_tribe"}],
+        "jokers": [{"key": f"j_placeholder_{i}"} for i in range(5)],
+        "max_jokers": 5,
+    }
+    assert bot.select_booster_action(G) == [Actions.SKIP_BOOSTER_PACK]
+
+
+def test_buffoon_pack_skips_when_no_joker_has_synergy():
+    # Unknown joker key → get_joker returns None → synergy 0.0 → skip
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "pack_cards": [{"key": "j_unknown_test_joker"}],
+        "jokers": [],
+        "max_jokers": 5,
+    }
+    assert bot.select_booster_action(G) == [Actions.SKIP_BOOSTER_PACK]
