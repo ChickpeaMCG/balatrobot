@@ -133,6 +133,11 @@ class FlushBot(Bot):
             if "Buffoon" in name and pack.get("cost", 999) <= dollars:
                 return [Actions.BUY_BOOSTER, [idx + 1]]
 
+        # Priority 4: reroll if safe to do so
+        reroll_cost = (G.get("shop") or {}).get("reroll_cost", 5)
+        if dollars >= 25 and dollars - reroll_cost >= 20:
+            return [Actions.REROLL_SHOP]
+
         return [Actions.END_SHOP]
 
     def select_booster_action(self, G):

@@ -374,3 +374,40 @@ def test_sell_jokers_noop_with_multiple_jokers():
     action, *args = bot.sell_jokers(G)
     assert action == Actions.SELL_JOKER
     assert args[0] == []
+
+
+# ---------------------------------------------------------------------------
+# select_shop_action — reroll logic
+# ---------------------------------------------------------------------------
+
+def test_reroll_when_rich_and_cost_is_safe():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "dollars": 25,
+        "shop": {"cards": [], "boosters": [], "reroll_cost": 5},
+        "consumables": [],
+        "jokers": [],
+    }
+    assert bot.select_shop_action(G) == [Actions.REROLL_SHOP]
+
+
+def test_no_reroll_when_would_drop_below_20():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "dollars": 23,
+        "shop": {"cards": [], "boosters": [], "reroll_cost": 5},
+        "consumables": [],
+        "jokers": [],
+    }
+    assert bot.select_shop_action(G) == [Actions.END_SHOP]
+
+
+def test_no_reroll_when_below_dollar_threshold():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "dollars": 20,
+        "shop": {"cards": [], "boosters": [], "reroll_cost": 5},
+        "consumables": [],
+        "jokers": [],
+    }
+    assert bot.select_shop_action(G) == [Actions.END_SHOP]
