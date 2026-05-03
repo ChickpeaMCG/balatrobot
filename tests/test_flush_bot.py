@@ -356,3 +356,125 @@ def test_empty_pack_skipped(bot):
     G = {"pack_cards": []}
     action = bot.select_booster_action(G)
     assert action[0] == Actions.SKIP_BOOSTER_PACK
+
+
+# ---------------------------------------------------------------------------
+# sell_jokers
+# ---------------------------------------------------------------------------
+
+def test_sell_jokers_noop_with_multiple_jokers():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "jokers": [
+            {"key": "j_tribe", "sell_cost": 3},
+            {"key": "j_crafty", "sell_cost": 2},
+            {"key": "j_smeared", "sell_cost": 4},
+        ]
+    }
+    action, *args = bot.sell_jokers(G)
+    assert action == Actions.SELL_JOKER
+    assert args[0] == []
+
+
+# ---------------------------------------------------------------------------
+# select_shop_action — reroll logic
+# ---------------------------------------------------------------------------
+
+def test_reroll_when_rich_and_cost_is_safe():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "dollars": 25,
+        "shop": {"cards": [], "boosters": [], "reroll_cost": 5},
+        "consumables": [],
+        "jokers": [],
+    }
+    assert bot.select_shop_action(G) == [Actions.REROLL_SHOP]
+
+
+def test_no_reroll_when_would_drop_below_20():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "dollars": 23,
+        "shop": {"cards": [], "boosters": [], "reroll_cost": 5},
+        "consumables": [],
+        "jokers": [],
+    }
+    assert bot.select_shop_action(G) == [Actions.END_SHOP]
+
+
+def test_no_reroll_when_below_dollar_threshold():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "dollars": 20,
+        "shop": {"cards": [], "boosters": [], "reroll_cost": 5},
+        "consumables": [],
+        "jokers": [],
+    }
+    assert bot.select_shop_action(G) == [Actions.END_SHOP]
+
+
+def test_buffoon_pack_picks_highest_synergy_joker():
+    # j_smeared has flush_synergy 0.9, j_crafty has 0.7 — should pick j_smeared (index 1)
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "pack_cards": [
+            {"key": "j_crafty"},   # index 0 → 1-based position 1
+            {"key": "j_smeared"},  # index 1 → 1-based position 2
+        ],
+        "jokers": [],
+        "max_jokers": 5,
+    }
+    assert bot.select_booster_action(G) == [Actions.SELECT_BOOSTER_CARD, [2], []]
+
+
+def test_buffoon_pack_skips_when_joker_slots_full():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "pack_cards": [{"key": "j_tribe"}],
+        "jokers": [{"key": f"j_placeholder_{i}"} for i in range(5)],
+        "max_jokers": 5,
+    }
+    assert bot.select_booster_action(G) == [Actions.SKIP_BOOSTER_PACK]
+
+
+def test_buffoon_pack_skips_when_no_joker_has_synergy():
+    # Unknown joker key → get_joker returns None → synergy 0.0 → skip
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "pack_cards": [{"key": "j_unknown_test_joker"}],
+        "jokers": [],
+        "max_jokers": 5,
+    }
+    assert bot.select_booster_action(G) == [Actions.SKIP_BOOSTER_PACK]
+
+
+# ---------------------------------------------------------------------------
+# skip_or_select_blind — offered tag logic
+# ---------------------------------------------------------------------------
+
+def test_skip_blind_for_every_skip_tag():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    for tag in FlushBot.SKIP_TAGS:
+        G = {"ante": {"blinds": {"tag": tag, "chips_needed": 300}}}
+        result = bot.skip_or_select_blind(G)
+        assert result == [Actions.SKIP_BLIND], f"Expected SKIP_BLIND for tag {tag!r}"
+
+
+def test_select_blind_for_non_skip_tag():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {"ante": {"blinds": {"tag": "tag_uncommon", "chips_needed": 300}}}
+    assert bot.skip_or_select_blind(G) == [Actions.SELECT_BLIND]
+
+
+def test_select_blind_when_tag_is_false():
+    # Production serialisation: utils.lua emits false (not nil) when no tag on offer
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {"ante": {"blinds": {"tag": False, "chips_needed": 300}}}
+    assert bot.skip_or_select_blind(G) == [Actions.SELECT_BLIND]
+
+
+def test_select_blind_when_no_tag_key():
+    # Synthetic fixture edge case: tag key absent entirely
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {"ante": {"blinds": {"chips_needed": 300}}}
+    assert bot.skip_or_select_blind(G) == [Actions.SELECT_BLIND]

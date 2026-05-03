@@ -24,7 +24,14 @@
           {
             "type": "command",
             "command": "jq -r '.tool_input.file_path // \"\"' | tr -d '\\r' | { read -r f; echo \"$f\" | grep -q '\\.py$' && ruff check --fix \"$f\"; } 2>/dev/null || true",
+            "shell": "bash",
             "statusMessage": "Linting..."
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // \"\"' | tr -d '\\r' | { read -r f; echo \"$f\" | grep -q '\\.py$' && cd C:/Users/Vince/Desktop/sandbox/balatrobot && pytest tests/ -x --tb=short -q 2>&1 | tail -20; } 2>/dev/null || true",
+            "shell": "bash",
+            "statusMessage": "Running tests..."
           }
         ]
       }

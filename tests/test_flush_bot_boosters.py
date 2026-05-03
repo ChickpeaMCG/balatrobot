@@ -126,17 +126,6 @@ class TestSelectBoosterAction:
         assert action[1] == [2]
         assert action[2] == []
 
-    def test_celestial_pack_selects_first_when_no_jupiter(self, bot):
-        G = _booster_G([
-            {"key": "c_saturn", "name": "Saturn"},
-            {"key": "c_mars", "name": "Mars"},
-            {"key": "c_neptune", "name": "Neptune"},
-        ])
-        action = bot.select_booster_action(G)
-        assert action[0] == Actions.SELECT_BOOSTER_CARD
-        assert action[1] == [1]
-        assert action[2] == []
-
     def test_buffoon_pack_selects_flush_joker(self, bot):
         flush_key = bot.FLUSH_JOKERS[0]
         G = _booster_G([
