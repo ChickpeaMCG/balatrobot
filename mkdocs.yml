@@ -26,19 +26,12 @@ theme:
 
 nav:
   - Home: index.md
-  - Phases:
-      - Phase 1 — Replay & History: superpowers/records/phase-1-replay-run-history.md
-      - Phase 2 — Smarter FlushBot: superpowers/records/phase-2-smarter-flushbot.md
-      - Phase 3 — Mechanics Catalogue: superpowers/records/phase-3-game-mechanics-catalogue.md
-      - Phase 4 — Run Analytics: superpowers/records/phase-4-run-analytics.md
-      - Phase 5 — Documentation Site: superpowers/records/phase-5-docs-site.md
-      - Phase 6 — Booster Packs: superpowers/records/phase-6-boosters.md
-      - Phase 7a — Mechanics Polish: superpowers/records/phase-7a-flush-bot-mechanics-polish.md
   - Architecture: architecture.md
-
-exclude_docs: |
-  PLAN.md
-  PLAN_DOCS_SITE.md
-  FORK_AND_CHANGES.md
-  superpowers/specs/
-  superpowers/plans/
+  - Phases:
+      - Phase 1 — Replay & History: phase-1-replay-run-history.md
+      - Phase 2 — Smarter FlushBot: phase-2-smarter-flushbot.md
+      - Phase 3 — Mechanics Catalogue: phase-3-game-mechanics-catalogue.md
+      - Phase 4 — Run Analytics: phase-4-run-analytics.md
+      - Phase 5 — Documentation Site: phase-5-docs-site.md
+      - Phase 6 — Booster Packs: phase-6-boosters.md
+      - Phase 7a — Mechanics Polish: phase-7a-flush-bot-mechanics-polish.md

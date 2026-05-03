@@ -14,11 +14,13 @@ This site documents each phase of development: what was built, what was deferred
 
 | Phase | Description |
 |---|---|
-| [Phase 1](superpowers/records/phase-1-replay-run-history.md) | Replay & run history — action logging, run outcome tracking, replay runner |
-| [Phase 2](superpowers/records/phase-2-smarter-flushbot.md) | Smarter FlushBot — flush-first play/discard logic, shop strategy, Checkered Deck |
-| [Phase 3](superpowers/records/phase-3-game-mechanics-catalogue.md) | Game mechanics catalogue — typed item data, feature encoder (300-dim float32) |
-| [Phase 4](superpowers/records/phase-4-run-analytics.md) | Run analytics — run labelling, best-run capture, failure mode analysis |
-| [Phase 5](superpowers/records/phase-5-docs-site.md) | Documentation site — MkDocs + Material theme, GitHub Pages auto-deploy |
+| [Phase 1](phase-1-replay-run-history.md) | Replay & run history — action logging, run outcome tracking, replay runner |
+| [Phase 2](phase-2-smarter-flushbot.md) | Smarter FlushBot — flush-first play/discard logic, shop strategy, Checkered Deck |
+| [Phase 3](phase-3-game-mechanics-catalogue.md) | Game mechanics catalogue — typed item data, feature encoder (300-dim float32) |
+| [Phase 4](phase-4-run-analytics.md) | Run analytics — run labelling, best-run capture, failure mode analysis |
+| [Phase 5](phase-5-docs-site.md) | Documentation site — MkDocs + Material theme, GitHub Pages auto-deploy |
+| [Phase 6](phase-6-boosters.md) | Booster packs — pack opening, planet card use, celestial pack hand selection |
+| [Phase 7a](phase-7a-flush-bot-mechanics-polish.md) | Mechanics polish — flush detection, ante scaling, hand evaluation fixes |
 
 ## Source
 

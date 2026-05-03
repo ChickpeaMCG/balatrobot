@@ -168,9 +168,9 @@ pip install pre-commit && pre-commit install
 
 ### Finishing a phase or feature branch
 
-When using `superpowers:finishing-a-development-branch`, always create a phase implementation record before merging:
+When using `superpowers:finishing-a-development-branch`, create a phase record before merging:
 
-1. Create `docs/superpowers/records/phase-<N>-<slug>.md` using the standard structure:
+1. Create `docs/phase-<N>-<slug>.md` using the standard structure:
    - Header metadata (Date, Branch, Follows, Precedes)
    - Overview (2–3 sentences)
    - Scope table (items + independence)
@@ -180,9 +180,9 @@ When using `superpowers:finishing-a-development-branch`, always create a phase i
    - Current State Per Sub-Task table
    - What Is Explicitly Out of Scope
    - Deferred Items
-2. Update `docs/PLAN_DOCS_SITE.md` nav if a new phase page was added
+2. Add the new page to the Phases section in `mkdocs.yml`
 
-The records serve as both internal archaeology and the source content for the public MkDocs documentation site — no separate phase pages are needed.
+Records are the single persistent artifact. Specs and plans are working documents — they live only in the plan mode file (`.claude/plans/`) during implementation and are not committed to `docs/`.
 
 ## Verification
 
