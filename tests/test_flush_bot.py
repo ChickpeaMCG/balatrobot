@@ -446,3 +446,35 @@ def test_buffoon_pack_skips_when_no_joker_has_synergy():
         "max_jokers": 5,
     }
     assert bot.select_booster_action(G) == [Actions.SKIP_BOOSTER_PACK]
+
+
+# ---------------------------------------------------------------------------
+# skip_or_select_blind — offered tag logic
+# ---------------------------------------------------------------------------
+
+def test_skip_blind_for_every_skip_tag():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    for tag in FlushBot.SKIP_TAGS:
+        G = {"ante": {"blinds": {"tag": tag, "chips_needed": 300}}}
+        result = bot.skip_or_select_blind(G)
+        assert result == [Actions.SKIP_BLIND], f"Expected SKIP_BLIND for tag {tag!r}"
+
+
+def test_select_blind_for_non_skip_tag():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {"ante": {"blinds": {"tag": "tag_uncommon", "chips_needed": 300}}}
+    assert bot.skip_or_select_blind(G) == [Actions.SELECT_BLIND]
+
+
+def test_select_blind_when_tag_is_false():
+    # Production serialisation: utils.lua emits false (not nil) when no tag on offer
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {"ante": {"blinds": {"tag": False, "chips_needed": 300}}}
+    assert bot.skip_or_select_blind(G) == [Actions.SELECT_BLIND]
+
+
+def test_select_blind_when_no_tag_key():
+    # Synthetic fixture edge case: tag key absent entirely
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {"ante": {"blinds": {"chips_needed": 300}}}
+    assert bot.skip_or_select_blind(G) == [Actions.SELECT_BLIND]

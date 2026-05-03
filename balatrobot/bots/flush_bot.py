@@ -42,8 +42,9 @@ class FlushBot(Bot):
     SKIP_TAGS = {"tag_double", "tag_economy", "tag_voucher", "tag_coupon"}
 
     def skip_or_select_blind(self, G):
-        # Always select — skip logic deferred until offered tags are exposed in gamestate.
-        # G["tags"] = already-collected tags, not the tag currently on offer for skipping.
+        offered_tag = ((G.get("ante") or {}).get("blinds") or {}).get("tag")
+        if offered_tag and offered_tag in self.SKIP_TAGS:
+            return [Actions.SKIP_BLIND]
         return [Actions.SELECT_BLIND]
 
     def select_cards_from_hand(self, G):
