@@ -356,3 +356,21 @@ def test_empty_pack_skipped(bot):
     G = {"pack_cards": []}
     action = bot.select_booster_action(G)
     assert action[0] == Actions.SKIP_BOOSTER_PACK
+
+
+# ---------------------------------------------------------------------------
+# sell_jokers
+# ---------------------------------------------------------------------------
+
+def test_sell_jokers_noop_with_multiple_jokers():
+    bot = FlushBot(deck="Blue Deck", stake=1, seed=None, bot_port=12345)
+    G = {
+        "jokers": [
+            {"key": "j_tribe", "sell_cost": 3},
+            {"key": "j_crafty", "sell_cost": 2},
+            {"key": "j_smeared", "sell_cost": 4},
+        ]
+    }
+    action, *args = bot.sell_jokers(G)
+    assert action == Actions.SELL_JOKER
+    assert args[0] == []

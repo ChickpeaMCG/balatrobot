@@ -160,8 +160,6 @@ class FlushBot(Bot):
         return [Actions.SKIP_BOOSTER_PACK]
 
     def sell_jokers(self, G):
-        if len(G["jokers"]) > 1:
-            return [Actions.SELL_JOKER, [2]]
         return [Actions.SELL_JOKER, []]
 
     def rearrange_jokers(self, G):
