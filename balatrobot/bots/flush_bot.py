@@ -143,11 +143,11 @@ class FlushBot(Bot):
         first_key = _card_key(pack_cards[0])
 
         if _is_planet_key(first_key):
-            # Celestial pack: prefer Jupiter, otherwise take first card
+            # Celestial pack: only take Jupiter (levels up Flush); skip otherwise
             for idx, card in enumerate(pack_cards):
                 if _card_key(card) == "c_jupiter":
                     return [Actions.SELECT_BOOSTER_CARD, [idx + 1], []]
-            return [Actions.SELECT_BOOSTER_CARD, [1], []]
+            return [Actions.SKIP_BOOSTER_PACK]
 
         if first_key and first_key.startswith("j_"):
             # Buffoon pack: pick first flush-synergy joker found

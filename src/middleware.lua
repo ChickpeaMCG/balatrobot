@@ -223,11 +223,9 @@ function Middleware.c_choose_booster_cards()
     end,
 
     function(_action, _card, _hand_cards)
-        -- G.FUNCS.use_card inner event never fires end_consumeable for state=999 (SMODS packs)
-        -- so pack never closes; skip them unconditionally
-        if G.STATE == G.STATES.SMODS_BOOSTER_OPENED then
-            _action = Bot.ACTIONS.SKIP_BOOSTER_PACK
-        end
+        -- Note: Steamodded (booster.toml) patches end_consumeable to handle state=999, so
+        -- use_card is safe to call directly for SMODS packs — the pack closes normally.
+        -- Do NOT call skip_booster after use_card for state=999: that double-closes and deadlocks.
         if _action == Bot.ACTIONS.SKIP_BOOSTER_PACK then
             if G.STATE == G.STATES.SMODS_BOOSTER_OPENED and Middleware.BUTTONS.SKIP_PACK then
                 -- STOP_USE > 0 makes config.button nil for state=999; call skip_booster directly

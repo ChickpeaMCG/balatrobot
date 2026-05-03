@@ -313,7 +313,46 @@ def test_current_chips_zero_guard_does_not_skip_flush_fishing(bot):
 
 
 def test_gamestate_includes_blind_tag_key():
-    """Cached gamestates must include a 'tag' key in blinds (value may be None)."""
+    """Cached gamestates must include a 'tag' key in blinds (false or a string, never absent)."""
     for G in load_states("select_cards_from_hand"):
         blinds = (G.get("ante") or {}).get("blinds") or {}
         assert "tag" in blinds, f"'tag' missing from blinds: {blinds}"
+        tag = blinds["tag"]
+        assert tag is False or isinstance(tag, str), f"'tag' has unexpected type: {tag!r}"
+
+
+# ---------------------------------------------------------------------------
+# select_booster_action
+# ---------------------------------------------------------------------------
+
+def _booster_G(pack_keys: list[str]) -> dict:
+    return {"pack_cards": [{"key": k} for k in pack_keys]}
+
+
+def test_celestial_pack_skipped_when_no_jupiter(bot):
+    """Flush bot should skip a Celestial pack that contains no Jupiter."""
+    G = _booster_G(["c_earth", "c_venus", "c_saturn"])
+    action = bot.select_booster_action(G)
+    assert action[0] == Actions.SKIP_BOOSTER_PACK
+
+
+def test_celestial_pack_picks_jupiter_when_present(bot):
+    """Flush bot should pick Jupiter (index 2) when it's in the pack."""
+    G = _booster_G(["c_earth", "c_jupiter", "c_saturn"])
+    action = bot.select_booster_action(G)
+    assert action[0] == Actions.SELECT_BOOSTER_CARD
+    assert action[1] == [2]
+
+
+def test_celestial_pack_picks_jupiter_first_slot(bot):
+    """Flush bot should pick Jupiter at index 1 when it's the first card."""
+    G = _booster_G(["c_jupiter", "c_earth", "c_mars"])
+    action = bot.select_booster_action(G)
+    assert action[0] == Actions.SELECT_BOOSTER_CARD
+    assert action[1] == [1]
+
+
+def test_empty_pack_skipped(bot):
+    G = {"pack_cards": []}
+    action = bot.select_booster_action(G)
+    assert action[0] == Actions.SKIP_BOOSTER_PACK

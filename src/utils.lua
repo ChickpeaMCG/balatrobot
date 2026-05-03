@@ -154,10 +154,10 @@ function Utils.getBlindData()
             _blinds.boss        = G.GAME.blind.boss or false
         end
 
-        -- Offered skip tag (nil for boss blind or when no tag is available)
-        _blinds.tag = nil
+        -- Offered skip tag (false when no tag is on offer; Lua nil drops JSON keys)
+        _blinds.tag = false
         if G.tags and #G.tags > 0 then
-            _blinds.tag = G.tags[1].key or nil
+            _blinds.tag = G.tags[1].key or false
         end
     end
 
