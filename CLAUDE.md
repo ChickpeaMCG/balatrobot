@@ -184,6 +184,19 @@ When using `superpowers:finishing-a-development-branch`, always create a phase i
 
 The records serve as both internal archaeology and the source content for the public MkDocs documentation site — no separate phase pages are needed.
 
+## Verification
+
+Before declaring any bot/runtime change complete, you MUST run a live verification:
+
+1. Run a single bot run: `python run_flush_bot.py --runs 1`
+2. Confirm `run_history.json` has a new entry with a non-zero score and no freeze/crash
+3. If the change targets a specific failure mode, reproduce the original failure first, then verify it's gone
+
+**PASS criteria:** Run completes, `run_history.json` updated, no `G.STATE=999` freeze or unhandled exception  
+**FAIL criteria:** Timeout, crash, missing entry, or same failure mode reproduced
+
+Never claim a fix works based solely on code review. Evidence first.
+
 ## Steamodded Installation
 
 The mod folder must be symlinked or placed at `%AppData%\Roaming\Balatro\Mods\balatrobot`. Requires Steamodded v0.9.3+. The mod is loaded via `main.lua` SMODS header; all files are loaded manually via `NFS.read` + `load()`.
